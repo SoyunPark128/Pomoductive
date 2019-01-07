@@ -9,6 +9,17 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock Text="Hello World!"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Background="Azure">
+            <TextBlock Text="Hello World!"/>
+            <TextBox Name="TaskNameInput" Height="60" Header="Enter your name:" PlaceholderText="Task" />
+            <Button Name="TaskCreateButton" HorizontalAlignment="Stretch" FontSize="20" Content="Create" Click="{x:Bind Button_ClickAsync}"></Button>
+            <TextBlock Name="testText" />
+        </StackPanel>
+        <StackPanel Name="TaskListPanel" Grid.Column="1" Background="CadetBlue">
+        </StackPanel>
     </Grid>
 </Page>

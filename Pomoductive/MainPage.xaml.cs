@@ -1,8 +1,13 @@
-﻿using System;
+﻿using Pomoductive.Model;
+using Pomoductive.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -26,5 +31,33 @@ namespace Pomoductive
         {
             this.InitializeComponent();
         }
+
+        public JobsViewModel ViewModel = new JobsViewModel();
+
+
+        private async Task Button_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            Category newCategory = new Category(TaskNameInput.Text);
+
+            CheckBox taskCheckBox = new CheckBox();
+            taskCheckBox.Name = "Task" + newCategory.Name;
+            taskCheckBox.Content = newCategory.Name;
+            taskCheckBox.Checked += Task_Finished_Check;
+
+            TaskListPanel.Children.Add(taskCheckBox);
+            TaskNameInput.ClearValue(TextBox.TextProperty);
+            
+            await ViewModel.SaveAsync();
+            testText.Text = App.ViewModel.Jobs.Count.ToString() ?? "Nothing";
+            
+
+        }
+
+        private void Task_Finished_Check(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        
     }
 }
