@@ -1,5 +1,4 @@
-﻿using Pomoductive.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -15,6 +15,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.EntityFrameworkCore;
+using Pomoductive.Repository.Sql;
+using Pomoductive.ViewModels;
 
 namespace Pomoductive
 {
@@ -23,8 +26,10 @@ namespace Pomoductive
     /// </summary>
     sealed partial class App : Application
     {
-        /// Gets the app-wide MainViewModel singleton instance.
+        /// Gets the app-wide MainViewModel and Stopwatch singleton instance.
         public static ApplicationViewModel ViewModel { get; } = new ApplicationViewModel();
+        public static StopWatchViewModel Stopwatch { get; } = new StopWatchViewModel();
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -35,13 +40,17 @@ namespace Pomoductive
             this.Suspending += OnSuspending;
         }
 
-        /// <summary>
+
+        /// <summary>s
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            // Load the database.
+            UseSqlite();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -99,5 +108,26 @@ namespace Pomoductive
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+
+        /// <summary>
+        /// Pipeline for interacting with backend service or database.
+        /// </summary>
+        public static SqlPomoductiveRepository Repository { get; private set; }
+
+        /// <summary>
+        /// Configures the app to use the Sqlite data source. If no existing Sqlite database exists, 
+        /// loads a demo database filled with fake data so the app has content.
+        /// </summary>
+        public static void UseSqlite()
+        {
+            string databasePath = ApplicationData.Current.LocalFolder.Path + @"\Assets\Pomoductive.db";
+
+            var dbOptions = new DbContextOptionsBuilder<PomoductiveContext>().UseSqlite(
+                "Data Source=" + databasePath);
+            Repository = new SqlPomoductiveRepository(dbOptions);
+        }
+
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using Pomoductive.Model;
+﻿using Pomoductive.Models;
 using Pomoductive.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -32,12 +32,12 @@ namespace Pomoductive
             this.InitializeComponent();
         }
 
-        public JobsViewModel ViewModel = new JobsViewModel();
+        public TodoViewModel ViewModel = new TodoViewModel();
 
 
         private async Task Button_ClickAsync(object sender, RoutedEventArgs e)
         {
-            Category newCategory = new Category(TaskNameInput.Text);
+            Todo newCategory = new Todo(TaskNameInput.Text);
 
             CheckBox taskCheckBox = new CheckBox();
             taskCheckBox.Name = "Task" + newCategory.Name;
@@ -48,7 +48,7 @@ namespace Pomoductive
             TaskNameInput.ClearValue(TextBox.TextProperty);
             
             await ViewModel.SaveAsync();
-            testText.Text = App.ViewModel.Jobs.Count.ToString() ?? "Nothing";
+            testText.Text = App.ViewModel.Todos.Count.ToString() ?? "Nothing";
             
 
         }

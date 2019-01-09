@@ -22,10 +22,10 @@ namespace Pomoductive.ViewModels
         }
 
         //// <summary>
-        /// The collection of jobs in the list. 
+        /// The collection of todos in the list. 
         /// </summary>
-        public ObservableCollection<JobsViewModel> Jobs { get; }
-            = new ObservableCollection<JobsViewModel>();
+        public ObservableCollection<TodoViewModel> Todos { get; }
+            = new ObservableCollection<TodoViewModel>();
         public StopWatchViewModel Stopwatch = new StopWatchViewModel();
 
         /// <summary>

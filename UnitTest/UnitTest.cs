@@ -1,59 +1,61 @@
 ﻿using Xunit;
 using System;
+using Pomoductive.Models;
 using Pomoductive;
-using Pomoductive.Model;
 
 namespace UnitTest
 {
-    
+
     public class UnitTest1
     {
         [Fact]
         public void makeTask()
         {
-            Job testTask = new Category("test Task");
+            Todo testTask = new Todo("test Task");
 
-            Assert.Equal("test Task", testTask.name);
+            Assert.Equal("test Task", testTask.Name);
         }
+
 
         [Fact]
         public void TimeCountTest()
         {
             //arrange
-            Job testTask = new Category("time count test Task");
+            Todo testTask = new Todo("time count test Task");
 
             //act
-            testTask.TimeCountStart();
+            Pomoductive.App.Stopwatch.TimeCountReStart();
             System.Threading.Tasks.Task.Delay(2000).Wait();
-            testTask.TimeCountStop();
+            Pomoductive.App.Stopwatch.TimeCountStop();
+
 
             TimeSpan assumedTime1 = new TimeSpan(0, 0, 2);
             TimeSpan assumedTime2 = new TimeSpan(0, 0, 3);
 
             //assert
-            Assert.InRange(testTask.GetTotalTime(), assumedTime1, assumedTime2);
+            Assert.InRange(Pomoductive.App.Stopwatch.GetTotalTime(), assumedTime1, assumedTime2);
 
         }
 
         [Fact]
         public void MultipleTimeCountTest()
         {
-            Job testTask = new Category("multiple time count test Task");
+            Todo testTask = new Todo("multiple time count test Task");
 
             //act
-            testTask.TimeCountStart();
+            Pomoductive.App.Stopwatch.TimeCountStart();
             System.Threading.Tasks.Task.Delay(2000).Wait();
-            testTask.TimeCountStop();
+            Pomoductive.App.Stopwatch.TimeCountStop();
 
-            testTask.TimeCountStart();
+            Pomoductive.App.Stopwatch.TimeCountReStart();
             System.Threading.Tasks.Task.Delay(3000).Wait();
-            testTask.TimeCountStop();
+            Pomoductive.App.Stopwatch.TimeCountStop();
 
             TimeSpan assumedTime1 = new TimeSpan(0, 0, 5);
             TimeSpan assumedTime2 = new TimeSpan(0, 0, 6);
 
             //assert
-            Assert.InRange(testTask.GetTotalTime(), assumedTime1, assumedTime2);
+            Assert.InRange(Pomoductive.App.Stopwatch.GetTotalTime(), assumedTime1, assumedTime2);
         }
 
     }
