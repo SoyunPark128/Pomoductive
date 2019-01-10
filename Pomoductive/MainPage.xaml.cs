@@ -39,10 +39,17 @@ namespace Pomoductive
         {
             Todo newCategory = new Todo(TaskNameInput.Text);
 
+            ViewModel = new TodoViewModel(newCategory)
+            {
+                Reward = "Sleep"
+            };
+
+
             CheckBox taskCheckBox = new CheckBox();
             taskCheckBox.Name = "Task" + newCategory.Name;
             taskCheckBox.Content = newCategory.Name;
             taskCheckBox.Checked += Task_Finished_Check;
+            
 
             TaskListPanel.Children.Add(taskCheckBox);
             TaskNameInput.ClearValue(TextBox.TextProperty);

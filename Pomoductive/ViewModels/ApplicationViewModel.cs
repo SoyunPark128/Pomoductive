@@ -18,7 +18,7 @@ namespace Pomoductive.ViewModels
         /// </summary>
         public ApplicationViewModel()
         {
-            Task.Run(GetCustomerListAsync);
+            Task.Run(GetTodoListAsync);
         }
 
         //// <summary>
@@ -29,25 +29,25 @@ namespace Pomoductive.ViewModels
         public StopWatchViewModel Stopwatch = new StopWatchViewModel();
 
         /// <summary>
-        /// Gets the complete list of customers from the database.
+        /// Gets the complete list of Todos from the database.
         /// </summary>
-        public async Task GetCustomerListAsync()
+        public async Task GetTodoListAsync()
         {
             /*
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsLoading = true);
 
-            var customers = await App.Repository.Customers.GetAsync();
-            if (customers == null)
+            var Todos = await App.Repository.Todos.GetAsync();
+            if (Todos == null)
             {
                 return;
             }
             
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
-                Customers.Clear();
-                foreach (var c in customers)
+                Todos.Clear();
+                foreach (var c in Todos)
                 {
-                    Customers.Add(new CustomerViewModel(c));
+                    Todos.Add(new TodoViewModel(c));
                 }
                 IsLoading = false;*
             });

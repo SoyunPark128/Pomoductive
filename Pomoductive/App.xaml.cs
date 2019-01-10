@@ -121,7 +121,7 @@ namespace Pomoductive
         /// </summary>
         public static void UseSqlite()
         {
-            string databasePath = ApplicationData.Current.LocalFolder.Path + @"\Assets\Pomoductive.db";
+            string databasePath = ApplicationData.Current.LocalFolder.Path + @"\Pomoductive.db";
 
             var dbOptions = new DbContextOptionsBuilder<PomoductiveContext>().UseSqlite(
                 "Data Source=" + databasePath);

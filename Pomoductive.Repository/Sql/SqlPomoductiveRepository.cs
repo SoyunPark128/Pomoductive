@@ -17,10 +17,10 @@ namespace Pomoductive.Repository.Sql
         public SqlPomoductiveRepository(DbContextOptionsBuilder<PomoductiveContext>  dbOptionsBuilder)
         {
             _dbOptions = dbOptionsBuilder.Options;
-            //using (var db = new PomoductiveContext(_dbOptions))
-            //{
-            //    db.Database.EnsureCreated();
-            //}
+            using (var db = new PomoductiveContext(_dbOptions))
+            {
+                db.Database.EnsureCreated();
+            }
         }
 
 

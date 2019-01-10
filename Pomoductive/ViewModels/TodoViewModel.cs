@@ -19,7 +19,7 @@ namespace Pomoductive.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Initializes a new instance of the JobsViewModel class that wraps a Customer object.
+        /// Initializes a new instance of the JobsViewModel class that wraps a Todo object.
         /// </summary>
         public TodoViewModel(Todo todo = null)
         {
@@ -44,6 +44,19 @@ namespace Pomoductive.ViewModels
             }
         }
 
+        public string Reward
+        {
+            get => TodoModel.Reward;
+            set
+            {
+                if (value != TodoModel.Reward)
+                {
+                    TodoModel.Reward = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         /// <summary>
         /// Notifies listeners that a property value has changed.
         /// </summary>
@@ -60,8 +73,13 @@ namespace Pomoductive.ViewModels
         public async Task SaveAsync()
         {
             App.ViewModel.Todos.Add(this);
-
+            await App.Repository.Todos.UpsertAsync(TodoModel);
         }
+
+        /// <summary>
+        /// Called when a bound DataGrid control commits the edits that have been made to a customer.
+        /// </summary>
+        public async void EndEdit() => await SaveAsync();
 
         public void MarkTerminated()
         {
