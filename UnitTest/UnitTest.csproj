@@ -141,9 +141,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pomoductive.Model\Pomoductive.Model.csproj">
+    <ProjectReference Include="..\Pomoductive.Model\Pomoductive.Models.csproj">
       <Project>{869a61c4-65aa-4222-b376-790bbf649ef4}</Project>
-      <Name>Pomoductive.Model</Name>
+      <Name>Pomoductive.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\Pomoductive\Pomoductive.csproj">
       <Project>{a727362c-c5d2-40fd-96db-1e1a626a92ec}</Project>

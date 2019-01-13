@@ -5,9 +5,18 @@
     xmlns:local="using:Pomoductive"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:Pomoductive.ViewModels" 
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.Resources>
+        <DataTemplate x:Key="TodoListDataTemplate" x:DataType="data:TodoViewModel">
+            <StackPanel Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
+                <CheckBox Content="{x:Bind Name}"/>
+                <Button  Content="Start" Click="TimeCountingStartsButtonClicked"/>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -17,9 +26,17 @@
             <TextBlock Text="Hello World!"/>
             <TextBox Name="TaskNameInput" Height="60" Header="Enter your name:" PlaceholderText="Task" />
             <Button Name="TaskCreateButton" HorizontalAlignment="Stretch" FontSize="20" Content="Create" Click="{x:Bind Button_ClickAsync}"></Button>
-            <TextBlock Name="testText" />
+            <TextBlock Text="{x:Bind ViewModel.Todos.Count, Mode=OneWay}"/>
+            <TextBlock Name="remainTimeTextBlock"/>
+            <TextBlock Name="testSenderText" />
+            <TextBlock Name="testEText" />
+
         </StackPanel>
+
         <StackPanel Name="TaskListPanel" Grid.Column="1" Background="CadetBlue">
+            <ListView ItemsSource="{x:Bind ViewModel.Todos}" 
+                  ItemTemplate="{StaticResource TodoListDataTemplate}" CanDragItems="True" AllowDrop="True">
+            </ListView>
         </StackPanel>
     </Grid>
 </Page>

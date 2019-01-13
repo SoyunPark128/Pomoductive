@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pomoductive", "Pomoductive\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pomoductive.Repository", "Pomoductive.Repository\Pomoductive.Repository.csproj", "{49E15058-1D38-448F-BA49-EBEAB79DFA61}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pomoductive.Model", "Pomoductive.Model\Pomoductive.Model.csproj", "{869A61C4-65AA-4222-B376-790BBF649EF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pomoductive.Models", "Pomoductive.Model\Pomoductive.Models.csproj", "{869A61C4-65AA-4222-B376-790BBF649EF4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{68722FA9-F7D8-4C18-806A-25AD9ABF6D99}"
 EndProject

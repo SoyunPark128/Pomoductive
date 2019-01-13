@@ -12,11 +12,10 @@ namespace Pomoductive.ViewModels
     /// <summary>
     /// Provides a bindable wrapper for the Todo model class, encapsulating various services for access by the UI.
     /// </summary>
-    public class TodoViewModel
+    public class TodoViewModel : BindableBase
     {
 
         private Todo _todoModel;
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Initializes a new instance of the JobsViewModel class that wraps a Todo object.
@@ -57,14 +56,10 @@ namespace Pomoductive.ViewModels
             }
         }
 
-        /// <summary>
-        /// Notifies listeners that a property value has changed.
-        /// </summary>
-        /// <param name="propertyName">Name of the property used to notify listeners. This
-        /// value is optional and can be provided automatically when invoked from compilers
-        /// that support <see cref="CallerMemberNameAttribute"/>.</param>
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public string Name
+        {
+            get => TodoModel.Name;
+        }
 
 
         /// <summary>
@@ -72,7 +67,7 @@ namespace Pomoductive.ViewModels
         /// </summary>
         public async Task SaveAsync()
         {
-            App.ViewModel.Todos.Add(this);
+            App.AppViewModel.Todos.Add(this);
             await App.Repository.Todos.UpsertAsync(TodoModel);
         }
 

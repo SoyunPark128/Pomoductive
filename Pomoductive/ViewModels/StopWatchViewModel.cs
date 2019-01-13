@@ -4,16 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Pomoductive.Models;
+using Windows.UI.Xaml;
 
 namespace Pomoductive.ViewModels
 {
     public class StopWatchViewModel
     {
         StopWatchModel StopWatchModel = StopWatchModel.Instance;
+        //public event EventHandler<RoutedEventArgs> TimeCountStopEvent;
 
         public TimeSpan GetTotalTime()
         {
             return StopWatchModel.TotalTime;
+        }
+
+        public TimeSpan GetElapsedTime()
+        {
+            return StopWatchModel.Stopwatch.Elapsed;
         }
 
         public void TimeCountStart()
@@ -34,6 +41,7 @@ namespace Pomoductive.ViewModels
                 StopWatchModel.Stopwatch.Stop();
                 TimeLog(StopWatchModel.Stopwatch.Elapsed);
                 StopWatchModel.Stopwatch.Reset();
+                //TimeCountStopEvent.Invoke(this, null);
             }
             else
             {

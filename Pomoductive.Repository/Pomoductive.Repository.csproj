@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pomoductive.Model\Pomoductive.Model.csproj" />
+    <ProjectReference Include="..\Pomoductive.Model\Pomoductive.Models.csproj" />
   </ItemGroup>
 
 </Project>

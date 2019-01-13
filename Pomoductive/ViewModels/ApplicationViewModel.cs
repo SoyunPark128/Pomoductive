@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Uwp.Helpers;
@@ -11,7 +12,7 @@ namespace Pomoductive.ViewModels
     /// <summary>
     /// Provides data and commands accessible to the entire app.  
     /// </summary>
-    public class ApplicationViewModel
+    public class ApplicationViewModel : BindableBase
     {
         /// <summary>
         /// Creates a new MainViewModel.
@@ -28,16 +29,26 @@ namespace Pomoductive.ViewModels
             = new ObservableCollection<TodoViewModel>();
         public StopWatchViewModel Stopwatch = new StopWatchViewModel();
 
+        private bool _isLoading = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the Customers list is currently being updated. 
+        /// </summary>
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set => Set(ref _isLoading, value);
+        }
+
         /// <summary>
         /// Gets the complete list of Todos from the database.
         /// </summary>
         public async Task GetTodoListAsync()
         {
-            /*
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsLoading = true);
 
-            var Todos = await App.Repository.Todos.GetAsync();
-            if (Todos == null)
+            var todos = await App.Repository.Todos.GetAsync();
+            if (todos == null)
             {
                 return;
             }
@@ -45,13 +56,13 @@ namespace Pomoductive.ViewModels
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
                 Todos.Clear();
-                foreach (var c in Todos)
+                foreach (var c in todos)
                 {
                     Todos.Add(new TodoViewModel(c));
                 }
-                IsLoading = false;*
+                IsLoading = false;
             });
-            */
         }
+        
     }
 }

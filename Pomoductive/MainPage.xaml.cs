@@ -10,6 +10,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,32 +32,41 @@ namespace Pomoductive
         public MainPage()
         {
             this.InitializeComponent();
+            player.Source = MediaSource.CreateFromUri(new Uri("ms-winsoundevent:Notification.Reminder"));
         }
 
-        public TodoViewModel ViewModel = new TodoViewModel();
+
+        /// <summary>
+        /// Gets the app-wide AppViewModel instance.
+        /// </summary>
+        public ApplicationViewModel ViewModel => App.AppViewModel;
+
+        DispatcherTimer timer4Stopwatch = new DispatcherTimer();
+        TimeSpan SettedTime = new TimeSpan(0, 0, 5);
+        TimeSpan remainTime = new TimeSpan();
+        TimeSpan padding = new TimeSpan(0, 0, 1); 
+        MediaPlayer player = new MediaPlayer();
+        //public event EventHandler<RoutedEventArgs> PomodoreFinished;
 
 
         private async Task Button_ClickAsync(object sender, RoutedEventArgs e)
         {
-            Todo newCategory = new Todo(TaskNameInput.Text);
-
-            ViewModel = new TodoViewModel(newCategory)
+            Todo newTodo = new Todo(TaskNameInput.Text);
+            TodoViewModel TodoViewModel = new TodoViewModel(newTodo)
             {
                 Reward = "Sleep"
             };
 
-
             CheckBox taskCheckBox = new CheckBox();
-            taskCheckBox.Name = "Task" + newCategory.Name;
-            taskCheckBox.Content = newCategory.Name;
+            taskCheckBox.Name = "Task" + newTodo.Name;
+            taskCheckBox.Content = newTodo.Name;
             taskCheckBox.Checked += Task_Finished_Check;
             
 
             TaskListPanel.Children.Add(taskCheckBox);
             TaskNameInput.ClearValue(TextBox.TextProperty);
             
-            await ViewModel.SaveAsync();
-            testText.Text = App.ViewModel.Todos.Count.ToString() ?? "Nothing";
+            await TodoViewModel.SaveAsync();
             
 
         }
@@ -65,6 +76,44 @@ namespace Pomoductive
 
         }
 
-        
+
+        private void TimeCountingStartsButtonClicked(object sender, RoutedEventArgs e)
+    {
+            
+            Button clickedButton = (Button)sender;
+            remainTime = SettedTime;
+
+            EventHandler<object> tmr4SwTickEventHndlr = null;
+            tmr4SwTickEventHndlr = (object s, object a) =>
+            {
+                Timer_Tick4Stopwatch(s, a, clickedButton, ref tmr4SwTickEventHndlr);
+            };
+            timer4Stopwatch.Tick += tmr4SwTickEventHndlr;
+
+            ViewModel.Stopwatch.TimeCountStart();
+            timer4Stopwatch.Start();
+            
+            testSenderText.Text = "object sender : " + sender?.ToString() ?? "object sender is Nothing";
+            testEText.Text = "RoutedEventArgs e.OriginalSource : " + e.OriginalSource?.ToString() ?? "RoutedEventArgs e.OriginalSource is Nothing";
+        }
+        public void Timer_Tick4Stopwatch(object sender, object e, Button clickedButton, ref EventHandler<object> TickEventHandlr)
+        {
+            
+            if (remainTime < TimeSpan.Zero)
+            {
+                ViewModel.Stopwatch.TimeCountStop();
+                timer4Stopwatch.Stop();
+                timer4Stopwatch.Tick -= TickEventHandlr;
+                player.Play();
+                clickedButton.Content = "Done!";
+                remainTimeTextBlock.Text = "Done!";
+            }
+            else
+            {
+                clickedButton.Content = remainTime.Add(padding).ToString(@"dd\:mm\:ss");
+                remainTimeTextBlock.Text = remainTime.Add(padding).ToString(@"dd\:mm\:ss");
+                remainTime = SettedTime - ViewModel.Stopwatch.GetElapsedTime();
+            }
+        }
     }
 }
