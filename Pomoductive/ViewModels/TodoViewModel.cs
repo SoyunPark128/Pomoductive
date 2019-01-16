@@ -61,6 +61,11 @@ namespace Pomoductive.ViewModels
             get => TodoModel.Name;
         }
 
+        public Guid ID
+        {
+            get => TodoModel.Id;
+        }
+
 
         /// <summary>
         /// Saves todo data that has been edited.
@@ -70,6 +75,12 @@ namespace Pomoductive.ViewModels
             App.AppViewModel.Todos.Add(this);
             await App.Repository.Todos.UpsertAsync(TodoModel);
         }
+
+        /// <summary>
+        /// Deletes the specified todo from the database.
+        /// </summary>
+        public async Task DeleteOrder(Todo TodoToDelete) =>
+            await App.Repository.Todos.DeleteAsync(TodoToDelete.Id);
 
         /// <summary>
         /// Called when a bound DataGrid control commits the edits that have been made to a customer.

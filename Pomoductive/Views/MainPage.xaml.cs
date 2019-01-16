@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace Pomoductive
+namespace Pomoductive.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -44,7 +44,7 @@ namespace Pomoductive
         DispatcherTimer timer4Stopwatch = new DispatcherTimer();
         TimeSpan SettedTime = new TimeSpan(0, 0, 5);
         TimeSpan remainTime = new TimeSpan();
-        TimeSpan padding = new TimeSpan(0, 0, 1); 
+        TimeSpan padding = new TimeSpan(0, 0, 1);
         MediaPlayer player = new MediaPlayer();
         //public event EventHandler<RoutedEventArgs> PomodoreFinished;
 
@@ -61,25 +61,37 @@ namespace Pomoductive
             taskCheckBox.Name = "Task" + newTodo.Name;
             taskCheckBox.Content = newTodo.Name;
             taskCheckBox.Checked += Task_Finished_Check;
-            
+
 
             TaskListPanel.Children.Add(taskCheckBox);
             TaskNameInput.ClearValue(TextBox.TextProperty);
-            
+
             await TodoViewModel.SaveAsync();
-            
+
 
         }
 
-        private void Task_Finished_Check(object sender, RoutedEventArgs e)
+
+        /// <summary>
+        /// Deletes the currently checked order.
+        /// </summary>
+        private async void Task_Finished_Check(object sender, RoutedEventArgs e)
         {
+            if (ViewModel.SelectedTodo is null)
+            {
+                CheckBox checkedBox = (CheckBox)sender;
+                ViewModel.SelectedTodo = (TodoViewModel)checkedBox.DataContext;
+            }
+
+            var deleteTodo = ViewModel.SelectedTodo;
+            await ViewModel.DeleteTodo(deleteTodo);
 
         }
 
 
         private void TimeCountingStartsButtonClicked(object sender, RoutedEventArgs e)
-    {
-            
+        {
+
             Button clickedButton = (Button)sender;
             remainTime = SettedTime;
 
@@ -92,13 +104,13 @@ namespace Pomoductive
 
             ViewModel.Stopwatch.TimeCountStart();
             timer4Stopwatch.Start();
-            
+
             testSenderText.Text = "object sender : " + sender?.ToString() ?? "object sender is Nothing";
             testEText.Text = "RoutedEventArgs e.OriginalSource : " + e.OriginalSource?.ToString() ?? "RoutedEventArgs e.OriginalSource is Nothing";
         }
         public void Timer_Tick4Stopwatch(object sender, object e, Button clickedButton, ref EventHandler<object> TickEventHandlr)
         {
-            
+
             if (remainTime < TimeSpan.Zero)
             {
                 ViewModel.Stopwatch.TimeCountStop();
@@ -115,5 +127,7 @@ namespace Pomoductive
                 remainTime = SettedTime - ViewModel.Stopwatch.GetElapsedTime();
             }
         }
+
+
     }
 }

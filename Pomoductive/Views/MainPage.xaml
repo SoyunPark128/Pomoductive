@@ -1,8 +1,8 @@
 ﻿<Page
-    x:Class="Pomoductive.MainPage"
+    x:Class="Pomoductive.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Pomoductive"
+    xmlns:local="using:Pomoductive.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Pomoductive.ViewModels" 
@@ -11,18 +11,18 @@
     <Page.Resources>
         <DataTemplate x:Key="TodoListDataTemplate" x:DataType="data:TodoViewModel">
             <StackPanel Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
-                <CheckBox Content="{x:Bind Name}"/>
+                <CheckBox Content="{x:Bind Name}" Checked="Task_Finished_Check"/>
                 <Button  Content="Start" Click="TimeCountingStartsButtonClicked"/>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Background="Azure">
+        <StackPanel Grid.Column="0" Background="Beige">
             <TextBlock Text="Hello World!"/>
             <TextBox Name="TaskNameInput" Height="60" Header="Enter your name:" PlaceholderText="Task" />
             <Button Name="TaskCreateButton" HorizontalAlignment="Stretch" FontSize="20" Content="Create" Click="{x:Bind Button_ClickAsync}"></Button>
@@ -35,7 +35,7 @@
 
         <StackPanel Name="TaskListPanel" Grid.Column="1" Background="CadetBlue">
             <ListView ItemsSource="{x:Bind ViewModel.Todos}" 
-                  ItemTemplate="{StaticResource TodoListDataTemplate}" CanDragItems="True" AllowDrop="True">
+                  ItemTemplate="{StaticResource TodoListDataTemplate}" CanDragItems="True" AllowDrop="True" SelectedItem="{x:Bind ViewModel.SelectedTodo, Mode=TwoWay}">
             </ListView>
         </StackPanel>
     </Grid>

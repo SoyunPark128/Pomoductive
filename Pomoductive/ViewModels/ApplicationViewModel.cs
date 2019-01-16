@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Toolkit.Uwp.Helpers;
+using Pomoductive.Models;
 
 namespace Pomoductive.ViewModels
 {
@@ -37,7 +38,10 @@ namespace Pomoductive.ViewModels
         public bool IsLoading
         {
             get => _isLoading;
-            set => Set(ref _isLoading, value);
+            set
+            {
+                Set(ref _isLoading, value);
+            }
         }
 
         /// <summary>
@@ -63,6 +67,26 @@ namespace Pomoductive.ViewModels
                 IsLoading = false;
             });
         }
-        
+
+        private TodoViewModel _selectedTodo;
+
+        /// <summary>
+        /// Gets or sets the selected order.
+        /// </summary>
+        public TodoViewModel SelectedTodo
+        {
+            get => _selectedTodo;
+            set => Set(ref _selectedTodo, value);
+            
+        }
+
+        /// <summary>
+        /// Deletes the specified Todo from the database.
+        /// </summary>
+        public async Task DeleteTodo(TodoViewModel orderToDelete)
+        {
+            await App.Repository.Todos.DeleteAsync(orderToDelete.ID);
+            Todos.Remove(Todos.Where(td => td.ID == orderToDelete.ID).Single());
+        }
     }
 }
