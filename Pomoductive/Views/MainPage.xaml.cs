@@ -87,18 +87,19 @@ namespace Pomoductive.Views
         /// </summary>
         private async void Task_Finished_Check(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.SelectedTodo is null)
+            CheckBox checkedBox = (CheckBox)sender;
+            var deleteTodo = (TodoViewModel)checkedBox.DataContext;
+
+            if (deleteTodo.IsSubTodo())
             {
-                CheckBox checkedBox = (CheckBox)sender;
-                ViewModel.SelectedTodo = (TodoViewModel)checkedBox.DataContext;
+                var _parentsTodo = ViewModel.GetParents(deleteTodo.ParentsTodo);
+                //consider Todo models later
+                _parentsTodo.SubTodos.Remove(deleteTodo);
             }
-
-            var deleteTodo = ViewModel.SelectedTodo;
             await ViewModel.DeleteTodo(deleteTodo);
-
         }
 
-        private void MoreButton_Click(object sender, RoutedEventArgs e)
+            private void MoreButton_Click(object sender, RoutedEventArgs e)
         {
             Button MoreButton = (Button)sender;
             MoreButton.ContextFlyout.ShowAt(MoreButton);

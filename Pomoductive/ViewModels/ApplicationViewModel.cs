@@ -59,15 +59,18 @@ namespace Pomoductive.ViewModels
                 return;
             }
 
+            // Todo
             foreach (var subTodo in SubTodos)
             {
                 var parentsWhichHasSubs =  parentsTodos.ToList<Todo>().Find(x => x.Id == subTodo.ParentsTodo);
                 if (null != parentsWhichHasSubs)
                 {
                     parentsWhichHasSubs.SubTodos.Add(subTodo);
+                    subTodo.ParentsTodo = parentsWhichHasSubs.Id;
                 }
             }
-            
+
+            // TodoViewModel
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
                 Todos.Clear();
@@ -78,7 +81,9 @@ namespace Pomoductive.ViewModels
                     {
                         foreach (var subc in c.SubTodos)
                         {
-                            newParentsTodo.SubTodos.Add(new TodoViewModel(subc));
+                            var newChildTodo = new TodoViewModel(subc);
+                            newParentsTodo.SubTodos.Add(newChildTodo);
+                            newChildTodo.ParentsTodo = newParentsTodo.ID;
                         }
                     }
                     Todos.Add(newParentsTodo);
@@ -107,6 +112,20 @@ namespace Pomoductive.ViewModels
             await App.Repository.Todos.DeleteAsync(orderToDelete.ID);
             Todos.Remove(Todos.Where(td => td.ID == orderToDelete.ID).Single());
         }
+
+
+        public TodoViewModel GetParents(Guid parentsID)
+        {
+            foreach (var todo in Todos)
+            {
+                if (parentsID == todo.ID)
+                {
+                    return todo;
+                }
+            }
+            return null;
+        }
+
 
         private ObservableCollection<ShellNavigationItem> _navigationItems = new ObservableCollection<ShellNavigationItem>();
         public ObservableCollection<ShellNavigationItem> NavigationItems

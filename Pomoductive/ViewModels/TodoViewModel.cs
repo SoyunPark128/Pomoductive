@@ -25,8 +25,9 @@ namespace Pomoductive.ViewModels
         {
             TodoModel = todo ?? new Todo(string.Empty);
         }
+        public ObservableCollection<TodoViewModel> SubTodos { get; set; } = new ObservableCollection<TodoViewModel>();
 
-        
+
         /// <summary>
         /// Gets or sets the underlying Todo object.
         /// </summary>
@@ -46,12 +47,12 @@ namespace Pomoductive.ViewModels
 
         public string Reward
         {
-            get => TodoModel.Reward;
+            get => _todoModel.Reward;
             set
             {
                 if (value != TodoModel.Reward)
                 {
-                    TodoModel.Reward = value;
+                    _todoModel.Reward = value;
                     OnPropertyChanged();
                 }
             }
@@ -59,15 +60,26 @@ namespace Pomoductive.ViewModels
 
         public string Name
         {
-            get => TodoModel.Name;
+            get => _todoModel.Name;
         }
 
         public Guid ID
         {
-            get => TodoModel.Id;
+            get => _todoModel.Id;
         }
 
-        public ObservableCollection<TodoViewModel> SubTodos { get; set; } = new ObservableCollection<TodoViewModel>();
+        public Guid ParentsTodo
+        {
+            get => _todoModel.ParentsTodo;
+            set
+            {
+                if (value != TodoModel.ParentsTodo)
+                {
+                    _todoModel.ParentsTodo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
 
         /// <summary>
@@ -112,13 +124,14 @@ namespace Pomoductive.ViewModels
                 return false;
             }
         }
-
-        public void AddParentsTodo(Guid parentsTodo)
-        {
-            _todoModel.ParentsTodo = parentsTodo;
-        }
-
-
         
+        public bool IsSubTodo()
+        {
+            if (default(Guid) != _todoModel.ParentsTodo)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
