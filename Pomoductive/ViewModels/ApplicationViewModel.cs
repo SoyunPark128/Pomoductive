@@ -51,18 +51,37 @@ namespace Pomoductive.ViewModels
         {
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsLoading = true);
 
-            var todos = await App.Repository.Todos.GetAsync();
-            if (todos == null)
+            var parentsTodos = await App.Repository.Todos.GetForParentsTodoAsync();
+            var SubTodos = await App.Repository.Todos.GetForSubTodoAsync();
+
+            if (null == parentsTodos)
             {
                 return;
+            }
+
+            foreach (var subTodo in SubTodos)
+            {
+                var parentsWhichHasSubs =  parentsTodos.ToList<Todo>().Find(x => x.Id == subTodo.ParentsTodo);
+                if (null != parentsWhichHasSubs)
+                {
+                    parentsWhichHasSubs.SubTodos.Add(subTodo);
+                }
             }
             
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
                 Todos.Clear();
-                foreach (var c in todos)
+                foreach (var c in parentsTodos)
                 {
-                    Todos.Add(new TodoViewModel(c));
+                    var newParentsTodo = new TodoViewModel(c);
+                    if (c.SubTodos != null)
+                    {
+                        foreach (var subc in c.SubTodos)
+                        {
+                            newParentsTodo.SubTodos.Add(new TodoViewModel(subc));
+                        }
+                    }
+                    Todos.Add(newParentsTodo);
                 }
                 IsLoading = false;
             });
@@ -87,6 +106,13 @@ namespace Pomoductive.ViewModels
         {
             await App.Repository.Todos.DeleteAsync(orderToDelete.ID);
             Todos.Remove(Todos.Where(td => td.ID == orderToDelete.ID).Single());
+        }
+
+        private ObservableCollection<ShellNavigationItem> _navigationItems = new ObservableCollection<ShellNavigationItem>();
+        public ObservableCollection<ShellNavigationItem> NavigationItems
+        {
+            get { return _navigationItems; }
+            set { Set(ref _navigationItems, value); }
         }
     }
 }

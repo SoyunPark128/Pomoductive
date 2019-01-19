@@ -47,6 +47,18 @@ namespace Pomoductive.Repository.Sql
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Todo>> GetForParentsTodoAsync() =>
+            await _db.Todos
+                .Where(todo => todo.ParentsTodo == default(Guid))
+                .AsNoTracking()
+                .ToListAsync();
+
+        public async Task<IEnumerable<Todo>> GetForSubTodoAsync() =>
+            await _db.Todos
+                .Where(todo => todo.ParentsTodo != default(Guid))
+                .AsNoTracking()
+                .ToListAsync();
+
         public async Task<Todo> UpsertAsync(Todo todo)
         {
             var current = await _db.Todos.FirstOrDefaultAsync(_todo => _todo.Id == todo.Id);

@@ -32,7 +32,12 @@ namespace Pomoductive.Views
         public MainPage()
         {
             this.InitializeComponent();
+
+            //Finish Sound
             player.Source = MediaSource.CreateFromUri(new Uri("ms-winsoundevent:Notification.Reminder"));
+
+            //Initiate StopWatch Event
+            timer4Stopwatch.Tick += Timer_Tick4Stopwatch;
         }
 
 
@@ -49,25 +54,30 @@ namespace Pomoductive.Views
         //public event EventHandler<RoutedEventArgs> PomodoreFinished;
 
 
-        private async Task Button_ClickAsync(object sender, RoutedEventArgs e)
+        private async Task TodoCreateButtonAsync(object sender, RoutedEventArgs e)
         {
-            Todo newTodo = new Todo(TaskNameInput.Text);
+            Todo newTodo = new Todo(TodoNameInput.Text);
             TodoViewModel TodoViewModel = new TodoViewModel(newTodo)
             {
                 Reward = "Sleep"
             };
-
-            CheckBox taskCheckBox = new CheckBox();
-            taskCheckBox.Name = "Task" + newTodo.Name;
-            taskCheckBox.Content = newTodo.Name;
-            taskCheckBox.Checked += Task_Finished_Check;
-
-
-            TaskListPanel.Children.Add(taskCheckBox);
-            TaskNameInput.ClearValue(TextBox.TextProperty);
-
+            
+            TodoNameInput.ClearValue(TextBox.TextProperty);
             await TodoViewModel.SaveAsync();
+            
+        }
 
+        /// <summary>
+        /// Add a sub To-do below current To-do
+        /// </summary>
+        private async void AddNewSubTodoAsync(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.SelectedTodo != null)
+            {
+                Todo newSubTodo = new Todo(TodoNameInput.Text);
+                TodoViewModel SubTodoViewModel = new TodoViewModel(newSubTodo);
+            }
+            
 
         }
 
@@ -88,44 +98,63 @@ namespace Pomoductive.Views
 
         }
 
+        private void MoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button MoreButton = (Button)sender;
+            MoreButton.ContextFlyout.ShowAt(MoreButton);
+            ViewModel.SelectedTodo = (e.OriginalSource as FrameworkElement).DataContext as TodoViewModel;
+        }
+
+        private void OnClosed(object sender, object e)
+        {
+
+        }
+
+        
+        private async void DeleteTodoClickedAsync(object sender, RoutedEventArgs e)
+        {
+
+        }
 
         private void TimeCountingStartsButtonClicked(object sender, RoutedEventArgs e)
         {
-
-            Button clickedButton = (Button)sender;
             remainTime = SettedTime;
-
-            EventHandler<object> tmr4SwTickEventHndlr = null;
-            tmr4SwTickEventHndlr = (object s, object a) =>
-            {
-                Timer_Tick4Stopwatch(s, a, clickedButton, ref tmr4SwTickEventHndlr);
-            };
-            timer4Stopwatch.Tick += tmr4SwTickEventHndlr;
-
+            
             ViewModel.Stopwatch.TimeCountStart();
             timer4Stopwatch.Start();
-
-            testSenderText.Text = "object sender : " + sender?.ToString() ?? "object sender is Nothing";
-            testEText.Text = "RoutedEventArgs e.OriginalSource : " + e.OriginalSource?.ToString() ?? "RoutedEventArgs e.OriginalSource is Nothing";
+            
         }
-        public void Timer_Tick4Stopwatch(object sender, object e, Button clickedButton, ref EventHandler<object> TickEventHandlr)
+        public void Timer_Tick4Stopwatch(object sender, object e)
         {
 
             if (remainTime < TimeSpan.Zero)
             {
                 ViewModel.Stopwatch.TimeCountStop();
                 timer4Stopwatch.Stop();
-                timer4Stopwatch.Tick -= TickEventHandlr;
                 player.Play();
-                clickedButton.Content = "Done!";
+                PomodoreButtonText.Text = "Done!";
                 remainTimeTextBlock.Text = "Done!";
             }
             else
             {
-                clickedButton.Content = remainTime.Add(padding).ToString(@"dd\:mm\:ss");
+                PomodoreButtonText.Text = remainTime.Add(padding).ToString(@"dd\:mm\:ss");
                 remainTimeTextBlock.Text = remainTime.Add(padding).ToString(@"dd\:mm\:ss");
                 remainTime = SettedTime - ViewModel.Stopwatch.GetElapsedTime();
             }
+        }
+
+        private void Button_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            if (ViewModel.Stopwatch.IsRunning())
+            {
+                PomodoreButtonText.Text = "Pause";
+            }
+            PomodoreButtonText.Text = "Restart";
+        }
+
+        private void Button_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            PomodoreButtonText.Text = "Start";
         }
 
 

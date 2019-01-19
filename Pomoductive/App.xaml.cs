@@ -21,6 +21,9 @@ using Pomoductive.ViewModels;
 using Pomoductive.Views;
 using Windows.Globalization;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI;
+using Windows.UI.ViewManagement;
+using Windows.ApplicationModel.Core;
 
 namespace Pomoductive
 {
@@ -70,6 +73,26 @@ namespace Pomoductive
             }
 
             Window.Current.Activate();
+
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+
+            // Set active window colors
+            titleBar.ForegroundColor = Colors.White;
+            titleBar.BackgroundColor = Colors.Transparent;
+            titleBar.ButtonForegroundColor = Colors.White;
+            titleBar.ButtonHoverForegroundColor = Colors.White;
+            titleBar.ButtonPressedForegroundColor = Colors.White;
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonHoverBackgroundColor = Colors.DimGray;
+            titleBar.ButtonPressedBackgroundColor = Colors.Gray;
+
+            // Set inactive window colors
+            titleBar.InactiveForegroundColor = Color.FromArgb(218, 255, 255, 255);
+            titleBar.InactiveBackgroundColor = Color.FromArgb(255, 255, 255, 255);
+            titleBar.ButtonInactiveForegroundColor = Color.FromArgb(218, 255, 255, 255);
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
         }
 
         /// <summary>

@@ -48,9 +48,16 @@ namespace Pomoductive.ViewModels
                 throw new Exception("not started");
             }
         }
+
+        public bool IsRunning()
+        {
+            return StopWatchModel.Stopwatch.IsRunning;
+        }
+
         private void TimeLog(TimeSpan elapsedTime)
         {
             StopWatchModel.TotalTime += elapsedTime;
         }
+
     }
 }

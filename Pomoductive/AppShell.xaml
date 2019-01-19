@@ -36,7 +36,11 @@
             <Setter Property="Padding"
                     Value="0,0,0,0" />
             <Setter Property="Width"
-                    Value="144" />
+                    Value="150" />
+            <Setter Property="FocusVisualPrimaryThickness" Value="0" />
+            <Setter Property="FocusVisualSecondaryThickness" Value="0" />
+            <Setter Property="FocusVisualPrimaryBrush" Value="Transparent"/>
+            <Setter Property="FocusVisualSecondaryBrush" Value="Transparent"/>
         </Style>
 
         <Style x:Key="ListViewItemNarrow"
@@ -59,7 +63,7 @@
         </Grid.RowDefinitions>
 
         <Grid x:Name="AppTitleBar"
-              Background="{ThemeResource SystemControlHighlightAccent3RevealAccent2BackgroundBrush}">
+              Background="{ThemeResource NavBackgroundAcrylicBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="LeftPaddingColumn" />
                 <ColumnDefinition />
@@ -78,26 +82,26 @@
                       Margin="8,0" />
             <TextBlock Text="Lunch Scheduler"
                        Grid.Column="1"
-                       Style="{StaticResource CaptionTextBlockStyle}"
+                       Style="{ThemeResource CaptionTextBlockStyle}"
                        Margin="36,8,0,0"
                        Foreground="NavajoWhite" />
         </Grid>
 
         <Grid x:Name="NavControlRoot"
               Height="48"
-              Background="{ThemeResource SystemControlHighlightAccent3RevealAccent2BackgroundBrush}"
+              Background="{StaticResource NavBackgroundAcrylicBrush}"
               Grid.Row="1">
             <Grid x:Name="NavIndicatorGrid"
                   VerticalAlignment="Bottom"
                   HorizontalAlignment="Center"
                   Height="1"
-                  Width="576">
+                  Width="750">
 
                 <Line x:Name="NavIndicator"
                       Stroke="NavajoWhite"
                       X1="0"
                       Y1="0"
-                      X2="144"
+                      X2="150"
                       Y2="0"
                       StrokeThickness="2">
                     <Line.RenderTransform>
@@ -113,27 +117,14 @@
                       SelectedIndex="-1"
                       ItemClick="NavList_ItemClick"
                       IsItemClickEnabled="True"
-                      ItemsSource="{x:Bind NavigationItems}"
+                      ItemsSource="{x:Bind _navigationItems}"
                       DisplayMemberPath="Label"
                       ItemContainerStyle="{StaticResource ListViewItemNormal}"
-                      Loaded="NavList_Loaded">
-                <ListView.Resources>
-                    <SolidColorBrush x:Key="ListViewItemForeground"
-                                     Color="NavajoWhite" />
-                    <SolidColorBrush x:Key="ListViewItemForegroundSelected"
-                                     Color="NavajoWhite" />
-                    <SolidColorBrush x:Key="ListViewItemForegroundPointerOver"
-                                     Color="NavajoWhite" />
-                    <SolidColorBrush x:Key="ListViewItemBackgroundSelected"
-                                     Color="Transparent" />
-                    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver"
-                                     Color="Transparent" />
-                    <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPressed"
-                                     Color="Transparent" />
-                </ListView.Resources>
+                      Loaded="NavList_Loaded"
+                      TabFocusNavigation="Cycle" SelectedItem="{ThemeResource AccentButtonStyle}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <ItemsStackPanel Orientation="Horizontal" />
+                        <ItemsStackPanel Orientation="Horizontal"  />
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
             </ListView>
@@ -169,8 +160,7 @@
         <Grid Grid.Row="2">
             <Frame
                 x:Name="frame"
-                Margin="20,0,0,0"
-                Navigating="OnNavigatingToPage">
+                Margin="20,0,0,0">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition>

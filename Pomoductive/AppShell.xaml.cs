@@ -74,6 +74,8 @@ namespace Pomoductive
         /// Gets the navigation frame instance.
         /// </summary>
         public Frame AppFrame => frame;
+        private ObservableCollection<ShellNavigationItem> _navigationItems = App.AppViewModel.NavigationItems;
+
 
         /// <summary>
         /// Default keyboard focus movement for any unhandled keyboarding
@@ -119,101 +121,60 @@ namespace Pomoductive
             }
         }
 
-        public readonly string CustomerListLabel = "Customer list";
-
-        public readonly string OrderListLabel = "Order list";
-
-        /// <summary>
-        /// Navigates to the page corresponding to the tapped item.
-        /// </summary>
-        private void NavigationView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
         {
-            var label = args.InvokedItem as string;
-            var pageType = typeof(MainPage);
-                //args.IsSettingsInvoked ? typeof(SettingsPage) :
-                //label == CustomerListLabel ? typeof(CustomerListPage) :
-                //label == OrderListLabel ? typeof(OrderListPage) : null;
-            if (pageType != null && pageType != AppFrame.CurrentSourcePageType)
-            {
-                AppFrame.Navigate(pageType);
-            }
+            LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
+            RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
+            AppTitleBar.Height = coreTitleBar.Height;
         }
 
-        /// <summary>
-        /// Ensures the nav menu reflects reality when navigation is triggered outside of
-        /// the nav menu buttons.
-        /// </summary>
-        private void OnNavigatingToPage(object sender, NavigatingCancelEventArgs e)
+        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
-            if (e.NavigationMode == NavigationMode.Back)
-            {
-                //if (e.SourcePageType == typeof(CustomerListPage))
-                //{
-                //    NavView.SelectedItem = CustomerListMenuItem;
-                //}
-                //else if (e.SourcePageType == typeof(OrderListPage))
-                //{
-                //    NavView.SelectedItem = OrderListMenuItem;
-                //}
-                //else if (e.SourcePageType == typeof(SettingsPage))
-                //{
-                //    NavView.SelectedItem = NavView.SettingsItem;
-                //}
-            }
+            UpdateTitleBarLayout(sender);
         }
 
-        /// <summary>
-        /// Invoked when the View Code button is clicked. Launches the repo on GitHub. 
-        /// </summary>
-        private async void ViewCodeNavPaneButton_Tapped(object sender, TappedRoutedEventArgs e) =>
-            await Launcher.LaunchUriAsync(new Uri(
-                "https://github.com/Microsoft/Windows-appsample-customers-orders-database"));
 
-        /// <summary>
-        /// Navigates the frame to the previous page.
-        /// </summary>
-        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
-        {
-            if (AppFrame.CanGoBack)
-            {
-                AppFrame.GoBack();
-            }
-        }
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///NAVIGATION
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        private ObservableCollection<ShellNavigationItem> _navigationItems = new ObservableCollection<ShellNavigationItem>();
-        public ObservableCollection<ShellNavigationItem> NavigationItems
-        {
-            get { return _navigationItems; }
-            set { Set(ref _navigationItems, value); }
-        }
         private void PopulateNavItems()
         {
             _navigationItems.Clear();
 
             _navigationItems.Add(ShellNavigationItem.FromType<MainPage>("DashBoard", Symbol.Admin));
-            _navigationItems.Add(ShellNavigationItem.FromType<StatisticsPage>("Overview", Symbol.Home));
-            _navigationItems.Add(ShellNavigationItem.FromType<TodoManagementPage>("My lunches", Symbol.Calendar));
-            _navigationItems.Add(ShellNavigationItem.FromType<JournalPage>("People", Symbol.People));
-            _navigationItems.Add(ShellNavigationItem.FromType<ChallengePage>("Places", Symbol.Map));
+            _navigationItems.Add(ShellNavigationItem.FromType<StatisticsPage>("Statistics", Symbol.Home));
+            _navigationItems.Add(ShellNavigationItem.FromType<TodoManagementPage>("To-Do Management", Symbol.Calendar));
+            _navigationItems.Add(ShellNavigationItem.FromType<JournalPage>("Journal", Symbol.People));
+            _navigationItems.Add(ShellNavigationItem.FromType<ChallengePage>("Challenge", Symbol.Map));
         }
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        private void Set<T>(ref T storage, T value, [CallerMemberName]string propertyName = null)
+        public bool Navigate<T>(object parameter = null, NavigationTransitionInfo infoOverride = null) where T : Page => Navigate(typeof(T), parameter, infoOverride);
+
+        public bool Navigate(Type pageType, object parameter = null, NavigationTransitionInfo infoOverride = null)
         {
-            if (Equals(storage, value))
+            // Don't open the same page multiple times
+            if (AppFrame.CurrentSourcePageType != pageType)
             {
-                return;
+                return AppFrame.Navigate(pageType, parameter, infoOverride);
             }
-
-            storage = value;
-            OnPropertyChanged(propertyName);
+            else
+            {
+                return false;
+            }
         }
 
-        private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private void NavList_Loaded(object sender, RoutedEventArgs e)
+        {
+            Navigate(typeof(MainPage));
+        }
 
+        private void MoveNavIndicator(int index)
+        {
+            NavIndicatorOffset.X = index * NavIndicator.X2;
+        }
 
         private void NavigationService_Navigated(object sender, NavigationEventArgs e)
         {
@@ -250,16 +211,6 @@ namespace Pomoductive
             }
         }
 
-        private void MoveNavIndicator(int index)
-        {
-            NavIndicatorOffset.X = index * NavIndicator.X2;
-        }
-
-        private void NavList_Loaded(object sender, RoutedEventArgs e)
-        {
-            Navigate(typeof(MainPage));
-        }
-
         private void NavList_ItemClick(object sender, ItemClickEventArgs e)
         {
             var navigationItem = e.ClickedItem as ShellNavigationItem;
@@ -268,31 +219,19 @@ namespace Pomoductive
                 Navigate(navigationItem.PageType);
             }
         }
-        public bool Navigate(Type pageType, object parameter = null, NavigationTransitionInfo infoOverride = null)
+
+        /// <summary>
+        /// Navigates the frame to the previous page.
+        /// </summary>
+        private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
-            // Don't open the same page multiple times
-            if (AppFrame.CurrentSourcePageType != pageType)
+            if (AppFrame.CanGoBack)
             {
-                return AppFrame.Navigate(pageType, parameter, infoOverride);
-            }
-            else
-            {
-                return false;
+                AppFrame.GoBack();
             }
         }
 
-        public bool Navigate<T>(object parameter = null, NavigationTransitionInfo infoOverride = null) where T : Page => Navigate(typeof(T), parameter, infoOverride);
 
-        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            UpdateTitleBarLayout(sender);
-        }
 
-        private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
-        {
-            LeftPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayLeftInset);
-            RightPaddingColumn.Width = new GridLength(coreTitleBar.SystemOverlayRightInset);
-            AppTitleBar.Height = coreTitleBar.Height;
-        }
     }
 }

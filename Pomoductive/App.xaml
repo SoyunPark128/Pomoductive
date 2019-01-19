@@ -5,4 +5,18 @@
     xmlns:local="using:Pomoductive"
     >
 
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <AcrylicBrush x:Key="NavBackgroundAcrylicBrush"
+                                  BackgroundSource="HostBackdrop"
+                                  TintColor="{ThemeResource SystemAccentColorLight1}"
+                                  TintOpacity="0.8"
+                                  FallbackColor="{ThemeResource SystemAccentColorLight1}" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

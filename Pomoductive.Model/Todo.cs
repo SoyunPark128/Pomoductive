@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -23,14 +24,16 @@ namespace Pomoductive.Models
         public int DailyCount { get; set; }
 
         [NotMapped]
-        public List<Todo> SubTodos { get; set; }
-        
-        public Todo(string name, string reward = null)
+        public List<Todo> SubTodos { get; set; } = new List<Todo>();
+        public Guid ParentsTodo { get; set; } = Guid.Empty;
+
+        public Todo(string name, string reward = null, Guid parentsTodo = default(Guid))
         {
             Name = name;
             Reward = reward;
             IsSelected = false;
             IsTerminated = false;
+            ParentsTodo = parentsTodo;
         }
 
 
@@ -41,13 +44,6 @@ namespace Pomoductive.Models
         Daily,
         OneOff
     }
-
-    public enum Subdivided
-    {
-        Category,
-        SubTodo
-    }
-
 
 
 }

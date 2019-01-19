@@ -1,6 +1,7 @@
 ﻿using Pomoductive.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -66,6 +67,8 @@ namespace Pomoductive.ViewModels
             get => TodoModel.Id;
         }
 
+        public ObservableCollection<TodoViewModel> SubTodos { get; set; } = new ObservableCollection<TodoViewModel>();
+
 
         /// <summary>
         /// Saves todo data that has been edited.
@@ -110,15 +113,12 @@ namespace Pomoductive.ViewModels
             }
         }
 
-        public void AddSubTodo(Todo subTodo)
+        public void AddParentsTodo(Guid parentsTodo)
         {
-            _todoModel.SubTodos.Add(subTodo);
+            _todoModel.ParentsTodo = parentsTodo;
         }
 
-        public List<Todo> GetSubTodos()
-        {
-            return _todoModel.SubTodos;
-        }
+
         
     }
 }
