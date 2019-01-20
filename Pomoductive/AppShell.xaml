@@ -24,7 +24,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:uc="using:Pomoductive.UserControls"
     KeyDown="AppShell_KeyDown"
     TabNavigation="Cycle"
     mc:Ignorable="d">
@@ -55,7 +54,7 @@
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot"
-          Background="NavajoWhite">
+          Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -74,7 +73,7 @@
                    Width="20" Height="20" Margin="12,0"/>-->
             <FontIcon FontFamily="Segoe MDL2 Assets"
                       Glyph="&#xED56;"
-                      Foreground="Navy"
+                      Foreground="Black"
                       Grid.Column="1"
                       HorizontalAlignment="Left"
                       Width="20"
@@ -84,7 +83,7 @@
                        Grid.Column="1"
                        Style="{ThemeResource CaptionTextBlockStyle}"
                        Margin="36,8,0,0"
-                       Foreground="NavajoWhite" />
+                       Foreground="White" />
         </Grid>
 
         <Grid x:Name="NavControlRoot"
@@ -98,7 +97,7 @@
                   Width="750">
 
                 <Line x:Name="NavIndicator"
-                      Stroke="NavajoWhite"
+                      Stroke="White"
                       X1="0"
                       Y1="0"
                       X2="150"
@@ -129,8 +128,8 @@
                 </ListView.ItemsPanel>
             </ListView>
 
-            <HyperlinkButton Content="DEMO MODE" 
-                             Foreground="NavajoWhite"
+            <HyperlinkButton Content="DEMO" 
+                             Foreground="White"
                              Margin="0,0,54,0"
                              HorizontalAlignment="Right">
                 <FlyoutBase.AttachedFlyout>
@@ -159,8 +158,7 @@
         </Grid>
         <Grid Grid.Row="2">
             <Frame
-                x:Name="frame"
-                Margin="20,0,0,0">
+                x:Name="frame">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition>

@@ -6,33 +6,56 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:data="using:Pomoductive.ViewModels" 
+    xmlns:models="using:Pomoductive.Models"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <DataTemplate x:Key="TodoListDataTemplate" x:DataType="data:TodoViewModel">
             <StackPanel>
                 <StackPanel Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
-                    <CheckBox x:Name="TodoCheckBox" Content="{x:Bind Name}"  Checked="Task_Finished_Check"/>
+                    <CheckBox x:Name="TodoCheckBox" Content="{x:Bind Name}"  Checked="Task_Finished_CheckAsync"/>
                     <Button x:Name="MoreButton" Background="Transparent" Click="MoreButton_Click" 
                             FontFamily="Segoe MDL2 Assets" Content="&#xE10C;" 
                             BorderBrush="Transparent" 
                             ContextFlyout="{StaticResource AddSubTodoFlyout}"/>
                 </StackPanel>
                 <ListView  Margin="30,0,0,0" ItemsSource="{x:Bind SubTodos}" >
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="data:TodoViewModel">
-                            <CheckBox x:Name="SubTodoCheckBox" Content="{x:Bind Name}" Checked="Task_Finished_Check">
-                                <CheckBox.RenderTransform>
-                                    <ScaleTransform CenterX="25" CenterY="25" ScaleX="0.9" ScaleY="0.9" />
-                                </CheckBox.RenderTransform>
-                            </CheckBox>
+                    <ListView.ItemTemplate >
+                        <DataTemplate x:DataType="models:Todo">
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="SubTodoCheckBox" Content="{x:Bind Name}" Checked="Task_Finished_CheckAsync">
+                                    <CheckBox.RenderTransform>
+                                        <ScaleTransform CenterX="25" CenterY="25" ScaleX="0.9" ScaleY="0.9" />
+                                    </CheckBox.RenderTransform>
+                                </CheckBox>
+                                <Button x:Name="MoreButton" Background="Transparent" Click="MoreButton_Click" 
+                                        FontFamily="Segoe MDL2 Assets" Content="&#xE10C;" 
+                                        BorderBrush="Transparent">
+                                    <Button.ContextFlyout>
+                                        <CommandBarFlyout Placement="Right">
+                                            <AppBarButton x:Name="RenameTodoButton" Icon="Edit" Click="RenameTodoAsync"/>
+                                            <AppBarButton x:Name="DeleteTodoButton" Label="Delete" Icon="Delete" Click="DeleteTodoClickedAsync"/>
+                                        </CommandBarFlyout>
+                                    </Button.ContextFlyout>
+                                </Button>
+                            </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </StackPanel>
         </DataTemplate>
-        <CommandBarFlyout Placement="Right" x:Key="AddSubTodoFlyout" Closed="OnClosed">
-            <AppBarButton x:Name="AddNewSubTodoButton" Label="Share" Icon="Add" Click="AddNewSubTodoAsync"  />
+        <CommandBarFlyout Placement="Right" x:Key="AddSubTodoFlyout">
+            <AppBarButton x:Name="AddSubTodoButton" Icon="Add" Click="AddNewSubTodoFlyoutOpen">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout Closed="AddSubTodoFlyout_Closed">
+                        <StackPanel>
+                            <TextBox x:Name="AddNewSubTodoTextBox" IsReadOnly="False" Margin="2"/>
+                            <Button Click="AddNewSubTodoAsync" Content="Add New Sub To-Do"/>
+                        </StackPanel>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </AppBarButton>
+            <AppBarButton x:Name="RenameTodoButton" Icon="Edit" Click="RenameTodoAsync"/>
             <AppBarButton x:Name="DeleteTodoButton" Label="Delete" Icon="Delete" Click="DeleteTodoClickedAsync"/>
         </CommandBarFlyout>
 
@@ -41,7 +64,11 @@
     </Page.Resources>
 
     <Grid>
-        <StackPanel Background="Beige" Name="TaskListPanel" HorizontalAlignment="Stretch" Margin="0,0,0.4,0" VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Background="{ThemeResource SystemControlBackgroundAltMediumLowBrush}" Name="TaskListPanel" Margin="20,0,20,0" Grid.Column="0" >
             <TextBox Name="TodoNameInput" PlaceholderText="New To-Do" FontSize="22"/>
             <Button Name="TodoCreateButton" HorizontalAlignment="Stretch" FontSize="20" Content="Create" Click="{x:Bind TodoCreateButtonAsync}"/>
             <TextBlock Text="{x:Bind ViewModel.Todos.Count, Mode=OneWay}"/>
@@ -53,19 +80,22 @@
         <Button  Background="Transparent"  Click="TimeCountingStartsButtonClicked"
                  HorizontalAlignment="Center" VerticalAlignment="Bottom"
                  PointerEntered="Button_PointerEntered" PointerExited="Button_PointerExited"
+                 Grid.ColumnSpan="2" 
+                 Margin="0,0,0,20"
                  >
             <StackPanel>
-                <Border CornerRadius="360,360,0,0" 
-                    Background="Tomato" 
+                <Border CornerRadius="45" 
+                    Background="#FFFF4400" 
                     BorderBrush="Transparent" 
-                    BorderThickness="1">
-                    <TextBlock x:Name="PomodoreButtonText" Text="Start" 
-                           Margin="50,25,50,17"
-                           Foreground="DarkSeaGreen"
-                           FontSize="50"
-                               />
+                    BorderThickness="1"
+                    Width="200" Height="120">
+                    <TextBlock x:Name="PomodoreButtonText" Text="Start"
+                           Foreground="#FFC4FF0E"
+                           FontSize="55" FontWeight="ExtraBold" Margin="0,0,0,10"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
             </StackPanel>
         </Button>
     </Grid>
+    
 </Page>

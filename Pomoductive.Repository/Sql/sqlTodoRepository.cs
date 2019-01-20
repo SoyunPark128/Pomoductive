@@ -49,13 +49,13 @@ namespace Pomoductive.Repository.Sql
 
         public async Task<IEnumerable<Todo>> GetForParentsTodoAsync() =>
             await _db.Todos
-                .Where(todo => todo.ParentsTodo == default(Guid))
+                .Where(todo => todo.ParentsTodo == default(Guid) && todo.IsTerminated == false)
                 .AsNoTracking()
                 .ToListAsync();
 
         public async Task<IEnumerable<Todo>> GetForSubTodoAsync() =>
             await _db.Todos
-                .Where(todo => todo.ParentsTodo != default(Guid))
+                .Where(todo => todo.ParentsTodo != default(Guid) && todo.IsTerminated == false)
                 .AsNoTracking()
                 .ToListAsync();
 

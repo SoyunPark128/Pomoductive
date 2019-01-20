@@ -76,21 +76,56 @@ namespace Pomoductive.ViewModels
                 Todos.Clear();
                 foreach (var c in parentsTodos)
                 {
-                    var newParentsTodo = new TodoViewModel(c);
-                    if (c.SubTodos != null)
-                    {
-                        foreach (var subc in c.SubTodos)
-                        {
-                            var newChildTodo = new TodoViewModel(subc);
-                            newParentsTodo.SubTodos.Add(newChildTodo);
-                            newChildTodo.ParentsTodo = newParentsTodo.ID;
-                        }
-                    }
-                    Todos.Add(newParentsTodo);
+                    var newTodoViewModel = new TodoViewModel(c);
+                    Todos.Add(newTodoViewModel);
                 }
                 IsLoading = false;
             });
         }
+
+        /// <summary>
+        /// Deletes the specified Todo from the database.
+        /// </summary>
+        public async Task DeleteTodo(Todo deletedTodo)
+        {
+            await App.Repository.Todos.DeleteAsync(deletedTodo.Id);
+            await ReleaseTodo(deletedTodo);
+        }
+
+        public async Task ReleaseTodo(Todo releasedTodo, bool isTerminated = false)
+        {
+            if (isTerminated)
+            {
+                releasedTodo.IsTerminated = isTerminated;
+                await TodoViewModel.SaveAsync(releasedTodo);
+            }
+
+
+            if (TodoViewModel.IsSubTodo(releasedTodo))
+            {
+                //TODO: CreateFromGuid create empty TodoViewModel. Find out later
+                var _parentsTodoViewModel = GetParents(releasedTodo.ParentsTodo);
+                //var _parentsTodo = await TodoViewModel.CreateFromGuid(deleteTodo.ParentsTodo);
+                _parentsTodoViewModel.SubTodos.Remove(releasedTodo);
+            }
+            else
+            {
+                Todos.Remove(Todos.Where(td => td.Id == releasedTodo.Id).Single());
+            }
+        }
+        
+        public TodoViewModel GetParents(Guid parentsID)
+        {
+            foreach (var todo in Todos)
+            {
+                if (parentsID == todo.Id)
+                {
+                    return todo;
+                }
+            }
+            return null;
+        }
+
 
         private TodoViewModel _selectedTodo;
 
@@ -101,31 +136,8 @@ namespace Pomoductive.ViewModels
         {
             get => _selectedTodo;
             set => Set(ref _selectedTodo, value);
-            
+
         }
-
-        /// <summary>
-        /// Deletes the specified Todo from the database.
-        /// </summary>
-        public async Task DeleteTodo(TodoViewModel orderToDelete)
-        {
-            await App.Repository.Todos.DeleteAsync(orderToDelete.ID);
-            Todos.Remove(Todos.Where(td => td.ID == orderToDelete.ID).Single());
-        }
-
-
-        public TodoViewModel GetParents(Guid parentsID)
-        {
-            foreach (var todo in Todos)
-            {
-                if (parentsID == todo.ID)
-                {
-                    return todo;
-                }
-            }
-            return null;
-        }
-
 
         private ObservableCollection<ShellNavigationItem> _navigationItems = new ObservableCollection<ShellNavigationItem>();
         public ObservableCollection<ShellNavigationItem> NavigationItems
