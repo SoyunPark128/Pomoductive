@@ -21,11 +21,17 @@ namespace Pomoductive.Models
         public bool IsTerminated { get; set; }
         [NotMapped]
         public bool IsDailyCompleted { get; set; }
-        public int DailyCount { get; set; }
+        
 
         [NotMapped]
         public List<Todo> SubTodos { get; set; } = new List<Todo>();
         public Guid ParentsTodo { get; set; } = Guid.Empty;
+
+        public int DailyCount { get; set; }
+        public int TotalPomoCount { get; set; } = 0;
+        public int WorkingMinutesPerOnePomo { get; set; } = 25;
+        public int ShortBreakMinutesPerOnePomo { get; set; } = 5;
+        public int LongBreakMinutesPerOnePomo { get; set; } = 15;
 
         public Todo(string name, string reward = null, Guid parentsTodo = default(Guid))
         {

@@ -12,9 +12,14 @@
                 <ResourceDictionary x:Key="Default">
                     <AcrylicBrush x:Key="NavBackgroundAcrylicBrush"
                                   BackgroundSource="HostBackdrop"
-                                  TintColor="{ThemeResource SystemAccentColorLight1}"
-                                  TintOpacity="0.8"
-                                  FallbackColor="{ThemeResource SystemAccentColorLight1}" />
+                                  TintColor="{ThemeResource SystemAccentColor }"
+                                  Opacity="0.8"
+                                  FallbackColor="{ThemeResource SystemAccentColorLight1 }"
+                                 />
+                    <SolidColorBrush x:Key="PomoButtonBackGroundBrush"
+                                     Color="{ThemeResource SystemAccentColor }"/>
+                    <SolidColorBrush x:Key="ButtonBackGroundBrush"
+                                     Color="{ThemeResource SystemAccentColorDark1 }"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>

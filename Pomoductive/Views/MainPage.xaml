@@ -11,26 +11,39 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <DataTemplate x:Key="TodoListDataTemplate" x:DataType="data:TodoViewModel">
-            <StackPanel>
-                <StackPanel Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
-                    <CheckBox x:Name="TodoCheckBox" Content="{x:Bind Name}"  Checked="Task_Finished_CheckAsync"/>
-                    <Button x:Name="MoreButton" Background="Transparent" Click="MoreButton_Click" 
+            <Grid  Width="250">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <CheckBox x:Name="TodoCheckBox" Content="{x:Bind Name}"  Checked="Task_Finished_CheckAsync"
+                              Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
+                <Button x:Name="MoreButton" Background="Transparent" Click="MoreButton_Click" 
                             FontFamily="Segoe MDL2 Assets" Content="&#xE10C;" 
-                            BorderBrush="Transparent" 
+                            BorderBrush="Transparent" Grid.Row="0" Grid.Column="1"
                             ContextFlyout="{StaticResource AddSubTodoFlyout}"/>
-                </StackPanel>
-                <ListView  Margin="30,0,0,0" ItemsSource="{x:Bind SubTodos}" >
+                <ListView  Margin="10,0,0,0" ItemsSource="{x:Bind SubTodos}" 
+                           Grid.Row="1" Grid.ColumnSpan="2" MaxHeight="500">
                     <ListView.ItemTemplate >
                         <DataTemplate x:DataType="models:Todo">
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox x:Name="SubTodoCheckBox" Content="{x:Bind Name}" Checked="Task_Finished_CheckAsync">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="SubTodoCheckBox" Content="{x:Bind Name}" Checked="Task_Finished_CheckAsync" 
+                                            Width="170" Grid.Column="0">
                                     <CheckBox.RenderTransform>
                                         <ScaleTransform CenterX="25" CenterY="25" ScaleX="0.9" ScaleY="0.9" />
                                     </CheckBox.RenderTransform>
                                 </CheckBox>
                                 <Button x:Name="MoreButton" Background="Transparent" Click="MoreButton_Click" 
                                         FontFamily="Segoe MDL2 Assets" Content="&#xE10C;" 
-                                        BorderBrush="Transparent">
+                                        BorderBrush="Transparent"  Grid.Column="2">
                                     <Button.ContextFlyout>
                                         <CommandBarFlyout Placement="Right">
                                             <AppBarButton x:Name="RenameTodoButton" Icon="Edit" Click="RenameTodoAsync"/>
@@ -38,11 +51,11 @@
                                         </CommandBarFlyout>
                                     </Button.ContextFlyout>
                                 </Button>
-                            </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </StackPanel>
+            </Grid>
         </DataTemplate>
         <CommandBarFlyout Placement="Right" x:Key="AddSubTodoFlyout">
             <AppBarButton x:Name="AddSubTodoButton" Icon="Add" Click="AddNewSubTodoFlyoutOpen">
@@ -57,26 +70,35 @@
             </AppBarButton>
             <AppBarButton x:Name="RenameTodoButton" Icon="Edit" Click="RenameTodoAsync"/>
             <AppBarButton x:Name="DeleteTodoButton" Label="Delete" Icon="Delete" Click="DeleteTodoClickedAsync"/>
-        </CommandBarFlyout>
+        </CommandBarFlyout> 
 
 
 
     </Page.Resources>
 
-    <Grid>
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Background="{ThemeResource SystemControlBackgroundAltMediumLowBrush}" Name="TaskListPanel" Margin="20,0,20,0" Grid.Column="0" >
-            <TextBox Name="TodoNameInput" PlaceholderText="New To-Do" FontSize="22"/>
-            <Button Name="TodoCreateButton" HorizontalAlignment="Stretch" FontSize="20" Content="Create" Click="{x:Bind TodoCreateButtonAsync}"/>
-            <TextBlock Text="{x:Bind ViewModel.Todos.Count, Mode=OneWay}"/>
-            <TextBlock Name="remainTimeTextBlock"/>
-            <ListView ItemsSource="{x:Bind ViewModel.Todos}" 
+        <Grid Background="{ThemeResource SystemControlBackgroundAltMediumLowBrush}" Name="TaskListPanel" Margin="20,0,20,0" Grid.Column="0" MinWidth="250" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="0">
+                <TextBox Name="TodoNameInput" PlaceholderText="New To-Do" FontSize="22"/>
+                <Button Name="TodoCreateButton" Content="Create"
+                        HorizontalAlignment="Stretch" FontSize="20" Background="{ThemeResource ButtonBackGroundBrush}" 
+                        Click="{x:Bind TodoCreateButtonAsync}"/>
+                <TextBlock Text="{x:Bind ViewModel.Todos.Count, Mode=OneWay}"/>
+                <TextBlock Name="remainTimeTextBlock"/>
+            </StackPanel>
+            <ListView ItemsSource="{x:Bind ViewModel.Todos}"  Grid.Row="1"
                   ItemTemplate="{StaticResource TodoListDataTemplate}" CanDragItems="True" AllowDrop="True" SelectedItem="{x:Bind ViewModel.SelectedTodo, Mode=TwoWay}">
             </ListView>
-        </StackPanel>
+        </Grid>
         <Button  Background="Transparent"  Click="TimeCountingStartsButtonClicked"
                  HorizontalAlignment="Center" VerticalAlignment="Bottom"
                  PointerEntered="Button_PointerEntered" PointerExited="Button_PointerExited"
@@ -85,12 +107,12 @@
                  >
             <StackPanel>
                 <Border CornerRadius="45" 
-                    Background="#FFFF4400" 
+                    Background="{ThemeResource PomoButtonBackGroundBrush}" 
                     BorderBrush="Transparent" 
                     BorderThickness="1"
                     Width="200" Height="120">
                     <TextBlock x:Name="PomodoreButtonText" Text="Start"
-                           Foreground="#FFC4FF0E"
+                           Foreground="White"
                            FontSize="55" FontWeight="ExtraBold" Margin="0,0,0,10"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>

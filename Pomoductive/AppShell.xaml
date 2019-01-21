@@ -79,7 +79,7 @@
                       Width="20"
                       Height="20"
                       Margin="8,0" />
-            <TextBlock Text="Lunch Scheduler"
+            <TextBlock Text="Pomoductive"
                        Grid.Column="1"
                        Style="{ThemeResource CaptionTextBlockStyle}"
                        Margin="36,8,0,0"

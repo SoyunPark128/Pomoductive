@@ -59,7 +59,8 @@ namespace Pomoductive.Views
             Todo newTodo = new Todo(TodoNameInput.Text);
             TodoViewModel TodoViewModel = new TodoViewModel(newTodo)
             {
-                Reward = "Sleep"
+                IsNewTodo = true,
+                Reward = ""
             };
             
             TodoNameInput.ClearValue(TextBox.TextProperty);
