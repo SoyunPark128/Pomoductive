@@ -22,9 +22,6 @@ namespace Pomoductive.Models
         [NotMapped]
         public bool IsDailyCompleted { get; set; }
         
-
-        [NotMapped]
-        public List<Todo> SubTodos { get; set; } = new List<Todo>();
         public Guid ParentsTodo { get; set; } = Guid.Empty;
 
         public int DailyCount { get; set; }

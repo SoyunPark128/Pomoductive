@@ -29,7 +29,7 @@
                 <ListView  Margin="10,0,0,0" ItemsSource="{x:Bind SubTodos}" 
                            Grid.Row="1" Grid.ColumnSpan="2" MaxHeight="500">
                     <ListView.ItemTemplate >
-                        <DataTemplate x:DataType="models:Todo">
+                        <DataTemplate x:DataType="data:TodoViewModel">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />

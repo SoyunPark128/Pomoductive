@@ -64,7 +64,7 @@ namespace Pomoductive.Views
             };
             
             TodoNameInput.ClearValue(TextBox.TextProperty);
-            await TodoViewModel.SaveAsync();
+            await TodoViewModel.SaveTodoAsync();
             
         }
 
@@ -75,16 +75,16 @@ namespace Pomoductive.Views
         {
             var parentsTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
             Todo newSubTodo = new Todo(AddNewSubTodoTextBox.Text);
+            TodoViewModel newSubTodoViewModel = new TodoViewModel(newSubTodo);
 
             newSubTodo.ParentsTodo = parentsTodoViewModel.Id;
-            parentsTodoViewModel.SubTodos.Add(newSubTodo);
+            parentsTodoViewModel.SubTodos.Add(newSubTodoViewModel);
 
             AddNewSubTodoTextBox.ClearValue(TextBox.TextProperty);
 
             parentsTodoViewModel.IsNewTodo = false;
-            await parentsTodoViewModel.SaveAsync();
-            await TodoViewModel.SaveAsync(newSubTodo);
-
+            await parentsTodoViewModel.SaveTodoAsync();
+            await newSubTodoViewModel.SaveTodoAsync();
         }
 
 
@@ -95,16 +95,8 @@ namespace Pomoductive.Views
         {
             CheckBox checkedBox = (CheckBox)sender;
             
-            if (checkedBox.DataContext.GetType() == typeof(Todo))
-            {
-                var finishedSubTodo = (sender as FrameworkElement).DataContext as Todo;
-                await ViewModel.ReleaseTodo(finishedSubTodo, true);
-            }
-            else
-            {
-                var finishedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
-                await ViewModel.ReleaseTodo(finishedTodoViewModel.TodoModel, true);
-            }
+            var finishedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
+            await finishedTodoViewModel.ReleaseTodo(true);
         }
 
         private void MoreButton_Click(object sender, RoutedEventArgs e)
@@ -119,16 +111,8 @@ namespace Pomoductive.Views
         {
             AppBarButton appBarButton = (AppBarButton)sender;
 
-            if (appBarButton.DataContext.GetType() == typeof(Todo))
-            {
-                var deletedSubTodo = (sender as FrameworkElement).DataContext as Todo;
-                await ViewModel.DeleteTodo(deletedSubTodo);
-            }
-            else
-            {
-                var deletedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
-                await ViewModel.DeleteTodo(deletedTodoViewModel.TodoModel);
-            }
+            var deletedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
+            await deletedTodoViewModel.DeleteTodo();
         }
 
         private void TimeCountingStartsButtonClicked(object sender, RoutedEventArgs e)

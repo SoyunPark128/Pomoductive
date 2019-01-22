@@ -60,71 +60,31 @@ namespace Pomoductive.ViewModels
             }
 
             // Todo
-            foreach (var subTodo in SubTodos)
-            {
-                var parentsWhichHasSubs =  parentsTodos.ToList<Todo>().Find(x => x.Id == subTodo.ParentsTodo);
-                if (null != parentsWhichHasSubs)
-                {
-                    parentsWhichHasSubs.SubTodos.Add(subTodo);
-                    subTodo.ParentsTodo = parentsWhichHasSubs.Id;
-                }
-            }
+            
 
             // TodoViewModel
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
                 Todos.Clear();
-                foreach (var c in parentsTodos)
+
+                foreach (var pt in parentsTodos)
                 {
-                    var newTodoViewModel = new TodoViewModel(c);
+                    var newTodoViewModel = new TodoViewModel(pt);
+                    newTodoViewModel.SubTodos.Clear();
+                    var subTodos = SubTodos.ToList<Todo>().FindAll(x => x.ParentsTodo == newTodoViewModel.Id);
+                    foreach (var st in subTodos)
+                    {
+                        var newSubTodoViewModel = new TodoViewModel(st);
+                        newTodoViewModel.SubTodos.Add(newSubTodoViewModel);
+                    }
                     Todos.Add(newTodoViewModel);
                 }
+                
+                
                 IsLoading = false;
             });
         }
-
-        /// <summary>
-        /// Deletes the specified Todo from the database.
-        /// </summary>
-        public async Task DeleteTodo(Todo deletedTodo)
-        {
-            await App.Repository.Todos.DeleteAsync(deletedTodo.Id);
-            await ReleaseTodo(deletedTodo);
-        }
-
-        public async Task ReleaseTodo(Todo releasedTodo, bool isTerminated = false)
-        {
-            if (isTerminated)
-            {
-                releasedTodo.IsTerminated = isTerminated;
-                await TodoViewModel.SaveAsync(releasedTodo);
-            }
-
-
-            if (TodoViewModel.IsSubTodo(releasedTodo))
-            {
-                //TODO: CreateFromGuid create empty TodoViewModel. Find out later
-                var _parentsTodoViewModel = GetParents(releasedTodo.ParentsTodo);
-                //var _parentsTodo = await TodoViewModel.CreateFromGuid(deleteTodo.ParentsTodo);
-                _parentsTodoViewModel.SubTodos.Remove(releasedTodo);
-            }
-            else
-            {
-                Todos.Remove(Todos.Where(td => td.Id == releasedTodo.Id).Single());
-            }
-        }
         
-        public TodoViewModel GetParents(Guid parentsID)
-        {
-            foreach (var todo in Todos)
-            {
-                if (parentsID == todo.Id)
-                {
-                    return todo;
-                }
-            }
-            return null;
-        }
 
 
         private TodoViewModel _selectedTodo;

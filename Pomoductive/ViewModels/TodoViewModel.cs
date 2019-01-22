@@ -17,6 +17,10 @@ namespace Pomoductive.ViewModels
     public class TodoViewModel : BindableBase
     {
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///Property//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         private Todo _todoModel;
 
         /// <summary>
@@ -25,34 +29,12 @@ namespace Pomoductive.ViewModels
         public TodoViewModel(Todo todo = null)
         {
             TodoModel = todo ?? new Todo(string.Empty);
-            SubTodos = new ObservableCollection<Todo>(TodoModel.SubTodos);
-
+            SubTodos = new ObservableCollection<TodoViewModel>();
             //NewSubTodoView = new TodoViewModel();
         }
+        
+        public ObservableCollection<TodoViewModel> SubTodos { get; } = new ObservableCollection<TodoViewModel>();
 
-        private ObservableCollection<Todo> _subTodos;
-        public ObservableCollection<Todo> SubTodos
-        {
-            get => _subTodos;
-            set
-            {
-                if (_subTodos != value)
-                {
-                    if (value != null)
-                    {
-                        value.CollectionChanged += SubTodos_Changed;
-                    }
-
-                    if (_subTodos != null)
-                    {
-                        _subTodos.CollectionChanged -= SubTodos_Changed;
-                    }
-                    _subTodos = value;
-                    OnPropertyChanged();
-                    //IsModified = true;
-                }
-            }
-        }
 
         /// <summary>
         /// Gets or sets the underlying Todo object.
@@ -110,18 +92,20 @@ namespace Pomoductive.ViewModels
             get => TodoModel.Id;
         }
 
-        public Guid ParentsTodo
+        public Guid ParentsTodoId
         {
             get => TodoModel.ParentsTodo;
             set
             {
                 if (value != TodoModel.ParentsTodo)
                 {
-                    _todoModel.ParentsTodo = value;
+                    TodoModel.ParentsTodo = value;
                     OnPropertyChanged();
                 }
             }
         }
+        
+        
 
         private bool _isNewTodo;
         /// <summary>
@@ -133,30 +117,77 @@ namespace Pomoductive.ViewModels
             set => Set(ref _isNewTodo, value);
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///METHOD////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
         /// <summary>
         /// Saves todo data that has been edited.
         /// </summary>
-        public async Task SaveAsync()
+        public async Task SaveTodoAsync()
         {
             if (IsNewTodo)
             {
                 IsNewTodo = false;
-                App.AppViewModel.Todos.Add(this);
+                if (this.IsSubTodo())
+                {
+                    var _parentsTodoViewModel = this.GetParentsViewModel();
+                    _parentsTodoViewModel.SubTodos.Add(this);
+                }
+                else
+                {
+                    App.AppViewModel.Todos.Add(this);
+                }
             }
 
             await App.Repository.Todos.UpsertAsync(TodoModel);
         }
 
-        public static async Task SaveAsync(Todo todo)
+        public async Task ReleaseTodo(bool isTerminated = false)
         {
-            await App.Repository.Todos.UpsertAsync(todo);
+            if (isTerminated)
+            {
+                this.IsTerminated = isTerminated;
+                await SaveTodoAsync();
+            }
+
+
+            if (IsSubTodo())
+            {
+                //TODO: CreateFromGuid create empty TodoViewModel. Find out later
+                //var _parentsTodo = await TodoViewModel.CreateFromGuid(deleteTodo.ParentsTodo);
+                var _parentsTodoViewModel = GetParentsViewModel();
+                _parentsTodoViewModel.SubTodos.Remove(this);
+            }
+            else
+            {
+                App.AppViewModel.Todos.Remove(App.AppViewModel.Todos.Where(td => td.Id == this.Id).Single());
+            }
         }
 
         /// <summary>
         /// Deletes the specified todo from the database.
         /// </summary>
-        public async Task DeleteTodo(Todo TodoToDelete) =>
-            await App.Repository.Todos.DeleteAsync(TodoToDelete.Id);
+        public async Task DeleteTodo()
+        {
+            await App.Repository.Todos.DeleteAsync(this.Id);
+            await ReleaseTodo();
+        }
+
+        public TodoViewModel GetParentsViewModel()
+        {
+            foreach (var todo in App.AppViewModel.Todos)
+            {
+                if (ParentsTodoId == todo.Id)
+                {
+                    return todo;
+                }
+            }
+            return null;
+        }
 
         /// <summary>
         /// Creates an TodoViewModel that wraps an Todo object created from the specified Id.
@@ -166,6 +197,7 @@ namespace Pomoductive.ViewModels
 
         /// <summary>
         /// Returns the todo with the specified Id.
+        /// It is slower than GetParentsViewModel()
         /// </summary>
         private static async Task<Todo> GetTodo(Guid todoId) =>
             await App.Repository.Todos.GetAsync(todoId);
@@ -173,19 +205,19 @@ namespace Pomoductive.ViewModels
         /// <summary>
         /// Called when a bound DataGrid control commits the edits that have been made to a customer.
         /// </summary>
-        public async void EndEdit() => await SaveAsync();
+        public async void EndEdit() => await SaveTodoAsync();
         
 
         public int CountDailyCount()
         {
-            return ++_todoModel.DailyCount;
+            return ++TodoModel.DailyCount;
         }
 
         public bool CheckDailyCompleted(int soFarCount)
         {
-            if (soFarCount == _todoModel.DailyCount)
+            if (soFarCount == TodoModel.DailyCount)
             {
-                _todoModel.IsDailyCompleted = true;
+                TodoModel.IsDailyCompleted = true;
                 return true;
             }
             else
@@ -193,66 +225,14 @@ namespace Pomoductive.ViewModels
                 return false;
             }
         }
-
-        ///
-        /// Sub Todo Methods /////////////////////////////////////////////////////
-        /// 
-
-        public static bool IsSubTodo(Todo todo)
+        
+        public bool IsSubTodo()
         {
-            if (default(Guid) != todo.ParentsTodo)
+            if (default(Guid) != this.TodoModel.ParentsTodo)
             {
                 return true;
             }
             return false;
-        }
-        /// <summary>
-        /// Notifies anyone listening to this object that a line item changed. 
-        /// </summary>
-        private void SubTodos_Changed(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (SubTodos != null)
-            {
-                TodoModel.SubTodos = SubTodos.ToList();
-            }
-
-            OnPropertyChanged(nameof(SubTodos));
-            //IsModified = true;
-        }
-
-        private TodoViewModel _newSubTodoView;
-
-        /// <summary>
-        /// Gets or sets the line item that the user is currently working on.
-        /// </summary>
-        public TodoViewModel NewSubTodoView
-        {
-            get => _newSubTodoView;
-            set
-            {
-                if (value != _newSubTodoView)
-                {
-                    if (value != null)
-                    {
-                        value.PropertyChanged += NewSubTodo_PropertyChanged;
-                    }
-
-                    if (_newSubTodoView != null)
-                    {
-                        _newSubTodoView.PropertyChanged -= NewSubTodo_PropertyChanged;
-                    }
-
-                    _newSubTodoView = value;
-                    UpdateNewSubTodoBindings();
-                }
-            }
-        }
-
-        private void NewSubTodo_PropertyChanged(object sender, PropertyChangedEventArgs e) => UpdateNewSubTodoBindings();
-
-        private void UpdateNewSubTodoBindings()
-        {
-            OnPropertyChanged(nameof(NewSubTodoView));
         }
     }
 }
