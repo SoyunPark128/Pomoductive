@@ -12,7 +12,7 @@ namespace Pomoductive.Repository.Sql
     /// Contains methods for interacting with the Todos backend using 
     /// SQL via Entity Framework Core 2.2.
     /// </summary>
-    public class SqlTodoRepository
+    public class SqlTodoRepository : ITodoRepository
     {
         private readonly PomoductiveContext _db;
 

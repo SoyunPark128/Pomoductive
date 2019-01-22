@@ -16,7 +16,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.EntityFrameworkCore;
-using Pomoductive.Repository.Sql;
 using Pomoductive.ViewModels;
 using Pomoductive.Views;
 using Windows.Globalization;
@@ -24,6 +23,8 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.ApplicationModel.Core;
+using Pomoductive.Repository;
+using Pomoductive.Repository.Sql;
 
 namespace Pomoductive
 {
@@ -123,7 +124,7 @@ namespace Pomoductive
         /// <summary>
         /// Pipeline for interacting with backend service or database.
         /// </summary>
-        public static SqlPomoductiveRepository Repository { get; private set; }
+        public static IPomoductiveRepository Repository { get; private set; }
 
         /// <summary>
         /// Configures the app to use the Sqlite data source. If no existing Sqlite database exists, 
@@ -131,11 +132,12 @@ namespace Pomoductive
         /// </summary>
         public static void UseSqlite()
         {
-            string databasePath = ApplicationData.Current.LocalFolder.Path + @"\Pomoductive.db";
+            String databasePath = ApplicationData.Current.LocalFolder.Path + @"\Pomoductive.db";
 
             var dbOptions = new DbContextOptionsBuilder<PomoductiveContext>().UseSqlite(
                 "Data Source=" + databasePath);
             Repository = new SqlPomoductiveRepository(dbOptions);
+
         }
 
 

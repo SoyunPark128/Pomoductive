@@ -10,7 +10,7 @@ namespace Pomoductive.Repository.Sql
     /// Contains methods for interacting with the app backend using 
     /// SQL via Entity Framework Core 2.2. 
     /// </summary>
-    public class SqlPomoductiveRepository
+    public class SqlPomoductiveRepository : IPomoductiveRepository
     {
         private readonly DbContextOptions<PomoductiveContext> _dbOptions;
 
@@ -25,7 +25,7 @@ namespace Pomoductive.Repository.Sql
 
 
 
-        public SqlTodoRepository Todos => new SqlTodoRepository(new PomoductiveContext(_dbOptions));
+        public ITodoRepository Todos => new SqlTodoRepository(new PomoductiveContext(_dbOptions));
 
     }
 }
