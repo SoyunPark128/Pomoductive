@@ -24,6 +24,7 @@ namespace Pomoductive.Repository.Sql
         public async Task<IEnumerable<Todo>> GetAsync()
         {
             return await _db.Todos
+                .Include(todo => todo.TimeRecords)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -31,6 +32,7 @@ namespace Pomoductive.Repository.Sql
         public async Task<Todo> GetAsync(Guid id)
         {
             return await _db.Todos
+                .Include(todo => todo.TimeRecords)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(todo => todo.Id == id);
         }
@@ -39,8 +41,8 @@ namespace Pomoductive.Repository.Sql
         {
             string[] parameters = value.Split(' ');
             return await _db.Todos
-                .Where(todo =>
-                    parameters.Any(parameter => todo.Name.StartsWith(parameter) ))
+                .Where(todo => parameters.Any(parameter => todo.Name.StartsWith(parameter)))
+                .Include(todo => todo.TimeRecords)
                 .OrderByDescending(todo =>
                     parameters.Count(parameter => todo.Name.StartsWith(parameter)))
                 .AsNoTracking()
@@ -50,12 +52,14 @@ namespace Pomoductive.Repository.Sql
         public async Task<IEnumerable<Todo>> GetForParentsTodoAsync() =>
             await _db.Todos
                 .Where(todo => todo.ParentsTodo == default(Guid) && todo.IsTerminated == false)
+                .Include(todo => todo.TimeRecords)
                 .AsNoTracking()
                 .ToListAsync();
 
         public async Task<IEnumerable<Todo>> GetForSubTodoAsync() =>
             await _db.Todos
                 .Where(todo => todo.ParentsTodo != default(Guid) && todo.IsTerminated == false)
+                .Include(todo => todo.TimeRecords)
                 .AsNoTracking()
                 .ToListAsync();
 

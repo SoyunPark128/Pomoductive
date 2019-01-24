@@ -11,9 +11,7 @@ namespace Pomoductive.Models
         public TimeSpan TotalTime { get; set; }
 
         private static readonly StopWatchModel instance = new StopWatchModel();
-
-        static StopWatchModel()
-        { }
+        
 
         private StopWatchModel()
         {

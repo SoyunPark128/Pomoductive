@@ -21,5 +21,10 @@ namespace Pomoductive.Repository.Sql
         /// Gets the todos DbSet.
         /// </summary>
         public DbSet<Todo> Todos { get; set; }
+
+        /// <summary>
+        /// Gets the timeRecord DbSet.
+        /// </summary>
+        public DbSet<TimeRecord> TimeRecords { get; set; }
     }
 }

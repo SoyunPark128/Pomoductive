@@ -14,5 +14,10 @@ namespace Pomoductive.Repository
         /// Returns the Todos repository.
         /// </summary>
         ITodoRepository Todos { get; }
+
+        /// <summary>
+        /// Returns the TimeRecords repository.
+        /// </summary>
+        ITimeRecordRepository TimeRecords { get; }
     }
 }

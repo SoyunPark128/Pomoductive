@@ -45,12 +45,16 @@ namespace Pomoductive.Views
         /// Gets the app-wide AppViewModel instance.
         /// </summary>
         public ApplicationViewModel ViewModel => App.AppViewModel;
+        TodoViewModel selectedTodoViewModel = new TodoViewModel();
+        TimeSpan remainTime = new TimeSpan();
+        TimeRecordViewModel timeRecordViewModel;
 
         DispatcherTimer timer4Stopwatch = new DispatcherTimer();
-        TimeSpan SettedTime = new TimeSpan(0, 0, 5);
-        TimeSpan remainTime = new TimeSpan();
-        TimeSpan padding = new TimeSpan(0, 0, 1);
         MediaPlayer player = new MediaPlayer();
+
+
+
+
         //public event EventHandler<RoutedEventArgs> PomodoreFinished;
 
 
@@ -59,13 +63,12 @@ namespace Pomoductive.Views
             Todo newTodo = new Todo(TodoNameInput.Text);
             TodoViewModel TodoViewModel = new TodoViewModel(newTodo)
             {
-                IsNewTodo = true,
-                Reward = ""
+                IsNewTodo = true
             };
-            
+
             TodoNameInput.ClearValue(TextBox.TextProperty);
             await TodoViewModel.SaveTodoAsync();
-            
+
         }
 
         /// <summary>
@@ -74,11 +77,12 @@ namespace Pomoductive.Views
         private async void AddNewSubTodoAsync(object sender, RoutedEventArgs e)
         {
             var parentsTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
-            Todo newSubTodo = new Todo(AddNewSubTodoTextBox.Text);
-            TodoViewModel newSubTodoViewModel = new TodoViewModel(newSubTodo);
 
-            newSubTodo.ParentsTodo = parentsTodoViewModel.Id;
-            parentsTodoViewModel.SubTodos.Add(newSubTodoViewModel);
+            Todo newSubTodo = new Todo(AddNewSubTodoTextBox.Text, null, parentsTodoViewModel.Id);
+            TodoViewModel newSubTodoViewModel = new TodoViewModel(newSubTodo)
+            {
+                IsNewTodo = true
+            };
 
             AddNewSubTodoTextBox.ClearValue(TextBox.TextProperty);
 
@@ -94,7 +98,7 @@ namespace Pomoductive.Views
         private async void Task_Finished_CheckAsync(object sender, RoutedEventArgs e)
         {
             CheckBox checkedBox = (CheckBox)sender;
-            
+
             var finishedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
             await finishedTodoViewModel.ReleaseTodo(true);
         }
@@ -105,8 +109,8 @@ namespace Pomoductive.Views
             MoreButton.ContextFlyout.ShowAt(MoreButton);
             ViewModel.SelectedTodo = (e.OriginalSource as FrameworkElement).DataContext as TodoViewModel;
         }
-        
-        
+
+
         private async void DeleteTodoClickedAsync(object sender, RoutedEventArgs e)
         {
             AppBarButton appBarButton = (AppBarButton)sender;
@@ -117,13 +121,18 @@ namespace Pomoductive.Views
 
         private void TimeCountingStartsButtonClicked(object sender, RoutedEventArgs e)
         {
-            remainTime = SettedTime;
-            
+            selectedTodoViewModel = App.AppViewModel.SelectedTodo;
+
+            remainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo);
+            timeRecordViewModel = selectedTodoViewModel.GetTimeRecordViewModel();
+
             ViewModel.Stopwatch.TimeCountStart();
+            PomodoreButtonText.FontSize = 45;
             timer4Stopwatch.Start();
-            
+
         }
-        public void Timer_Tick4Stopwatch(object sender, object e)
+
+        public async void Timer_Tick4Stopwatch(object sender, object e)
         {
 
             if (remainTime < TimeSpan.Zero)
@@ -131,14 +140,21 @@ namespace Pomoductive.Views
                 ViewModel.Stopwatch.TimeCountStop();
                 timer4Stopwatch.Stop();
                 player.Play();
+                PomodoreButtonText.FontSize = 55;
                 PomodoreButtonText.Text = "Done!";
-                remainTimeTextBlock.Text = "Done!";
+
+                timeRecordViewModel.Remainder = 0;
+                timeRecordViewModel.TotalTaskCount++;
+                await timeRecordViewModel.SaveTimeRecordAsync();
             }
             else
             {
-                PomodoreButtonText.Text = remainTime.Add(padding).ToString(@"dd\:mm\:ss");
-                remainTimeTextBlock.Text = remainTime.Add(padding).ToString(@"dd\:mm\:ss");
-                remainTime = SettedTime - ViewModel.Stopwatch.GetElapsedTime();
+                PomodoreButtonText.Text = remainTime.ToString(@"dd\:mm\:ss");
+                remainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo) - ViewModel.Stopwatch.GetElapsedTime();
+
+                timeRecordViewModel.Remainder = timeRecordViewModel.TaskMin / (float)ViewModel.Stopwatch.GetElapsedTime().Minutes;
+                await timeRecordViewModel.SaveTimeRecordAsync();
+
             }
         }
 
@@ -173,11 +189,12 @@ namespace Pomoductive.Views
                 AddSubTodoButton.AllowFocusOnInteraction = true;
             }
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-            
+
         }
         private void AddSubTodoFlyout_Closed(object sender, object e)
         {
             AddNewSubTodoTextBox.ClearValue(TextBox.TextProperty);
         }
-    }
+
+    } 
 }

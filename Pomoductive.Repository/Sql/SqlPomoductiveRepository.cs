@@ -27,5 +27,7 @@ namespace Pomoductive.Repository.Sql
 
         public ITodoRepository Todos => new SqlTodoRepository(new PomoductiveContext(_dbOptions));
 
+        public ITimeRecordRepository TimeRecords => new SqlTimeRecordRepository(new PomoductiveContext(_dbOptions));
+
     }
 }

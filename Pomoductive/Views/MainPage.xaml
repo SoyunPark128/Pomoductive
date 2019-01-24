@@ -20,16 +20,16 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <CheckBox x:Name="TodoCheckBox" Content="{x:Bind Name}"  Checked="Task_Finished_CheckAsync"
+                <CheckBox  Content="{x:Bind Name}"  Checked="Task_Finished_CheckAsync"
                               Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
                 <Button x:Name="MoreButton" Background="Transparent" Click="MoreButton_Click" 
                             FontFamily="Segoe MDL2 Assets" Content="&#xE10C;" 
                             BorderBrush="Transparent" Grid.Row="0" Grid.Column="1"
                             ContextFlyout="{StaticResource AddSubTodoFlyout}"/>
-                <ListView  Margin="10,0,0,0" ItemsSource="{x:Bind SubTodos}" 
-                           Grid.Row="1" Grid.ColumnSpan="2" MaxHeight="500">
+                <ListView ItemsSource="{x:Bind SubTodos}" SelectedItem="{x:Bind SelectedSubTodo , Mode=TwoWay}"
+                    Margin="10,0,0,0"  Grid.Row="1" Grid.ColumnSpan="2" MaxHeight="500">
                     <ListView.ItemTemplate >
-                        <DataTemplate x:DataType="data:TodoViewModel">
+                        <DataTemplate x:DataType="data:TodoViewModel" >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -70,7 +70,7 @@
             </AppBarButton>
             <AppBarButton x:Name="RenameTodoButton" Icon="Edit" Click="RenameTodoAsync"/>
             <AppBarButton x:Name="DeleteTodoButton" Label="Delete" Icon="Delete" Click="DeleteTodoClickedAsync"/>
-        </CommandBarFlyout> 
+        </CommandBarFlyout>
 
 
 
@@ -86,16 +86,18 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
+
             <StackPanel Grid.Row="0">
-                <TextBox Name="TodoNameInput" PlaceholderText="New To-Do" FontSize="22"/>
+                <TextBox Name="TodoNameInput"  AccessKey="TodoCreateButton"   
+                         PlaceholderText="New To-Do" FontSize="22"/>
                 <Button Name="TodoCreateButton" Content="Create"
                         HorizontalAlignment="Stretch" FontSize="20" Background="{ThemeResource ButtonBackGroundBrush}" 
                         Click="{x:Bind TodoCreateButtonAsync}"/>
                 <TextBlock Text="{x:Bind ViewModel.Todos.Count, Mode=OneWay}"/>
+                <TextBlock Text="{x:Bind ViewModel.SelectedTodo.Name, Mode=OneWay}"/>
                 <TextBlock Name="remainTimeTextBlock"/>
             </StackPanel>
-            <ListView ItemsSource="{x:Bind ViewModel.Todos}"  Grid.Row="1"
+            <ListView x:Name="TodoListView" ItemsSource="{x:Bind ViewModel.Todos}"  Grid.Row="1" 
                   ItemTemplate="{StaticResource TodoListDataTemplate}" CanDragItems="True" AllowDrop="True" SelectedItem="{x:Bind ViewModel.SelectedTodo, Mode=TwoWay}">
             </ListView>
         </Grid>
@@ -119,5 +121,5 @@
             </StackPanel>
         </Button>
     </Grid>
-    
+
 </Page>

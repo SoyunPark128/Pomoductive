@@ -16,7 +16,6 @@ namespace Pomoductive.ViewModels
     /// </summary>
     public class TodoViewModel : BindableBase
     {
-
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///Property//////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,14 +67,13 @@ namespace Pomoductive.ViewModels
 
         public bool IsTerminated
         {
-            get { return TodoModel.IsTerminated; }
+            get => TodoModel.IsTerminated;
             set
             {
                 TodoModel.IsTerminated = value;
                 OnPropertyChanged();
             }
         }
-
 
         public string Name
         {
@@ -104,8 +102,58 @@ namespace Pomoductive.ViewModels
                 }
             }
         }
+
+        public int DailyCount
+        {
+            get => TodoModel.DailyCount;
+            set
+            {
+                if (value != TodoModel.DailyCount)
+                {
+                    TodoModel.DailyCount = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         
-        
+        public int TaskMinutesPerOnePomo
+        {
+            get => TodoModel.TaskMinutesPerOnePomo;
+            set
+            {
+                if (value != TodoModel.TaskMinutesPerOnePomo)
+                {
+                    TodoModel.TaskMinutesPerOnePomo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int ShortBreakMinutesPerOnePomo
+        {
+            get => TodoModel.ShortBreakMinutesPerOnePomo;
+            set
+            {
+                if (value != TodoModel.ShortBreakMinutesPerOnePomo)
+                {
+                    TodoModel.ShortBreakMinutesPerOnePomo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int LongBreakMinutesPerOnePomo
+        {
+            get => TodoModel.LongBreakMinutesPerOnePomo;
+            set
+            {
+                if (value != TodoModel.LongBreakMinutesPerOnePomo)
+                {
+                    TodoModel.LongBreakMinutesPerOnePomo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private bool _isNewTodo;
         /// <summary>
@@ -116,12 +164,30 @@ namespace Pomoductive.ViewModels
             get => _isNewTodo;
             set => Set(ref _isNewTodo, value);
         }
+        
+
+        public TodoViewModel SelectedSubTodo
+        {
+            get { return App.AppViewModel.SelectedTodo; }
+            set { App.AppViewModel.SelectedTodo = value; }
+        }
+
+        public ICollection<TimeRecord> TimeRecords
+        {
+            get => TodoModel.TimeRecords;
+            set
+            {
+                if (value != TodoModel.TimeRecords)
+                {
+                    TodoModel.TimeRecords = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///METHOD////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
         /// <summary>
@@ -202,6 +268,22 @@ namespace Pomoductive.ViewModels
         private static async Task<Todo> GetTodo(Guid todoId) =>
             await App.Repository.Todos.GetAsync(todoId);
 
+        public TimeRecordViewModel GetTimeRecordViewModel()
+        {
+            TimeRecord _timeRecord = TimeRecords.FirstOrDefault(trvm => trvm.TodoId == Id 
+                                                                            && trvm.TaskMin == TaskMinutesPerOnePomo 
+                                                                            && trvm.RecordingDay == DateTime.Today);
+            
+            if (_timeRecord is null)
+            {
+                _timeRecord = new TimeRecord(Id);
+                _timeRecord.TaskMin = TaskMinutesPerOnePomo;
+                TimeRecords.Add(_timeRecord);
+            }
+
+            TimeRecordViewModel _timeRecordViewModel = new TimeRecordViewModel(_timeRecord);
+            return _timeRecordViewModel;
+        }
         /// <summary>
         /// Called when a bound DataGrid control commits the edits that have been made to a customer.
         /// </summary>

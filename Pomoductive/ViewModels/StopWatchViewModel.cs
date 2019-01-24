@@ -10,8 +10,10 @@ namespace Pomoductive.ViewModels
 {
     public class StopWatchViewModel
     {
-        StopWatchModel StopWatchModel = StopWatchModel.Instance;
+        public TimeSpan remainTime = new TimeSpan();
         //public event EventHandler<RoutedEventArgs> TimeCountStopEvent;
+        
+        public StopWatchModel StopWatchModel{ get => StopWatchModel.Instance; }
 
         public TimeSpan GetTotalTime()
         {
@@ -58,6 +60,6 @@ namespace Pomoductive.ViewModels
         {
             StopWatchModel.TotalTime += elapsedTime;
         }
-
+        
     }
 }
