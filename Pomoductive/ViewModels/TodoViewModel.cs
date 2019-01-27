@@ -217,6 +217,10 @@ namespace Pomoductive.ViewModels
             if (isTerminated)
             {
                 this.IsTerminated = isTerminated;
+                foreach (var st in SubTodos.ToList())
+                {
+                    await st.ReleaseTodo(true);
+                }
                 await SaveTodoAsync();
             }
 
@@ -230,7 +234,8 @@ namespace Pomoductive.ViewModels
             }
             else
             {
-                App.AppViewModel.Todos.Remove(App.AppViewModel.Todos.Where(td => td.Id == this.Id).Single());
+                
+                App.AppViewModel.Todos.Remove(this);
             }
         }
 
@@ -239,6 +244,10 @@ namespace Pomoductive.ViewModels
         /// </summary>
         public async Task DeleteTodo()
         {
+            foreach (var st in SubTodos.ToList())
+            {
+                await st.DeleteTodo();
+            }
             await App.Repository.Todos.DeleteAsync(this.Id);
             await ReleaseTodo();
         }

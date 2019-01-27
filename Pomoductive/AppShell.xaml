@@ -65,24 +65,16 @@
               Background="{ThemeResource NavBackgroundAcrylicBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="LeftPaddingColumn" />
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition x:Name="RightPaddingColumn" />
             </Grid.ColumnDefinitions>
-            <!--<Image x:Name="AppIcon" Source="Assets/Square44x44Logo.png"
-                   HorizontalAlignment="Left"
-                   Width="20" Height="20" Margin="12,0"/>-->
-            <FontIcon FontFamily="Segoe MDL2 Assets"
-                      Glyph="&#xED56;"
-                      Foreground="Black"
-                      Grid.Column="1"
-                      HorizontalAlignment="Left"
-                      Width="20"
-                      Height="20"
-                      Margin="8,0" />
+            <Image x:Name="AppIcon" Source="Assets/Square44x44Logo.targetsize-16.png" Height="32" Margin="5,0"/>
+           
             <TextBlock Text="Pomoductive"
                        Grid.Column="1"
                        Style="{ThemeResource CaptionTextBlockStyle}"
-                       Margin="36,8,0,0"
+                       Margin="20,4,0,0"
                        Foreground="White" />
         </Grid>
 
@@ -114,6 +106,7 @@
                       HorizontalAlignment="Center"
                       Height="48"
                       SelectedIndex="-1"
+                      Foreground="White"
                       ItemClick="NavList_ItemClick"
                       IsItemClickEnabled="True"
                       ItemsSource="{x:Bind _navigationItems}"
@@ -156,7 +149,7 @@
             </PersonPicture>
 
         </Grid>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" >
             <Frame
                 x:Name="frame">
                 <Frame.ContentTransitions>

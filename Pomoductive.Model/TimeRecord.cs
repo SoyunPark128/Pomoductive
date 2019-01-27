@@ -14,7 +14,7 @@ namespace Pomoductive.Models
         public int TaskMin { get; set; }
 
         public int TotalTaskCount { get; set; } = 0;
-        public float Remainder { get; set; }
+        public float Remainder { get; set; } = 0;
 
         public TimeRecord()
         { }

@@ -8,7 +8,7 @@ using Windows.UI.Xaml;
 
 namespace Pomoductive.ViewModels
 {
-    public class StopWatchViewModel
+    public class StopWatchViewModel  : BindableBase
     {
         public TimeSpan remainTime = new TimeSpan();
         //public event EventHandler<RoutedEventArgs> TimeCountStopEvent;
@@ -20,20 +20,20 @@ namespace Pomoductive.ViewModels
             return StopWatchModel.TotalTime;
         }
 
-        public TimeSpan GetElapsedTime()
-        {
-            return StopWatchModel.Stopwatch.Elapsed;
-        }
+
+        public TimeSpan ElapsedTime { get=> StopWatchModel.Stopwatch.Elapsed; }
 
         public void TimeCountStart()
         {
             StopWatchModel.TotalTime = TimeSpan.Zero;
             StopWatchModel.Stopwatch.Start();
+            IsRunning = true;
         }
 
         public void TimeCountReStart()
         {
             StopWatchModel.Stopwatch.Start();
+            IsRunning = true;
         }
 
         public void TimeCountStop()
@@ -43,17 +43,19 @@ namespace Pomoductive.ViewModels
                 StopWatchModel.Stopwatch.Stop();
                 TimeLog(StopWatchModel.Stopwatch.Elapsed);
                 StopWatchModel.Stopwatch.Reset();
-                //TimeCountStopEvent.Invoke(this, null);
             }
             else
             {
                 throw new Exception("not started");
             }
+            IsRunning = false;
         }
 
-        public bool IsRunning()
+        private bool _isRunning;
+        public bool IsRunning
         {
-            return StopWatchModel.Stopwatch.IsRunning;
+            get => _isRunning;
+            set => Set(ref _isRunning, value);
         }
 
         private void TimeLog(TimeSpan elapsedTime)

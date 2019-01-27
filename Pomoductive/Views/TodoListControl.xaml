@@ -1,0 +1,114 @@
+﻿<UserControl
+    x:Class="Pomoductive.Views.TodoListControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Pomoductive.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:Pomoductive.ViewModels"
+    xmlns:project="using:Pomoductive"
+    mc:Ignorable="d"
+    >
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="TreeViewItemDataTemplate" x:DataType="data:TodoViewModel">
+            <TreeViewItem ItemsSource="{x:Bind SubTodos}">
+                <Grid  Width="250">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" 
+                            Click="Task_Finished_CheckAsync"
+                            MinWidth="0" Width="15" Height="15" Margin="0,0,5,0" Padding="0,0,-10,0" 
+                            Background="White" BorderBrush="Black"  />
+                    <TextBlock Grid.Column="1"
+                            Text="{x:Bind Name}"
+                            HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Style="{ThemeResource BodyTextBlockStyle}" />
+                    <Button x:Name="MoreButton" Grid.Column="2" Margin="0,0,10,0"
+                            Background="Transparent" Click="MoreButton_Click" 
+                            FontFamily="Segoe MDL2 Assets" Content="&#xE10C;" 
+                            BorderBrush="Transparent"
+                            ContextFlyout="{StaticResource AddSubTodoFlyout}"/>
+                </Grid>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <Style TargetType="TreeView">
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TreeView">
+                        <TreeViewList x:Name="ListControl"
+                                      ItemTemplate="{StaticResource TreeViewItemDataTemplate}"
+                                      ItemContainerStyle="{StaticResource TreeViewItemStyle}"
+                                      CanDragItems="True"
+                                      AllowDrop="True"
+                                      CanReorderItems="True">
+
+                            <TreeViewList.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <ContentThemeTransition />
+                                    <ReorderThemeTransition />
+                                    <EntranceThemeTransition IsStaggeringEnabled="False" />
+                                </TransitionCollection>
+                            </TreeViewList.ItemContainerTransitions>
+                        </TreeViewList>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <CommandBarFlyout Placement="Right" x:Key="AddSubTodoFlyout">
+            <AppBarButton x:Name="AddSubTodoButton" Icon="Add" Click="AddNewSubTodoFlyoutOpen">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout Closed="AddSubTodoFlyout_Closed">
+                        <StackPanel>
+                            <TextBox x:Name="AddNewSubTodoTextBox" IsReadOnly="False" Margin="2"/>
+                            <Button Click="AddNewSubTodoAsync" Content="Add New Sub To-Do"/>
+                        </StackPanel>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </AppBarButton>
+            <AppBarButton x:Name="RenameTodoButton" Icon="Edit" Click="RenameTodoAsync"/>
+            <AppBarButton x:Name="DeleteTodoButton" Label="Delete" Icon="Delete" Click="DeleteTodoClickedAsync"/>
+        </CommandBarFlyout>
+    </UserControl.Resources>
+
+    <Grid Background="{ThemeResource SystemControlAcrylicElementBrush}" Name="TodoListPanel" Margin="20,0,20,0" Grid.Column="0" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBox Name="TodoNameInput"  AccessKey="TodoCreateButton" MaxWidth="290"
+                            PlaceholderText="New To-Do" FontSize="22"/>
+            <Button Name="TodoCreateButton" Content="Create"  Click="{x:Bind TodoCreateButtonAsync}"
+                        HorizontalAlignment="Stretch" FontSize="20" />
+
+            <TextBlock Text="{x:Bind ViewModel.Stopwatch.IsRunning, Mode=TwoWay}"/>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <TreeView x:Name="sampleTreeView" Grid.Row="1"
+                      SelectionMode="{x:Bind project:Converters.IsRunningToSelectionMode(ViewModel.Stopwatch.IsRunning), Mode=OneWay}"
+                      Margin="-30,0,0,0" MinWidth="290"
+                      ItemsSource="{x:Bind ViewModel.Todos}"
+                      Expanding="SampleTreeView_Expanding"
+                      Collapsed="SampleTreeView_Collapsed"
+                      ItemInvoked="SampleTreeView_ItemInvoked">
+                <TreeView.ItemTemplate>
+                    <DataTemplate x:DataType="data:TodoViewModel">
+                        <TreeViewItem ItemsSource="{x:Bind SubTodos}"
+                                    Content="{x:Bind Name}"/>
+                    </DataTemplate>
+                </TreeView.ItemTemplate>
+
+            </TreeView>
+        </ScrollViewer>
+        
+    </Grid>
+</UserControl>

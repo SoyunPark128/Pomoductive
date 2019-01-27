@@ -17,6 +17,7 @@ namespace Pomoductive.Models
         {
             Stopwatch = new Stopwatch();
             TotalTime = new TimeSpan();
+            
         }
 
         public static StopWatchModel Instance

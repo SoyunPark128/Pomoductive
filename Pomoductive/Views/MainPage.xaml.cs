@@ -38,6 +38,7 @@ namespace Pomoductive.Views
 
             //Initiate StopWatch Event
             timer4Stopwatch.Tick += Timer_Tick4Stopwatch;
+            
         }
 
 
@@ -47,154 +48,78 @@ namespace Pomoductive.Views
         public ApplicationViewModel ViewModel => App.AppViewModel;
         TodoViewModel selectedTodoViewModel = new TodoViewModel();
         TimeSpan remainTime = new TimeSpan();
+        TimeSpan OneSecond = new TimeSpan(0, 0, 1);
         TimeRecordViewModel timeRecordViewModel;
 
         DispatcherTimer timer4Stopwatch = new DispatcherTimer();
+        
         MediaPlayer player = new MediaPlayer();
 
 
-
-
-        //public event EventHandler<RoutedEventArgs> PomodoreFinished;
-
-
-        private async Task TodoCreateButtonAsync(object sender, RoutedEventArgs e)
-        {
-            Todo newTodo = new Todo(TodoNameInput.Text);
-            TodoViewModel TodoViewModel = new TodoViewModel(newTodo)
-            {
-                IsNewTodo = true
-            };
-
-            TodoNameInput.ClearValue(TextBox.TextProperty);
-            await TodoViewModel.SaveTodoAsync();
-
-        }
-
-        /// <summary>
-        /// Add a sub To-do below current To-do
-        /// </summary>
-        private async void AddNewSubTodoAsync(object sender, RoutedEventArgs e)
-        {
-            var parentsTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
-
-            Todo newSubTodo = new Todo(AddNewSubTodoTextBox.Text, null, parentsTodoViewModel.Id);
-            TodoViewModel newSubTodoViewModel = new TodoViewModel(newSubTodo)
-            {
-                IsNewTodo = true
-            };
-
-            AddNewSubTodoTextBox.ClearValue(TextBox.TextProperty);
-
-            parentsTodoViewModel.IsNewTodo = false;
-            await parentsTodoViewModel.SaveTodoAsync();
-            await newSubTodoViewModel.SaveTodoAsync();
-        }
-
-
-        /// <summary>
-        /// Deletes the currently checked order.
-        /// </summary>
-        private async void Task_Finished_CheckAsync(object sender, RoutedEventArgs e)
-        {
-            CheckBox checkedBox = (CheckBox)sender;
-
-            var finishedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
-            await finishedTodoViewModel.ReleaseTodo(true);
-        }
-
-        private void MoreButton_Click(object sender, RoutedEventArgs e)
-        {
-            Button MoreButton = (Button)sender;
-            MoreButton.ContextFlyout.ShowAt(MoreButton);
-            ViewModel.SelectedTodo = (e.OriginalSource as FrameworkElement).DataContext as TodoViewModel;
-        }
-
-
-        private async void DeleteTodoClickedAsync(object sender, RoutedEventArgs e)
-        {
-            AppBarButton appBarButton = (AppBarButton)sender;
-
-            var deletedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
-            await deletedTodoViewModel.DeleteTodo();
-        }
-
         private void TimeCountingStartsButtonClicked(object sender, RoutedEventArgs e)
         {
-            selectedTodoViewModel = App.AppViewModel.SelectedTodo;
+            if (ViewModel.Stopwatch.IsRunning)
+            {
 
-            remainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo);
+            }
+            
+
+
+            selectedTodoViewModel = App.AppViewModel.SelectedTodo;
             timeRecordViewModel = selectedTodoViewModel.GetTimeRecordViewModel();
+
+            if (timeRecordViewModel.Remainder != 0)
+            {
+                remainTime = Converters.RemainderToRemainTime(timeRecordViewModel.Remainder, timeRecordViewModel.TaskMin);
+            }
+            else
+            {
+                remainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo);
+            }
 
             ViewModel.Stopwatch.TimeCountStart();
             PomodoreButtonText.FontSize = 45;
             timer4Stopwatch.Start();
-
         }
 
         public async void Timer_Tick4Stopwatch(object sender, object e)
         {
-
             if (remainTime < TimeSpan.Zero)
             {
                 ViewModel.Stopwatch.TimeCountStop();
                 timer4Stopwatch.Stop();
                 player.Play();
                 PomodoreButtonText.FontSize = 55;
-                PomodoreButtonText.Text = "Done!";
+                PomodoreButtonText.Content = "Done!";
 
                 timeRecordViewModel.Remainder = 0;
                 timeRecordViewModel.TotalTaskCount++;
                 await timeRecordViewModel.SaveTimeRecordAsync();
+
+                // To start counting immediately
+                timer4Stopwatch.Interval = new TimeSpan(0, 0, 0);
+                remainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo);
+
             }
             else
             {
-                PomodoreButtonText.Text = remainTime.ToString(@"dd\:mm\:ss");
-                remainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo) - ViewModel.Stopwatch.GetElapsedTime();
+                PomodoreButtonText.Content = remainTime.ToString(@"dd\:mm\:ss");
+                remainTime -= OneSecond;
+                
+                timeRecordViewModel.Remainder = Converters.RemainTimeToRemainder(remainTime, timeRecordViewModel.TaskMin);
 
-                timeRecordViewModel.Remainder = timeRecordViewModel.TaskMin / (float)ViewModel.Stopwatch.GetElapsedTime().Minutes;
+                {
+                    ElapsedMinTxt.Text = "timeRecordViewModel.Remainder : " + timeRecordViewModel.Remainder.ToString();
+                    min.Text = "remainTime.Minutes : " + remainTime.Minutes.ToString();
+                    totalmin.Text = "remainTime.TotalMinutes : " + remainTime.TotalMinutes.ToString();
+                    stopwatchElapsed.Text = "ViewModel.Stopwatch.ElapsedTime : " + ViewModel.Stopwatch.ElapsedTime.ToString();
+                }
                 await timeRecordViewModel.SaveTimeRecordAsync();
-
             }
-        }
 
-        private void Button_PointerEntered(object sender, PointerRoutedEventArgs e)
-        {
-            if (ViewModel.Stopwatch.IsRunning())
-            {
-                PomodoreButtonText.Text = "Pause";
-            }
-            PomodoreButtonText.Text = "Restart";
-        }
-
-        private void Button_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            PomodoreButtonText.Text = "Start";
-        }
-
-        private void RenameTodoButton_Click(object sender, RoutedEventArgs e)
-        {
+            // For not too much pushing signals to DB
+            timer4Stopwatch.Interval = new TimeSpan(0, 0, 1);
 
         }
-
-        private void RenameTodoAsync(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AddNewSubTodoFlyoutOpen(object sender, RoutedEventArgs e)
-        {
-            if (Windows.Foundation.Metadata.ApiInformation.IsPropertyPresent("Windows.UI.Xaml.FrameworkElement", "AllowFocusOnInteraction"))
-            {
-                AddSubTodoButton.AllowFocusOnInteraction = true;
-            }
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-
-        }
-        private void AddSubTodoFlyout_Closed(object sender, object e)
-        {
-            AddNewSubTodoTextBox.ClearValue(TextBox.TextProperty);
-        }
-
     } 
 }

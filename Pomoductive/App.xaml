@@ -13,15 +13,39 @@
                     <AcrylicBrush x:Key="NavBackgroundAcrylicBrush"
                                   BackgroundSource="HostBackdrop"
                                   TintColor="{ThemeResource SystemAccentColor }"
-                                  Opacity="0.8"
-                                  FallbackColor="{ThemeResource SystemAccentColorLight1 }"
-                                 />
+                                  FallbackColor="{ThemeResource SystemAccentColorLight1 }"/>
+                    <AcrylicBrush x:Key="ButtonAcrylicPointOver"
+                                  TintColor="{ThemeResource SystemAccentColor }"
+                                  Opacity="0.1"/>
+                    <AcrylicBrush x:Key="ButtonAcrylicDisabled"
+                                  TintColor="{ThemeResource SystemAccentColor }"
+                                  Opacity="0.4"/>
                     <SolidColorBrush x:Key="PomoButtonBackGroundBrush"
                                      Color="{ThemeResource SystemAccentColor }"/>
-                    <SolidColorBrush x:Key="ButtonBackGroundBrush"
-                                     Color="{ThemeResource SystemAccentColorDark1 }"/>
+                    <SolidColorBrush x:Key="ButtonBackground" Color="{ThemeResource SystemAccentColor}"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource SystemAccentColorLight1 }"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{ThemeResource SystemAccentColorDark1}"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{ThemeResource SystemAccentColorDark1}"/>
+                    <SolidColorBrush x:Key="ButtonForeground" Color="White"/>
+                    <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
+                    <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{ThemeResource SystemAccentColorLight3}"/>
+                    <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{ThemeResource NavBackgroundAcrylicBrush}"/>
+                    <SolidColorBrush x:Key="ButtonBorderBrush" Color="{ThemeResource SystemAccentColor}"/>
+                    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{ThemeResource SystemAccentColorLight1 }"/>
+
+                    <Style TargetType="Button">
+                        <Setter Property="Foreground" Value="White" />
+                    </Style>
                 </ResourceDictionary>
+                
             </ResourceDictionary.ThemeDictionaries>
+            <Color x:Key="SystemAccentColor">#ff4400</Color>
+            <Color x:Key="SystemAccentColorLight1">#ff6a34</Color>
+            <Color x:Key="SystemAccentColorLight2">#ff9a75</Color>
+            <Color x:Key="SystemAccentColorLight3">#ffb79d</Color>
+            <Color x:Key="SystemAccentColorDark1">#e23c00</Color>
         </ResourceDictionary>
+        
     </Application.Resources>
+    
 </Application>
