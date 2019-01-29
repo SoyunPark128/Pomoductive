@@ -26,5 +26,27 @@ namespace Pomoductive.Views
         {
             this.InitializeComponent();
         }
+
+        private void CalendarView_CalendarViewDayItemChanging(CalendarView sender,
+                                   CalendarViewDayItemChangingEventArgs args)
+        {
+            // Render basic day items.
+            if (args.Phase == 0)
+            {
+                // Register callback for next phase.
+                args.RegisterUpdateCallback(CalendarView_CalendarViewDayItemChanging);
+            }
+            // Set blackout dates.
+            else if (args.Phase == 1)
+            {
+                // Blackout dates in the past, Sundays, and dates that are fully booked.
+                if (args.Item.Date > DateTimeOffset.Now )
+                {
+                    args.Item.IsBlackout = true;
+                }
+                // Register callback for next phase.
+                args.RegisterUpdateCallback(CalendarView_CalendarViewDayItemChanging);
+            }
+        }
     }
 }

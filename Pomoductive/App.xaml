@@ -12,6 +12,7 @@
                 <ResourceDictionary x:Key="Default">
                     <AcrylicBrush x:Key="NavBackgroundAcrylicBrush"
                                   BackgroundSource="HostBackdrop"
+                                  Opacity="0.9"
                                   TintColor="{ThemeResource SystemAccentColor }"
                                   FallbackColor="{ThemeResource SystemAccentColorLight1 }"/>
                     <AcrylicBrush x:Key="ButtonAcrylicPointOver"
@@ -33,9 +34,19 @@
                     <SolidColorBrush x:Key="ButtonBorderBrush" Color="{ThemeResource SystemAccentColor}"/>
                     <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{ThemeResource SystemAccentColorLight1 }"/>
 
-                    <Style TargetType="Button">
-                        <Setter Property="Foreground" Value="White" />
+                    
+                    <Style TargetType="Button" x:Key="myTopTitleStackpanelStyle1">
+                        <Setter Property="BorderThickness" Value="0,1"/>
+                        <Setter Property="Background" Value="#6600FF00"/>
+                        <Setter Property="BorderBrush" Value="#66275066"/>
                     </Style>
+                    
+                    <AcrylicBrush x:Key="PomoductivaAcrylicBrush"
+                        TintColor="White"
+                        TintOpacity="0.1"/>
+                    
+                    <Color x:Key="SystemAccentColor">#ff4400</Color>
+                    <Color x:Key="SystemAccentColorTip">#d1ff24</Color>
                 </ResourceDictionary>
                 
             </ResourceDictionary.ThemeDictionaries>

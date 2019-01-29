@@ -78,7 +78,7 @@
         </CommandBarFlyout>
     </UserControl.Resources>
 
-    <Grid Background="{ThemeResource SystemControlAcrylicElementBrush}" Name="TodoListPanel" Margin="20,0,20,0" Grid.Column="0" >
+    <Grid  Name="TodoListPanel" Margin="20,0,20,0" Grid.Column="0" Background="{ThemeResource PomoductivaAcrylicBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -88,18 +88,18 @@
             <TextBox Name="TodoNameInput"  AccessKey="TodoCreateButton" MaxWidth="290"
                             PlaceholderText="New To-Do" FontSize="22"/>
             <Button Name="TodoCreateButton" Content="Create"  Click="{x:Bind TodoCreateButtonAsync}"
-                        HorizontalAlignment="Stretch" FontSize="20" />
+                        HorizontalAlignment="Stretch" FontSize="20" x:FieldModifier="public"/>
 
-            <TextBlock Text="{x:Bind ViewModel.Stopwatch.IsRunning, Mode=TwoWay}"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
-            <TreeView x:Name="sampleTreeView" Grid.Row="1"
-                      SelectionMode="{x:Bind project:Converters.IsRunningToSelectionMode(ViewModel.Stopwatch.IsRunning), Mode=OneWay}"
+            <TreeView x:Name="TodoTreeView" Grid.Row="1"
+                      SelectionMode="{x:Bind project:Converters.IsRunningToSelectionMode(ViewModel.AppStopwatchViewModel.IsRunning), Mode=OneWay}"
                       Margin="-30,0,0,0" MinWidth="290"
-                      ItemsSource="{x:Bind ViewModel.Todos}"
-                      Expanding="SampleTreeView_Expanding"
-                      Collapsed="SampleTreeView_Collapsed"
-                      ItemInvoked="SampleTreeView_ItemInvoked">
+                      ItemsSource="{x:Bind ViewModel.TodoViewModels}"
+                      Expanding="TodoTreeView_Expanding"
+                      Collapsed="TodoTreeView_Collapsed"
+                      ItemInvoked="TodoTreeView_ItemInvoked"
+                      >
                 <TreeView.ItemTemplate>
                     <DataTemplate x:DataType="data:TodoViewModel">
                         <TreeViewItem ItemsSource="{x:Bind SubTodos}"

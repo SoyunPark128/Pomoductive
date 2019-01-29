@@ -48,6 +48,15 @@ namespace Pomoductive.Repository.Sql
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<TimeRecord>> GetAsyncByDate(DateTime redordingDayStart, DateTime redordingDayEnd)
+        {
+            return await _db.TimeRecords
+                .AsNoTracking()
+                .Where(tr => tr.RecordingDay > redordingDayStart && tr.RecordingDay <= redordingDayEnd)
+                .OrderBy(tr => tr.RecordingDay)
+                .ToListAsync();
+        }
+
         public async Task<TimeRecord> UpsertAsync(TimeRecord timeRescord)
         {
             var current = await _db.TimeRecords.FirstOrDefaultAsync(_timeRescord => _timeRescord.Id == timeRescord.Id);

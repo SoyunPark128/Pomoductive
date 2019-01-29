@@ -21,6 +21,7 @@ namespace Pomoductive.Repository
         Task<IEnumerable<TimeRecord>> GetAsyncByTodo(Guid todoId);
 
         Task<IEnumerable<TimeRecord>> GetAsyncByDate(DateTime redordingDay);
+        Task<IEnumerable<TimeRecord>> GetAsyncByDate(DateTime redordingDayStart, DateTime redordingDayEnd);
 
         /// <summary>
         /// Adds a new customer if the customer does not exist, updates the 

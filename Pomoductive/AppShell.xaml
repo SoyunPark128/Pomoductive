@@ -36,10 +36,11 @@
                     Value="0,0,0,0" />
             <Setter Property="Width"
                     Value="150" />
-            <Setter Property="FocusVisualPrimaryThickness" Value="0" />
-            <Setter Property="FocusVisualSecondaryThickness" Value="0" />
-            <Setter Property="FocusVisualPrimaryBrush" Value="Transparent"/>
+            <Setter Property="FocusVisualPrimaryThickness" Value="1" />
+            <Setter Property="FocusVisualSecondaryThickness" Value="1" />
+            <Setter Property="FocusVisualPrimaryBrush" Value="White"/>
             <Setter Property="FocusVisualSecondaryBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
         </Style>
 
         <Style x:Key="ListViewItemNarrow"
@@ -50,6 +51,8 @@
                     Value="0,0,0,0" />
             <Setter Property="Width"
                     Value="84" />
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource NavBackgroundAcrylicBrush}"/>
         </Style>
     </Page.Resources>
 
@@ -121,32 +124,7 @@
                 </ListView.ItemsPanel>
             </ListView>
 
-            <HyperlinkButton Content="DEMO" 
-                             Foreground="White"
-                             Margin="0,0,54,0"
-                             HorizontalAlignment="Right">
-                <FlyoutBase.AttachedFlyout>
-                    <Flyout>
-                        <TextBlock TextWrapping="WrapWholeWords" MaxWidth="300"
-                                   Text="Lunch Scheduler is running in demo mode. For more info about demo mode, and how to run in other modes, see the project 'readme' file.">
-                        </TextBlock>
-                    </Flyout>
-                </FlyoutBase.AttachedFlyout>
-            </HyperlinkButton>
-            <!--ProfilePicture="{x:Bind ViewModel.User.PhotoUrl, Mode=OneWay}"-->
-            <PersonPicture x:Name="UserPicture"
-                           Width="24"
-                           Height="24"
-                           Background="Navy"
-                           Margin="0,0,24,0"
-                           HorizontalAlignment="Right">
-                <FlyoutBase.AttachedFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Sign out"/>
-                        <!--Click="MenuFlyoutItem_Click" />-->
-                    </MenuFlyout>
-                </FlyoutBase.AttachedFlyout>
-            </PersonPicture>
+            
 
         </Grid>
         <Grid Grid.Row="2" >

@@ -9,22 +9,56 @@
     xmlns:qc="using:Ailon.QuickCharts"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid >
-        <Grid.Resources>
-            
-        </Grid.Resources>
-        <local:TodoListControl HorizontalAlignment="Left"/>
-        <Button  FontSize="55" FontWeight="ExtraBold"
-                 Click="TimeCountingStartsButtonClicked" x:Name="PomodoreButtonText"
-                 HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                 Grid.ColumnSpan="2" Content="Start" 
-                 Padding="20,10,20,15" Margin="0,0,0,10"/>
+        <qc:SerialChart DataSource="{x:Bind ViewModel.StatisticViewModels.TotalTodosPerADay2Weeks}" CategoryValueMemberPath="Date" MinimumCategoryGridStep="10" 
+            AxisForeground="Transparent" GridStroke="Transparent" BackgroundSizing="OuterBorderEdge" Background="Transparent"  Margin="-42,-10,-42,-30">
+            <qc:SerialChart.Graphs>
+                <qc:AreaGraph  ValueMemberPath="Todos" >
+                    <qc:AreaGraph.Brush>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="{ThemeResource SystemAccentColor}" Offset="0"/>
+                            <GradientStop Color="{ThemeResource SystemAccentColorLight3}" Offset="1"/>
+                        </LinearGradientBrush>
+                    </qc:AreaGraph.Brush>
+                </qc:AreaGraph>
+            </qc:SerialChart.Graphs>
+        </qc:SerialChart>
+        <local:TodoListControl HorizontalAlignment="Left" Background="{ThemeResource PomoductivaAcrylicBrush}"/>
+        <Button x:Name="PomodoreButtonText"
+             Click="TimeCountingStartsButtonClicked" 
+             HorizontalAlignment="Center" VerticalAlignment="Bottom"
+             Grid.ColumnSpan="2" Content="Start" 
+             Padding="20,10,20,15" Margin="0,0,0,10" FontSize="55" FontWeight="ExtraBold"/>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Vertical">
             <TextBlock x:Name="ElapsedMinTxt"/>
             <TextBlock x:Name="min"/>
             <TextBlock x:Name="totalmin"/>
             <TextBlock x:Name="stopwatchElapsed"/>
             <TextBlock Text="{x:Bind ViewModel.SelectedTodo.Name, Mode=TwoWay}"/>
-            <TextBlock Text="{x:Bind ViewModel.Stopwatch.IsRunning, Mode=OneWay}"/>
+            <TextBlock Text="{x:Bind ViewModel.AppStopwatchViewModel.IsRunning, Mode=OneWay}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0">
+            <HyperlinkButton Content="DEMO" 
+                                 Foreground="#ff4400"
+                                 Margin="0,0,10,0">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout>
+                        <TextBlock TextWrapping="WrapWholeWords" MaxWidth="300"
+                                       Text="Lunch Scheduler is running in demo mode. For more info about demo mode, and how to run in other modes, see the project 'readme' file.">
+                        </TextBlock>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </HyperlinkButton>
+            <!--ProfilePicture="{x:Bind ViewModel.User.PhotoUrl, Mode=OneWay}"-->
+            <PersonPicture x:Name="UserPicture"
+                               Width="24" Height="24" 
+                               Background="#d1ff24">
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Sign out"/>
+                        <!--Click="MenuFlyoutItem_Click" />-->
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+            </PersonPicture>
         </StackPanel>
     </Grid>
 

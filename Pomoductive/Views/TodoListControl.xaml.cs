@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,7 +25,7 @@ namespace Pomoductive.Views
     public sealed partial class TodoListControl : UserControl
     {
         public ApplicationViewModel ViewModel => App.AppViewModel;
-        
+        AppShell rootPage = AppShell.CurrentPage;
 
         public TodoListControl()
         {
@@ -32,20 +33,54 @@ namespace Pomoductive.Views
         }
         
 
-        private void SampleTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
+        private void TodoTreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
         {
             args.Node.HasUnrealizedChildren = false;
         }
 
-        private void SampleTreeView_Collapsed(TreeView sender, TreeViewCollapsedEventArgs args)
+        private void TodoTreeView_Collapsed(TreeView sender, TreeViewCollapsedEventArgs args)
         {
             args.Node.HasUnrealizedChildren = true;
         }
 
-        private void SampleTreeView_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
+        public async void TodoTreeView_ItemInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
         {
             var node = args.InvokedItem as TodoViewModel;
-            ViewModel.SelectedTodo = node;
+
+            if (ViewModel.SelectedTodo != node)
+            {
+                if (ViewModel.AppStopwatchViewModel.IsRunning)
+                {
+                    // Create the message dialog and set its content
+                    var messageDialog = new MessageDialog("Do you Want to stop the current Pomodore?");
+
+
+                    // Add commands and set their command ids
+                    messageDialog.Commands.Add(new UICommand("Stop", null, 0));
+                    messageDialog.Commands.Add(new UICommand("Do not stop", null, 1));
+
+                    // Set the command that will be invoked by default
+                    messageDialog.DefaultCommandIndex = 1;
+
+                    // Show the message dialog
+                    var commandChosen = await messageDialog.ShowAsync();
+
+                    if (commandChosen.Id is 0)
+                    {
+                        ViewModel.AppStopwatchViewModel.TimeCountStop();
+                        ViewModel.SelectedTodo = node;
+                        MainPage._pomodoreButton.FontSize = 55;
+                        MainPage._pomodoreButton.Content = "Start";
+                    }
+
+                }
+                else
+                {
+                    MainPage._pomodoreButton.FontSize = 55;
+                    MainPage._pomodoreButton.Content = "Start";
+                    ViewModel.SelectedTodo = node;
+                }
+            }
         }
 
         ///////////////////////////////////////
@@ -133,6 +168,5 @@ namespace Pomoductive.Views
             var finishedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
             await finishedTodoViewModel.ReleaseTodo(true);
         }
-
     }
 }

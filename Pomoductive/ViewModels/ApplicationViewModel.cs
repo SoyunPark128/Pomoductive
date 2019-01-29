@@ -26,9 +26,24 @@ namespace Pomoductive.ViewModels
         //// <summary>
         /// The collection of todos in the list. 
         /// </summary>
-        public ObservableCollection<TodoViewModel> Todos { get; }
+        public ObservableCollection<TodoViewModel> TodoViewModels { get; }
             = new ObservableCollection<TodoViewModel>();
-        public StopWatchViewModel Stopwatch = new StopWatchViewModel();
+
+        //StopWatch for Entire App
+        public StopWatchViewModel AppStopwatchViewModel = new StopWatchViewModel();
+        //Statistic Datas For Entire App
+        public StatisticDataViewModel StatisticViewModels = new StatisticDataViewModel();
+
+        private TimeRecordViewModel _appTimeRecordViewModel = new TimeRecordViewModel();
+        public TimeRecordViewModel AppTimeRecordViewModel
+        {
+            get => _appTimeRecordViewModel;
+            set
+            {
+                Set(ref _appTimeRecordViewModel, value);
+                OnPropertyChanged();
+            }
+        }
 
         private bool _isLoading = false;
 
@@ -45,7 +60,7 @@ namespace Pomoductive.ViewModels
         }
 
         /// <summary>
-        /// Gets the complete list of Todos from the database.
+        /// Gets the complete list of TodoViewModels from the database.
         /// </summary>
         public async Task GetTodoListAsync()
         {
@@ -65,7 +80,7 @@ namespace Pomoductive.ViewModels
             // TodoViewModel
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
-                Todos.Clear();
+                TodoViewModels.Clear();
 
                 foreach (var pt in parentsTodos)
                 {
@@ -77,7 +92,7 @@ namespace Pomoductive.ViewModels
                         var newSubTodoViewModel = new TodoViewModel(st);
                         newTodoViewModel.SubTodos.Add(newSubTodoViewModel);
                     }
-                    Todos.Add(newTodoViewModel);
+                    TodoViewModels.Add(newTodoViewModel);
                 }
                 
                 

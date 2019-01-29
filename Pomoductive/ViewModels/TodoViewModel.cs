@@ -205,7 +205,7 @@ namespace Pomoductive.ViewModels
                 }
                 else
                 {
-                    App.AppViewModel.Todos.Add(this);
+                    App.AppViewModel.TodoViewModels.Add(this);
                 }
             }
 
@@ -235,7 +235,7 @@ namespace Pomoductive.ViewModels
             else
             {
                 
-                App.AppViewModel.Todos.Remove(this);
+                App.AppViewModel.TodoViewModels.Remove(this);
             }
         }
 
@@ -254,7 +254,7 @@ namespace Pomoductive.ViewModels
 
         public TodoViewModel GetParentsViewModel()
         {
-            foreach (var todo in App.AppViewModel.Todos)
+            foreach (var todo in App.AppViewModel.TodoViewModels)
             {
                 if (ParentsTodoId == todo.Id)
                 {
@@ -294,7 +294,7 @@ namespace Pomoductive.ViewModels
             return _timeRecordViewModel;
         }
         /// <summary>
-        /// Called when a bound DataGrid control commits the edits that have been made to a customer.
+        /// Called when a bound DataGrid control commits the edits that have been made to a todo.
         /// </summary>
         public async void EndEdit() => await SaveTodoAsync();
         

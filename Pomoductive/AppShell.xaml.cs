@@ -50,10 +50,13 @@ namespace Pomoductive
         /// adds callbacks for Back requests and changes in the SplitView's DisplayMode, and
         /// provide the nav menu list with the data to display.
         /// </summary>
+        /// 
+        public static AppShell CurrentPage;
+
         public AppShell()
         {
             InitializeComponent();
-
+            CurrentPage = this;
             AppFrame.Navigated += NavigationService_Navigated;
             PopulateNavItems();
 
@@ -230,8 +233,5 @@ namespace Pomoductive
                 AppFrame.GoBack();
             }
         }
-
-
-
     }
 }

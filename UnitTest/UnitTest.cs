@@ -24,16 +24,16 @@ namespace UnitTest
             Todo testTask = new Todo("time count test Task");
 
             //act
-            Pomoductive.App.AppStopwatch.TimeCountReStart();
+            Pomoductive.App.AppViewModel.AppStopwatchViewModel.TimeCountReStart();
             System.Threading.Tasks.Task.Delay(2000).Wait();
-            Pomoductive.App.AppStopwatch.TimeCountStop();
+            Pomoductive.App.AppViewModel.AppStopwatchViewModel.TimeCountStop();
 
 
             TimeSpan assumedTime1 = new TimeSpan(0, 0, 2);
             TimeSpan assumedTime2 = new TimeSpan(0, 0, 3);
 
             //assert
-            Assert.InRange(Pomoductive.App.AppStopwatch.GetTotalTime(), assumedTime1, assumedTime2);
+            Assert.InRange(Pomoductive.App.AppViewModel.AppStopwatchViewModel.GetTotalTime(), assumedTime1, assumedTime2);
 
         }
 
@@ -43,19 +43,19 @@ namespace UnitTest
             Todo testTask = new Todo("multiple time count test Task");
 
             //act
-            Pomoductive.App.AppStopwatch.TimeCountStart();
+            Pomoductive.App.AppViewModel.AppStopwatchViewModel.TimeCountStart();
             System.Threading.Tasks.Task.Delay(2000).Wait();
-            Pomoductive.App.AppStopwatch.TimeCountStop();
+            Pomoductive.App.AppViewModel.AppStopwatchViewModel.TimeCountStop();
 
-            Pomoductive.App.AppStopwatch.TimeCountReStart();
+            Pomoductive.App.AppViewModel.AppStopwatchViewModel.TimeCountReStart();
             System.Threading.Tasks.Task.Delay(3000).Wait();
-            Pomoductive.App.AppStopwatch.TimeCountStop();
+            Pomoductive.App.AppViewModel.AppStopwatchViewModel.TimeCountStop();
 
             TimeSpan assumedTime1 = new TimeSpan(0, 0, 5);
             TimeSpan assumedTime2 = new TimeSpan(0, 0, 6);
 
             //assert
-            Assert.InRange(Pomoductive.App.AppStopwatch.GetTotalTime(), assumedTime1, assumedTime2);
+            Assert.InRange(Pomoductive.App.AppViewModel.AppStopwatchViewModel.GetTotalTime(), assumedTime1, assumedTime2);
         }
 
     }

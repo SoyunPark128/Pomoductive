@@ -33,93 +33,50 @@ namespace Pomoductive.Views
         {
             this.InitializeComponent();
 
-            //Finish Sound
-            player.Source = MediaSource.CreateFromUri(new Uri("ms-winsoundevent:Notification.Reminder"));
-
-            //Initiate StopWatch Event
-            timer4Stopwatch.Tick += Timer_Tick4Stopwatch;
             
+            //Initiate StopWatch Event
+            _pomodoreButton = PomodoreButtonText;
+
+            if (StopWatch.IsRunning)
+            {
+                StopWatch.Interval = new TimeSpan(0, 0, 0);
+                if (ViewModel.AppTimeRecordViewModel.Remainder != 0)
+                {
+                    StopWatch.RemainTime = Converters.RemainderToRemainTime(ViewModel.AppTimeRecordViewModel.Remainder, ViewModel.AppTimeRecordViewModel.TaskMin);
+                }
+                else
+                {
+                    StopWatch.RemainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo);
+                }
+            }
         }
 
 
         /// <summary>
         /// Gets the app-wide AppViewModel instance.
         /// </summary>
-        public ApplicationViewModel ViewModel => App.AppViewModel;
+        ApplicationViewModel ViewModel => App.AppViewModel;
+        StopWatchViewModel StopWatch => ViewModel.AppStopwatchViewModel;
+
         TodoViewModel selectedTodoViewModel = new TodoViewModel();
-        TimeSpan remainTime = new TimeSpan();
-        TimeSpan OneSecond = new TimeSpan(0, 0, 1);
-        TimeRecordViewModel timeRecordViewModel;
-
-        DispatcherTimer timer4Stopwatch = new DispatcherTimer();
-        
-        MediaPlayer player = new MediaPlayer();
-
+       
+        public static Button _pomodoreButton = new Button();
 
         private void TimeCountingStartsButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.Stopwatch.IsRunning)
+            if (StopWatch.IsRunning)
             {
-
+                StopWatch.TimeCountStop();
             }
-            
 
-
-            selectedTodoViewModel = App.AppViewModel.SelectedTodo;
-            timeRecordViewModel = selectedTodoViewModel.GetTimeRecordViewModel();
-
-            if (timeRecordViewModel.Remainder != 0)
-            {
-                remainTime = Converters.RemainderToRemainTime(timeRecordViewModel.Remainder, timeRecordViewModel.TaskMin);
-            }
             else
             {
-                remainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo);
-            }
-
-            ViewModel.Stopwatch.TimeCountStart();
-            PomodoreButtonText.FontSize = 45;
-            timer4Stopwatch.Start();
-        }
-
-        public async void Timer_Tick4Stopwatch(object sender, object e)
-        {
-            if (remainTime < TimeSpan.Zero)
-            {
-                ViewModel.Stopwatch.TimeCountStop();
-                timer4Stopwatch.Stop();
-                player.Play();
-                PomodoreButtonText.FontSize = 55;
-                PomodoreButtonText.Content = "Done!";
-
-                timeRecordViewModel.Remainder = 0;
-                timeRecordViewModel.TotalTaskCount++;
-                await timeRecordViewModel.SaveTimeRecordAsync();
-
-                // To start counting immediately
-                timer4Stopwatch.Interval = new TimeSpan(0, 0, 0);
-                remainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo);
-
-            }
-            else
-            {
-                PomodoreButtonText.Content = remainTime.ToString(@"dd\:mm\:ss");
-                remainTime -= OneSecond;
+                selectedTodoViewModel = ViewModel.SelectedTodo;
+                ViewModel.AppTimeRecordViewModel = selectedTodoViewModel.GetTimeRecordViewModel();
+                StopWatch.TimeCountStart();
                 
-                timeRecordViewModel.Remainder = Converters.RemainTimeToRemainder(remainTime, timeRecordViewModel.TaskMin);
-
-                {
-                    ElapsedMinTxt.Text = "timeRecordViewModel.Remainder : " + timeRecordViewModel.Remainder.ToString();
-                    min.Text = "remainTime.Minutes : " + remainTime.Minutes.ToString();
-                    totalmin.Text = "remainTime.TotalMinutes : " + remainTime.TotalMinutes.ToString();
-                    stopwatchElapsed.Text = "ViewModel.Stopwatch.ElapsedTime : " + ViewModel.Stopwatch.ElapsedTime.ToString();
-                }
-                await timeRecordViewModel.SaveTimeRecordAsync();
             }
-
-            // For not too much pushing signals to DB
-            timer4Stopwatch.Interval = new TimeSpan(0, 0, 1);
-
         }
+
     } 
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using static Pomoductive.ViewModels.StatisticDataViewModel;
 
 namespace Pomoductive
 {
@@ -30,5 +32,17 @@ namespace Pomoductive
             return (taskMin - (float)remainTime.TotalMinutes) / taskMin;
         }
 
+        public static ObservableCollection<TodosPerOneday> TodosPerADayDicToStruct(Dictionary<string, int>dic)
+        {
+            var TodosPerADayStructCollection = new ObservableCollection<TodosPerOneday>();
+            foreach (var item in dic)
+            {
+                TodosPerOneday _todosInOneday = new TodosPerOneday();
+                _todosInOneday.Date = item.Key;
+                _todosInOneday.Todos = item.Value;
+                TodosPerADayStructCollection.Add(_todosInOneday);
+            }
+            return TodosPerADayStructCollection;
+        }
     }
 }
