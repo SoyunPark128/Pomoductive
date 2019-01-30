@@ -33,8 +33,8 @@
                     <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{ThemeResource NavBackgroundAcrylicBrush}"/>
                     <SolidColorBrush x:Key="ButtonBorderBrush" Color="{ThemeResource SystemAccentColor}"/>
                     <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{ThemeResource SystemAccentColorLight1 }"/>
+                    <SolidColorBrush x:Key="SystemAccentColorTipBrush" Color="{ThemeResource SystemAccentColorTip }"/>
 
-                    
                     <Style TargetType="Button" x:Key="myTopTitleStackpanelStyle1">
                         <Setter Property="BorderThickness" Value="0,1"/>
                         <Setter Property="Background" Value="#6600FF00"/>
@@ -46,7 +46,7 @@
                         TintOpacity="0.1"/>
                     
                     <Color x:Key="SystemAccentColor">#ff4400</Color>
-                    <Color x:Key="SystemAccentColorTip">#d1ff24</Color>
+                    <Color x:Key="SystemAccentColorTip">#ffd1ff24</Color>
                 </ResourceDictionary>
                 
             </ResourceDictionary.ThemeDictionaries>

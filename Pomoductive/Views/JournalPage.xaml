@@ -6,11 +6,80 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:data="using:Pomoductive.ViewModels"
+    xmlns:project="using:Pomoductive"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Orientation="Vertical">
-        <CalendarDatePicker PlaceholderText="View Past Journal" Header="Calendar" CalendarViewDayItemChanging="CalendarView_CalendarViewDayItemChanging"/>
-        <RichEditBox x:Name="REBCustom" Width="800" Height="200" />
+    <Page.Resources>
+        <DataTemplate x:Key="TodoListViewTemplate" x:DataType="data:TimeRecordViewModel">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Ellipse x:Name="Ellipse"
+                         Grid.RowSpan="2"
+                         Width ="{x:Bind project:Converters.GetEllipseSize(TotalTaskCountAccurate)}" 
+                         Height="{x:Bind project:Converters.GetEllipseSize(TotalTaskCountAccurate)}" 
+                         Margin="6"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Center"
+                         Fill="{ThemeResource SystemAccentColorTipBrush}"/>
+                <TextBlock Grid.Column="1"
+                           Text="{x:Bind TodoName}"
+                           x:Phase="1"
+                           Style="{ThemeResource BaseTextBlockStyle}"
+                           Margin="12,6,0,0"/>
+                <TextBlock  Grid.Column="1"
+                            Grid.Row="1"
+                            Text="{x:Bind TotalTaskCountAccurate}"
+                            x:Phase="2"
+                            Style="{ThemeResource BodyTextBlockStyle}"
+                            Margin="12,0,0,6"/>
+            </Grid>
+        </DataTemplate>
 
-    </StackPanel>
+
+    </Page.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <AppBarButton x:Name="DatePicker" Icon="CalendarReply" 
+                          ToolTipService.ToolTip="View Past Journal" Click="CalendarFlyoutOpen">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout Placement="Right" AllowFocusWhenDisabled="False" >
+                        <CalendarDatePicker x:Name="FlyoutCalendarDatePicker"
+                            PlaceholderText="Select a Date" CalendarViewDayItemChanging="CalendarView_CalendarViewDayItemChanging"/>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </AppBarButton>
+            <AppBarButton Icon="Save" Click="JournalSaveButtonClicked"/>
+        </StackPanel>
+        <TextBlock Text="{x:Bind FlyoutCalendarDatePicker.Date.Value.DateTime.ToLongDateString(), Mode=OneWay}" 
+                    Foreground="{ThemeResource ButtonBackground}" FontSize="27"
+                    Grid.Row="0" HorizontalAlignment="Right" Margin="0,3,10,0"/>
+
+        <Grid Grid.Row ="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="TodosInDay" 
+                      ItemsSource="{x:Bind project:App.AppViewModel.StatisticViewModels.TimeRecordViewModels}"
+                      ItemTemplate="{StaticResource TodoListViewTemplate}"
+                      SelectionMode="None"
+                      Grid.Column="0" Margin="20,0,0,20" >
+            </ListView>
+            <RichEditBox x:Name="REBCustom" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Margin="30,10,50,40"/>
+        </Grid>
+        
+
+    </Grid>
 </Page>

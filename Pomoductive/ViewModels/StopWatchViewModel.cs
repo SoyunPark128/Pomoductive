@@ -148,6 +148,7 @@ namespace Pomoductive.ViewModels
                 App.AppViewModel.AppTimeRecordViewModel.Remainder = 0;
                 App.AppViewModel.AppTimeRecordViewModel.TotalTaskCount++;
                 await App.AppViewModel.AppTimeRecordViewModel.SaveTimeRecordAsync();
+                App.AppViewModel.StatisticViewModels.TimeRecordViewModels.Add(App.AppViewModel.AppTimeRecordViewModel);
 
                 // To start counting immediately
                 timer4Stopwatch.Interval = new TimeSpan(0, 0, 0);

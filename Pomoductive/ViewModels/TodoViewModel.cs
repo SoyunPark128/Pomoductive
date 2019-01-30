@@ -16,14 +16,10 @@ namespace Pomoductive.ViewModels
     /// </summary>
     public class TodoViewModel : BindableBase
     {
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///Property//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         private Todo _todoModel;
 
         /// <summary>
-        /// Initializes a new instance of the JobsViewModel class that wraps a Todo object.
+        /// Initializes a new instance of the TodoViewModel class that wraps a Todo object.
         /// </summary>
         public TodoViewModel(Todo todo = null)
         {
@@ -185,11 +181,6 @@ namespace Pomoductive.ViewModels
             }
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///METHOD////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
         /// <summary>
         /// Saves todo data that has been edited.
         /// </summary>
@@ -281,11 +272,11 @@ namespace Pomoductive.ViewModels
         {
             TimeRecord _timeRecord = TimeRecords.FirstOrDefault(trvm => trvm.TodoId == Id 
                                                                             && trvm.TaskMin == TaskMinutesPerOnePomo 
-                                                                            && trvm.RecordingDay == DateTime.Today);
+                                                                            && trvm.RedordingDate == DateTime.Today);
             
             if (_timeRecord is null)
             {
-                _timeRecord = new TimeRecord(Id);
+                _timeRecord = new TimeRecord(Id, Name);
                 _timeRecord.TaskMin = TaskMinutesPerOnePomo;
                 TimeRecords.Add(_timeRecord);
             }

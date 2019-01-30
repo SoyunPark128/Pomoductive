@@ -21,6 +21,7 @@ namespace Pomoductive.Repository.Sql
         {
             return await _db.TimeRecords
                 .AsNoTracking()
+                .OrderBy(tr => tr.RedordingDate)
                 .ToListAsync();
         }
 
@@ -28,6 +29,7 @@ namespace Pomoductive.Repository.Sql
         {
             return await _db.TimeRecords
                 .AsNoTracking()
+                .OrderBy(tr => tr.RedordingDate)
                 .FirstOrDefaultAsync(timeRecord => timeRecord.Id == id);
         }
 
@@ -37,14 +39,16 @@ namespace Pomoductive.Repository.Sql
             return await _db.TimeRecords
                 .AsNoTracking()
                 .Where(tr => tr.TodoId == todoId)
+                .OrderBy(tr => tr.RedordingDate)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<TimeRecord>> GetAsyncByDate(DateTime redordingDay)
+        public async Task<IEnumerable<TimeRecord>> GetAsyncByDate(DateTime redordingDate)
         {
             return await _db.TimeRecords
                 .AsNoTracking()
-                .Where(tr => tr.RecordingDay == redordingDay)
+                .Where(tr => tr.RedordingDate == redordingDate)
+                .OrderBy(tr => tr.RedordingDate)
                 .ToListAsync();
         }
 
@@ -52,24 +56,24 @@ namespace Pomoductive.Repository.Sql
         {
             return await _db.TimeRecords
                 .AsNoTracking()
-                .Where(tr => tr.RecordingDay > redordingDayStart && tr.RecordingDay <= redordingDayEnd)
-                .OrderBy(tr => tr.RecordingDay)
+                .Where(tr => tr.RedordingDate > redordingDayStart && tr.RedordingDate <= redordingDayEnd)
+                .OrderBy(tr => tr.RedordingDate)
                 .ToListAsync();
         }
 
-        public async Task<TimeRecord> UpsertAsync(TimeRecord timeRescord)
+        public async Task<TimeRecord> UpsertAsync(TimeRecord timeRecord)
         {
-            var current = await _db.TimeRecords.FirstOrDefaultAsync(_timeRescord => _timeRescord.Id == timeRescord.Id);
+            var current = await _db.TimeRecords.FirstOrDefaultAsync(_timeRescord => _timeRescord.Id == timeRecord.Id);
             if (null == current)
             {
-                _db.TimeRecords.Add(timeRescord);
+                _db.TimeRecords.Add(timeRecord);
             }
             else
             {
-                _db.Entry(current).CurrentValues.SetValues(timeRescord);
+                _db.Entry(current).CurrentValues.SetValues(timeRecord);
             }
             await _db.SaveChangesAsync();
-            return timeRescord;
+            return timeRecord;
         }
         public async Task DeleteAsync(Guid id)
         {

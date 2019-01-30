@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,6 +26,7 @@ namespace Pomoductive.Views
         public JournalPage()
         {
             this.InitializeComponent();
+            FlyoutCalendarDatePicker.Date = DateTimeOffset.Now;
         }
 
         private void CalendarView_CalendarViewDayItemChanging(CalendarView sender,
@@ -39,7 +41,7 @@ namespace Pomoductive.Views
             // Set blackout dates.
             else if (args.Phase == 1)
             {
-                // Blackout dates in the past, Sundays, and dates that are fully booked.
+                // Blackout dates in the future
                 if (args.Item.Date > DateTimeOffset.Now )
                 {
                     args.Item.IsBlackout = true;
@@ -47,6 +49,20 @@ namespace Pomoductive.Views
                 // Register callback for next phase.
                 args.RegisterUpdateCallback(CalendarView_CalendarViewDayItemChanging);
             }
+        }
+        
+        private void CalendarFlyoutOpen(object sender, RoutedEventArgs e)
+        {
+            if (Windows.Foundation.Metadata.ApiInformation.IsPropertyPresent("Windows.UI.Xaml.FrameworkElement", "AllowFocusOnInteraction"))
+            {
+                DatePicker.AllowFocusOnInteraction = true;
+            }
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
+        private void JournalSaveButtonClicked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

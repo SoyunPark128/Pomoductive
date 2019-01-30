@@ -30,7 +30,7 @@ namespace Pomoductive.Models
         public int LongBreakMinutesPerOnePomo { get; set; } = 15;
 
         [ForeignKey("TodoId")]
-        public ICollection<TimeRecord> TimeRecords { get; set; } = new Collection<TimeRecord>();
+        public ICollection<TimeRecord> TimeRecords { get; set; } = new ObservableCollection<TimeRecord>();
 
         public Todo(string name, string reward = null, Guid parentsTodo = default(Guid))
         {

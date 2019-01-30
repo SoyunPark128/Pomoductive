@@ -10,7 +10,8 @@ namespace Pomoductive.Models
         public Guid Id { get; set; } = Guid.NewGuid();
        
         public Guid TodoId { get; set; }
-        public DateTime RecordingDay { get; set; } = DateTime.Today;
+        public string TodoName { get; set; }
+        public DateTime RedordingDate { get; set; } = DateTime.Today;
         public int TaskMin { get; set; }
 
         public int TotalTaskCount { get; set; } = 0;
@@ -18,9 +19,10 @@ namespace Pomoductive.Models
 
         public TimeRecord()
         { }
-        public TimeRecord(Guid todoId)
+        public TimeRecord(Guid todoId, string todoName)
         {
             TodoId = todoId;
+            TodoName = todoName;
         }
     }
 }

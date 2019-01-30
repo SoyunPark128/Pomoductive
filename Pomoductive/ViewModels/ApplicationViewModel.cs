@@ -28,6 +28,12 @@ namespace Pomoductive.ViewModels
         /// </summary>
         public ObservableCollection<TodoViewModel> TodoViewModels { get; }
             = new ObservableCollection<TodoViewModel>();
+       
+        //// <summary>
+        /// The collection of journals.
+        /// </summary>
+        public ObservableCollection<JournalViewModel> JournalViewModels { get; }
+            = new ObservableCollection<JournalViewModel>();
 
         //StopWatch for Entire App
         public StopWatchViewModel AppStopwatchViewModel = new StopWatchViewModel();
@@ -73,10 +79,7 @@ namespace Pomoductive.ViewModels
             {
                 return;
             }
-
-            // Todo
             
-
             // TodoViewModel
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
@@ -99,7 +102,34 @@ namespace Pomoductive.ViewModels
                 IsLoading = false;
             });
         }
-        
+
+        /// <summary>
+        /// Gets the Journals from the database.
+        /// </summary>
+        public async Task GetJournalsAsync()
+        {
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsLoading = true);
+
+            var journals = await App.Repository.Journals.GetAsync();
+
+            if (null == journals)
+            {
+                return;
+            }
+
+            // TodoViewModel
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
+            {
+                TodoViewModels.Clear();
+
+                foreach (var j in journals)
+                {
+                    var newJournalViewModel = new JournalViewModel(j);
+                    JournalViewModels.Add(newJournalViewModel);
+                }
+                IsLoading = false;
+            });
+        }
 
 
         private TodoViewModel _selectedTodo;

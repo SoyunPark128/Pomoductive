@@ -19,5 +19,12 @@ namespace Pomoductive.Repository
         /// Returns the TimeRecords repository.
         /// </summary>
         ITimeRecordRepository TimeRecords { get; }
+
+
+        /// <summary>
+        /// Returns the Journals repository.
+        /// </summary>
+        IJournalRepository Journals { get; }
+
     }
 }

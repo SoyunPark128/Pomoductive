@@ -9,34 +9,30 @@ using System.Threading.Tasks;
 namespace Pomoductive.ViewModels
 {
     /// <summary>
-    /// Provides a bindable wrapper for the TimeRecord model class, encapsulating various services for access by the UI.
+    /// Provides a bindable wrapper for the TimeRecordModel model class, encapsulating various services for access by the UI.
     /// </summary>
     public class TimeRecordViewModel : BindableBase
     {
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///Property//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         private TimeRecord _timeRecord;
 
         public TimeRecordViewModel()
         { }
         /// <summary>
-        /// Initializes a new instance of the JobsViewModel class that wraps a Todo object.
+        /// Initializes a new instance of the TimeRecordModel class that wraps a Todo object.
         /// </summary>
-        public TimeRecordViewModel(Guid todoId)
+        public TimeRecordViewModel(Guid todoId, string todoName)
         {
-            TimeRecord = new TimeRecord(todoId);
+            TimeRecordModel = new TimeRecord(todoId, todoName);
         }
 
         public TimeRecordViewModel(TimeRecord timeRecord)
         {
-            TimeRecord = timeRecord;
+            TimeRecordModel = timeRecord;
         }
         /// <summary>
-        /// Gets or sets the underlying Todo object.
+        /// Gets or sets the underlying TimeRecordModel object.
         /// </summary>
-        public TimeRecord TimeRecord
+        public TimeRecord TimeRecordModel
         {
             get => _timeRecord;
             set
@@ -52,49 +48,64 @@ namespace Pomoductive.ViewModels
 
         public Guid TodoId
         {
-            get => TimeRecord.TodoId;
+            get => TimeRecordModel.TodoId;
             set
             {
-                TimeRecord.TodoId = value;
+                TimeRecordModel.TodoId = value;
                 OnPropertyChanged();
             }
         }
 
-        public DateTime RecordingDay { get => TimeRecord.RecordingDay; }
+        public string TodoName
+        {
+            get => TimeRecordModel.TodoName;
+            set
+            {
+                TimeRecordModel.TodoName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime RedordingDate { get => TimeRecordModel.RedordingDate; }
 
         public int TaskMin
         {
-            get => TimeRecord.TaskMin;
+            get => TimeRecordModel.TaskMin;
             set
             {
-                TimeRecord.TaskMin = value;
+                TimeRecordModel.TaskMin = value;
                 OnPropertyChanged();
             }
         }
 
         public int TotalTaskCount
         {
-            get => TimeRecord.TotalTaskCount; 
+            get => TimeRecordModel.TotalTaskCount; 
             set
             {
-                TimeRecord.TotalTaskCount = value;
+                TimeRecordModel.TotalTaskCount = value;
                 OnPropertyChanged();
             }
         }
 
         public float Remainder
         {
-            get => TimeRecord.Remainder;
+            get => TimeRecordModel.Remainder;
             set
             {
-                TimeRecord.Remainder = value;
+                TimeRecordModel.Remainder = value;
                 OnPropertyChanged();
             }
         }
 
+        public float TotalTaskCountAccurate
+        {
+            get => TotalTaskCount + Remainder;
+        }
+
         public async Task SaveTimeRecordAsync()
         {
-            await App.Repository.TimeRecords.UpsertAsync(TimeRecord);
+            await App.Repository.TimeRecords.UpsertAsync(TimeRecordModel);
         }
     }
 }

@@ -171,7 +171,7 @@ namespace Pomoductive
 
         private void NavList_Loaded(object sender, RoutedEventArgs e)
         {
-            Navigate(typeof(MainPage));
+            Navigate(typeof(JournalPage));
         }
 
         private void MoveNavIndicator(int index)

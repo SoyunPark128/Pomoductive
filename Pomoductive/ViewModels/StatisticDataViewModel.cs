@@ -1,7 +1,9 @@
-﻿using Pomoductive.Models;
+﻿using Microsoft.Toolkit.Uwp.Helpers;
+using Pomoductive.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,56 +11,111 @@ using System.Threading.Tasks;
 namespace Pomoductive.ViewModels
 {
 
-    public class StatisticDataViewModel
+    public class StatisticDataViewModel:BindableBase
     {
-        public ObservableCollection<TimeRecordViewModel> TimeRecordViewModelsFor2Weeks = new ObservableCollection<TimeRecordViewModel>();
-        public ObservableCollection<TodosPerOneday> TotalTodosPerADay2Weeks = new ObservableCollection<TodosPerOneday>();
-        private Dictionary<string, int> TotalTodosPerADay2WeeksDic = new Dictionary<string, int>();
+        public ObservableCollection<TimeRecordViewModel> TimeRecordViewModels = new ObservableCollection<TimeRecordViewModel>();
+        private Dictionary<string, int> TotalTodosPerADayDic = new Dictionary<string, int>();
+
+        public ObservableCollection<TodosPerOneday> TotalTodosPerADay = new ObservableCollection<TodosPerOneday>();
 
         public StatisticDataViewModel()
         {
             //Load Datas to TimeRecordsFor2Weeks
-            Task.Run(LoadTimeRecordViewModelsFor2WeeksData);
+            Task.Run(GetTimeRecordDatasAsync);
+            TimeRecordViewModels.CollectionChanged += new NotifyCollectionChangedEventHandler(StatisticsDataUpdate);
+
+            
         }
-        
-        private async Task LoadTimeRecordViewModelsFor2WeeksData()
+
+
+        private bool _isLoading = false;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the Customers list is currently being updated. 
+        /// </summary>
+        public bool IsLoading
         {
-            DateTime Day2WeekAgo = DateTime.Now.AddDays(-14);
-            var TimeRecordsFor2Weeks = await App.Repository.TimeRecords.GetAsyncByDate(Day2WeekAgo, DateTime.Today);
-            foreach (var TimeRecord in TimeRecordsFor2Weeks)
+            get => _isLoading;
+            set
             {
-                var newTimeRecordViewModel = new TimeRecordViewModel(TimeRecord);
-                TimeRecordViewModelsFor2Weeks.Add(newTimeRecordViewModel);
+                Set(ref _isLoading, value);
             }
-            LoadTotalTodosInOneDay();
-            TotalTodosPerADay2Weeks = Converters.TodosPerADayDicToStruct(TotalTodosPerADay2WeeksDic);
         }
 
-
-        private void LoadTotalTodosInOneDay()
+        /// <summary>
+        /// Gets the Journals from the database.
+        /// </summary>
+        private async Task GetTimeRecordDatasAsync()
         {
-            if (TimeRecordViewModelsFor2Weeks is null)
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsLoading = true);
+
+            var TimeRecords = await App.Repository.TimeRecords.GetAsync();
+
+            if (null == TimeRecords)
             {
                 return;
             }
 
-            foreach (var trvm in TimeRecordViewModelsFor2Weeks)
+            // TodoViewModel
+            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
-                string _date = trvm.RecordingDay.ToShortDateString();
+                TimeRecordViewModels.Clear();
+
+                foreach (var tr in TimeRecords)
+                {
+                    var newTimeRecordViewModel = new TimeRecordViewModel(tr);
+                    TimeRecordViewModels.Add(newTimeRecordViewModel);
+                }
+                IsLoading = false;
+                LoadTotalTodosInOneDay();
+                
+                // For the MainPage
+                TotalTodosPerADay = Converters.TodosPerADayDicToStruct(TotalTodosPerADayDic, DateTime.Now.AddDays(-14), DateTime.Now);
+            });
+            
+
+        }
+
+        private void LoadTotalTodosInOneDay()
+        {
+            if (TimeRecordViewModels is null)
+            {
+                return;
+            }
+
+            foreach (var trvm in TimeRecordViewModels)
+            {
+                string _date = trvm.RedordingDate.ToShortDateString();
                 int _count = trvm.TotalTaskCount;
 
                 try
                 {
-                    TotalTodosPerADay2WeeksDic[_date] += _count;
+                    TotalTodosPerADayDic[_date] += _count;
                 }
                 catch (KeyNotFoundException)
                 {
-                    TotalTodosPerADay2WeeksDic[_date] = _count;
+                    TotalTodosPerADayDic[_date] = _count;
                 }
-                
             }
         }
 
+        private void StatisticsDataUpdate(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args)
+        {
+            int before = 0;
+            foreach (var tad in TotalTodosPerADay)
+            {
+                if (tad.Date == DateTime.Today.ToShortDateString())
+                {
+                    before = tad.Todos;
+                    TotalTodosPerADay.Remove(tad);
+                    break;
+                }
+            }
+            TodosPerOneday _todosInOneday = new TodosPerOneday();
+            _todosInOneday.Date = DateTime.Today.ToShortDateString();
+            _todosInOneday.Todos = ++before;
+            TotalTodosPerADay.Add(_todosInOneday);
+        }
 
         public struct TodosPerOneday
         {

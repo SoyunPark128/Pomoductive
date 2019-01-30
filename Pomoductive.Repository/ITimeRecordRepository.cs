@@ -9,29 +9,37 @@ namespace Pomoductive.Repository
     public interface ITimeRecordRepository
     {
         /// <summary>
-        /// Returns all customers. 
+        /// Returns all TimeRecords. 
         /// </summary>
         Task<IEnumerable<TimeRecord>> GetAsync();
 
         /// <summary>
-        /// Returns the customer with the given id. 
+        /// Returns the TimeRecord with the given id. 
         /// </summary>
         Task<TimeRecord> GetAsync(Guid id);
 
+
+        /// <summary>
+        /// Returns the Journal with the given TodoId. 
+        /// </summary>
         Task<IEnumerable<TimeRecord>> GetAsyncByTodo(Guid todoId);
 
-        Task<IEnumerable<TimeRecord>> GetAsyncByDate(DateTime redordingDay);
+
+        /// <summary>
+        /// Returns the Journal with the given Date. 
+        /// </summary>
+        Task<IEnumerable<TimeRecord>> GetAsyncByDate(DateTime redordingDate);
         Task<IEnumerable<TimeRecord>> GetAsyncByDate(DateTime redordingDayStart, DateTime redordingDayEnd);
 
         /// <summary>
-        /// Adds a new customer if the customer does not exist, updates the 
-        /// existing customer otherwise.
+        /// Adds a new TimeRecord if the TimeRecord does not exist, updates the 
+        /// existing TimeRecord otherwise.
         /// </summary>
-        Task<TimeRecord> UpsertAsync(TimeRecord customer);
+        Task<TimeRecord> UpsertAsync(TimeRecord timeRecord);
 
         /// <summary>
-        /// Deletes a customer.
+        /// Deletes a TimeRecord.
         /// </summary>
-        Task DeleteAsync(Guid customerId);
+        Task DeleteAsync(Guid timeRecordId);
     }
 }

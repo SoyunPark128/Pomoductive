@@ -32,17 +32,26 @@ namespace Pomoductive
             return (taskMin - (float)remainTime.TotalMinutes) / taskMin;
         }
 
-        public static ObservableCollection<TodosPerOneday> TodosPerADayDicToStruct(Dictionary<string, int>dic)
+        public static ObservableCollection<TodosPerOneday> TodosPerADayDicToStruct(Dictionary<string, int>dic, DateTime start, DateTime end)
         {
             var TodosPerADayStructCollection = new ObservableCollection<TodosPerOneday>();
             foreach (var item in dic)
             {
-                TodosPerOneday _todosInOneday = new TodosPerOneday();
-                _todosInOneday.Date = item.Key;
-                _todosInOneday.Todos = item.Value;
-                TodosPerADayStructCollection.Add(_todosInOneday);
+                if (DateTime.Parse(item.Key) >= start && DateTime.Parse(item.Key) < end)
+                {
+                    TodosPerOneday _todosInOneday = new TodosPerOneday();
+                    _todosInOneday.Date = item.Key;
+                    _todosInOneday.Todos = item.Value;
+                    TodosPerADayStructCollection.Add(_todosInOneday);
+                }
+                
             }
             return TodosPerADayStructCollection;
+        }
+
+        public static double GetEllipseSize(float value)
+        {
+            return (double)(value * 5);
         }
     }
 }

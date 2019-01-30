@@ -29,5 +29,7 @@ namespace Pomoductive.Repository.Sql
 
         public ITimeRecordRepository TimeRecords => new SqlTimeRecordRepository(new PomoductiveContext(_dbOptions));
 
+        public IJournalRepository Journals => new SqlJournalRepository(new PomoductiveContext(_dbOptions));
+
     }
 }

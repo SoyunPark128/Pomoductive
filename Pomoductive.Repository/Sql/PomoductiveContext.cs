@@ -26,5 +26,10 @@ namespace Pomoductive.Repository.Sql
         /// Gets the timeRecord DbSet.
         /// </summary>
         public DbSet<TimeRecord> TimeRecords { get; set; }
+
+        /// <summary>
+        /// Gets the Journals DbSet.
+        /// </summary>
+        public DbSet<Journal> Journals { get; set; }
     }
 }

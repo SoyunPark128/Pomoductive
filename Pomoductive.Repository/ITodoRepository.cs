@@ -9,17 +9,17 @@ namespace Pomoductive.Repository
     public interface ITodoRepository
     {
         /// <summary>
-        /// Returns all customers. 
+        /// Returns all Todos. 
         /// </summary>
         Task<IEnumerable<Todo>> GetAsync();
 
         /// <summary>
-        /// Returns all customers with a data field matching the start of the given string. 
+        /// Returns all Todos with a data field matching the start of the given string. 
         /// </summary>
         Task<IEnumerable<Todo>> GetAsync(string search);
 
         /// <summary>
-        /// Returns the customer with the given id. 
+        /// Returns the Todo with the given id. 
         /// </summary>
         Task<Todo> GetAsync(Guid id);
 
@@ -28,13 +28,13 @@ namespace Pomoductive.Repository
         Task<IEnumerable<Todo>> GetForSubTodoAsync();
 
         /// <summary>
-        /// Adds a new customer if the customer does not exist, updates the 
-        /// existing customer otherwise.
+        /// Adds a new Todo if the Todo does not exist, updates the 
+        /// existing Todo otherwise.
         /// </summary>
         Task<Todo> UpsertAsync(Todo customer);
 
         /// <summary>
-        /// Deletes a customer.
+        /// Deletes a Todo.
         /// </summary>
         Task DeleteAsync(Guid customerId);
     }
