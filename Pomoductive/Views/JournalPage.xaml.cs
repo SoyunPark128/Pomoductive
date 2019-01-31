@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Pomoductive.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -18,11 +21,15 @@ using Windows.UI.Xaml.Shapes;
 
 namespace Pomoductive.Views
 {
+   
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class JournalPage : Page
-    {
+    { 
+        StatisticDataViewModel StatisticViewModel => App.AppStatisticDataViewModel;
+        JournalViewModel JournalViewModel = new JournalViewModel();
         public JournalPage()
         {
             this.InitializeComponent();
@@ -32,6 +39,7 @@ namespace Pomoductive.Views
         private void CalendarView_CalendarViewDayItemChanging(CalendarView sender,
                                    CalendarViewDayItemChangingEventArgs args)
         {
+            
             // Render basic day items.
             if (args.Phase == 0)
             {
@@ -48,6 +56,7 @@ namespace Pomoductive.Views
                 }
                 // Register callback for next phase.
                 args.RegisterUpdateCallback(CalendarView_CalendarViewDayItemChanging);
+                
             }
         }
         
@@ -60,9 +69,18 @@ namespace Pomoductive.Views
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
 
-        private void JournalSaveButtonClicked(object sender, RoutedEventArgs e)
+        private async Task JournalSaveButtonClicked(object sender, RoutedEventArgs e)
         {
+            string value = string.Empty;
+            JournalContentsBox.TextDocument.GetText(Windows.UI.Text.TextGetOptions.AdjustCrlf, out value);
+            JournalViewModel.JournalContents = value;
+            await JournalViewModel.SaveJournalkAsync();
+            JournalContentsBox.Document.SetText(Windows.UI.Text.TextSetOptions.None, string.Empty);
+        }
 
+        private void FlyoutCalendarDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            App.AppStatisticDataViewModel.SetTotalTodosAndNamePerADay(args.NewDate.Value.Date);
         }
     }
 }

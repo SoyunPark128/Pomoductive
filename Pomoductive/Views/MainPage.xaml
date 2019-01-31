@@ -9,7 +9,7 @@
     xmlns:qc="using:Ailon.QuickCharts"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid >
-        <qc:SerialChart DataSource="{x:Bind ViewModel.StatisticViewModels.TotalTodosPerADay}" CategoryValueMemberPath="Date" MinimumCategoryGridStep="10" 
+        <qc:SerialChart DataSource="{x:Bind StatisticViewModel.TotalTodosPerADay, Mode=OneWay}" CategoryValueMemberPath="Date" MinimumCategoryGridStep="10" 
             AxisForeground="Transparent" GridStroke="Transparent" BackgroundSizing="OuterBorderEdge" Background="Transparent"  Margin="-42,-10,-42,-30">
             <qc:SerialChart.Graphs>
                 <qc:AreaGraph  ValueMemberPath="Todos" >

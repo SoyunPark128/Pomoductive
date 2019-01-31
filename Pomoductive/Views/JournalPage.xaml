@@ -13,36 +13,35 @@
     <Page.Resources>
         <DataTemplate x:Key="TodoListViewTemplate" x:DataType="data:TimeRecordViewModel">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Ellipse x:Name="Ellipse"
-                         Grid.RowSpan="2"
+                <Canvas Width="90" Height="90" Grid.Column="0">
+                    <Ellipse x:Name="Ellipse"
                          Width ="{x:Bind project:Converters.GetEllipseSize(TotalTaskCountAccurate)}" 
                          Height="{x:Bind project:Converters.GetEllipseSize(TotalTaskCountAccurate)}" 
-                         Margin="6"
+                         Canvas.Left="{x:Bind project:Converters.GetCenterPoint(TotalTaskCountAccurate)}"
+                         Canvas.Top="{x:Bind project:Converters.GetCenterPoint(TotalTaskCountAccurate)}"
                          VerticalAlignment="Center"
                          HorizontalAlignment="Center"
                          Fill="{ThemeResource SystemAccentColorTipBrush}"/>
-                <TextBlock Grid.Column="1"
-                           Text="{x:Bind TodoName}"
-                           x:Phase="1"
-                           Style="{ThemeResource BaseTextBlockStyle}"
-                           Margin="12,6,0,0"/>
-                <TextBlock  Grid.Column="1"
-                            Grid.Row="1"
-                            Text="{x:Bind TotalTaskCountAccurate}"
-                            x:Phase="2"
-                            Style="{ThemeResource BodyTextBlockStyle}"
-                            Margin="12,0,0,6"/>
+                </Canvas>
+                <StackPanel Orientation="Vertical" Grid.Column="1" 
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{x:Bind TodoName}"
+                               x:Phase="1"
+                               Style="{ThemeResource BaseTextBlockStyle}"
+                               HorizontalAlignment="Left" Margin="1"/>
+                    <TextBlock                              
+                                Text="{x:Bind project:Converters.GetPomoCount(TotalTaskCountAccurate)}"
+                                x:Phase="2"
+                                FontSize="11"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                HorizontalAlignment="Left" Margin="1"/>
+                </StackPanel>
             </Grid>
         </DataTemplate>
-
 
     </Page.Resources>
     <Grid >
@@ -52,15 +51,18 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
             <AppBarButton x:Name="DatePicker" Icon="CalendarReply" 
-                          ToolTipService.ToolTip="View Past Journal" Click="CalendarFlyoutOpen">
+                          Label="History"
+                          ToolTipService.ToolTip="See the Past Journal" Click="CalendarFlyoutOpen" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="1, 2, 0, 0">
                 <FlyoutBase.AttachedFlyout>
                     <Flyout Placement="Right" AllowFocusWhenDisabled="False" >
                         <CalendarDatePicker x:Name="FlyoutCalendarDatePicker"
-                            PlaceholderText="Select a Date" CalendarViewDayItemChanging="CalendarView_CalendarViewDayItemChanging"/>
+                            PlaceholderText="Select a Date" CalendarViewDayItemChanging="CalendarView_CalendarViewDayItemChanging" DateChanged="FlyoutCalendarDatePicker_DateChanged" />
                     </Flyout>
                 </FlyoutBase.AttachedFlyout>
             </AppBarButton>
-            <AppBarButton Icon="Save" Click="JournalSaveButtonClicked"/>
+            <AppBarButton Icon="Save" Label="Save"
+                          Click="{x:Bind JournalSaveButtonClicked}"
+                          Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0, 2, 1, 0"/>
         </StackPanel>
         <TextBlock Text="{x:Bind FlyoutCalendarDatePicker.Date.Value.DateTime.ToLongDateString(), Mode=OneWay}" 
                     Foreground="{ThemeResource ButtonBackground}" FontSize="27"
@@ -68,16 +70,16 @@
 
         <Grid Grid.Row ="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="180" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ListView x:Name="TodosInDay" 
-                      ItemsSource="{x:Bind project:App.AppViewModel.StatisticViewModels.TimeRecordViewModels}"
+            <ListView x:Name="TodosInDay"
+                      ItemsSource="{x:Bind StatisticViewModel.TotalTodosAndNamePerADay}"
                       ItemTemplate="{StaticResource TodoListViewTemplate}"
                       SelectionMode="None"
-                      Grid.Column="0" Margin="20,0,0,20" >
+                      Grid.Column="0" Margin="10,10,0,20" Padding="-11,0,0,0" >
             </ListView>
-            <RichEditBox x:Name="REBCustom" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Margin="30,10,50,40"/>
+            <RichEditBox x:Name="JournalContentsBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Margin="15,10,50,40"/>
         </Grid>
         
 

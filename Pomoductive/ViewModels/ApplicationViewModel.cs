@@ -37,8 +37,6 @@ namespace Pomoductive.ViewModels
 
         //StopWatch for Entire App
         public StopWatchViewModel AppStopwatchViewModel = new StopWatchViewModel();
-        //Statistic Datas For Entire App
-        public StatisticDataViewModel StatisticViewModels = new StatisticDataViewModel();
 
         private TimeRecordViewModel _appTimeRecordViewModel = new TimeRecordViewModel();
         public TimeRecordViewModel AppTimeRecordViewModel

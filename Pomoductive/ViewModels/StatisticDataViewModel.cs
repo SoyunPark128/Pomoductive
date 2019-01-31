@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Helpers;
 using Pomoductive.Models;
+using Pomoductive.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace Pomoductive.ViewModels
 {
@@ -16,17 +18,22 @@ namespace Pomoductive.ViewModels
         public ObservableCollection<TimeRecordViewModel> TimeRecordViewModels = new ObservableCollection<TimeRecordViewModel>();
         private Dictionary<string, int> TotalTodosPerADayDic = new Dictionary<string, int>();
 
+        // For Graph
         public ObservableCollection<TodosPerOneday> TotalTodosPerADay = new ObservableCollection<TodosPerOneday>();
+        // For Journal Page
+        public ObservableCollection<TimeRecordViewModel> TotalTodosAndNamePerADay = new ObservableCollection<TimeRecordViewModel>();
+        
 
-        public StatisticDataViewModel()
+        public async Task ConfigureStatisticsDatas()
         {
             //Load Datas to TimeRecordsFor2Weeks
-            Task.Run(GetTimeRecordDatasAsync);
+            Task timerecordSetup = Task.Run(GetTimeRecordDatasAsync);
+            await timerecordSetup.ContinueWith(
+                delegate { LoadTotalTodosInOneDay(); }).ContinueWith(
+                delegate { TotalTodosPerADay = Converters.TodosPerADayDicToStruct(TotalTodosPerADayDic, DateTime.Now.AddDays(-14), DateTime.Now); }).ContinueWith(
+                delegate { SetTotalTodosAndNamePerADay(DateTime.Today); });
             TimeRecordViewModels.CollectionChanged += new NotifyCollectionChangedEventHandler(StatisticsDataUpdate);
-
-            
         }
-
 
         private bool _isLoading = false;
 
@@ -45,7 +52,7 @@ namespace Pomoductive.ViewModels
         /// <summary>
         /// Gets the Journals from the database.
         /// </summary>
-        private async Task GetTimeRecordDatasAsync()
+        public async Task GetTimeRecordDatasAsync()
         {
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsLoading = true);
 
@@ -66,11 +73,8 @@ namespace Pomoductive.ViewModels
                     var newTimeRecordViewModel = new TimeRecordViewModel(tr);
                     TimeRecordViewModels.Add(newTimeRecordViewModel);
                 }
-                IsLoading = false;
-                LoadTotalTodosInOneDay();
                 
-                // For the MainPage
-                TotalTodosPerADay = Converters.TodosPerADayDicToStruct(TotalTodosPerADayDic, DateTime.Now.AddDays(-14), DateTime.Now);
+                IsLoading = false;
             });
             
 
@@ -115,6 +119,19 @@ namespace Pomoductive.ViewModels
             _todosInOneday.Date = DateTime.Today.ToShortDateString();
             _todosInOneday.Todos = ++before;
             TotalTodosPerADay.Add(_todosInOneday);
+        }
+
+        public void SetTotalTodosAndNamePerADay(DateTime date)
+        {
+
+            TotalTodosAndNamePerADay.Clear();
+            foreach (var item in App.AppStatisticDataViewModel.TimeRecordViewModels)
+            {
+                if (item.RedordingDate == date)
+                {
+                    TotalTodosAndNamePerADay.Add(item);
+                }
+            }
         }
 
         public struct TodosPerOneday

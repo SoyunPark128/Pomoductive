@@ -8,6 +8,6 @@ namespace Pomoductive.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime JournalDate { get; } = DateTime.Today;
-        public string JournalContents = "";
+        public string JournalContents { get; set; } = "";
     }
 }

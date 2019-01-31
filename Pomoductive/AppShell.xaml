@@ -116,6 +116,7 @@
                       DisplayMemberPath="Label"
                       ItemContainerStyle="{StaticResource ListViewItemNormal}"
                       Loaded="NavList_Loaded"
+                      UseSystemFocusVisuals="True"
                       TabFocusNavigation="Cycle" SelectedItem="{ThemeResource AccentButtonStyle}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>

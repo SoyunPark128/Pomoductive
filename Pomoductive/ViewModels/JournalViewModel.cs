@@ -52,7 +52,7 @@ namespace Pomoductive.ViewModels
 
         public DateTime JournalDate { get => JournalModel.JournalDate; }
 
-        public async Task SaveTimeRecordAsync()
+        public async Task SaveJournalkAsync()
         {
             await App.Repository.Journals.UpsertAsync(JournalModel);
         }

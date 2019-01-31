@@ -35,7 +35,9 @@ namespace Pomoductive
     {
         /// Gets the app-wide MainViewModel and AppStopwatch singleton instances.
         public static ApplicationViewModel AppViewModel { get; } = new ApplicationViewModel();
-        
+
+        //Statistic Datas For Entire App
+        public static StatisticDataViewModel AppStatisticDataViewModel { get; } = new StatisticDataViewModel();
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -58,22 +60,21 @@ namespace Pomoductive
             // Load the database.
             UseSqlite();
 
+            
+
             // Prepare the app shell and window content.
             AppShell shell = Window.Current.Content as AppShell ?? new AppShell();
             shell.Language = ApplicationLanguages.Languages[0];
-
-
-            Window.Current.Content = shell;
+            
 
             if (shell.AppFrame.Content == null)
             {
-                // When the navigation stack isn't restored, navigate to the first page
-                // suppressing the initial entrance animation.
-                shell.AppFrame.Navigate(typeof(MainPage), null,
-                    new SuppressNavigationTransitionInfo());
+                ExtendedSplash extendedSplash = new ExtendedSplash(e);
+                Window.Current.Content = extendedSplash;
+                Window.Current.Activate();
             }
 
-            Window.Current.Activate();
+            
 
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 

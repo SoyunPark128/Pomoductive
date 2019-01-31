@@ -35,12 +35,12 @@
                     <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{ThemeResource SystemAccentColorLight1 }"/>
                     <SolidColorBrush x:Key="SystemAccentColorTipBrush" Color="{ThemeResource SystemAccentColorTip }"/>
 
-                    <Style TargetType="Button" x:Key="myTopTitleStackpanelStyle1">
+                    <Style x:Key="myTopTitleStackpanelStyle1" TargetType="Button">
                         <Setter Property="BorderThickness" Value="0,1"/>
                         <Setter Property="Background" Value="#6600FF00"/>
                         <Setter Property="BorderBrush" Value="#66275066"/>
                     </Style>
-                    
+
                     <AcrylicBrush x:Key="PomoductivaAcrylicBrush"
                         TintColor="White"
                         TintOpacity="0.1"/>

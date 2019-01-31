@@ -57,6 +57,7 @@ namespace Pomoductive.Views
         /// </summary>
         ApplicationViewModel ViewModel => App.AppViewModel;
         StopWatchViewModel StopWatch => ViewModel.AppStopwatchViewModel;
+        StatisticDataViewModel StatisticViewModel => App.AppStatisticDataViewModel;
 
         TodoViewModel selectedTodoViewModel = new TodoViewModel();
        

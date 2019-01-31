@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,7 +52,23 @@ namespace Pomoductive
 
         public static double GetEllipseSize(float value)
         {
-            return (double)(value * 5);
+            double _ellipseSize = value*5 + 10;
+            if (_ellipseSize > 80)
+            {
+                _ellipseSize = 80;
+            }
+            return _ellipseSize;
+        }
+
+        public static string GetPomoCount(float value)
+        {
+            string _pomoCount = value.ToString("F1", CultureInfo.InvariantCulture) + "Pomos";
+            return _pomoCount;
+        }
+
+        public static double GetCenterPoint(float value)
+        {
+            return (90 - GetEllipseSize(value)) / 2;
         }
     }
 }
