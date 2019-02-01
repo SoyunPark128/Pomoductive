@@ -137,7 +137,7 @@ namespace Pomoductive.ViewModels
 
         public async Task TodoMinutes()
         {
-            MainPage._pomodoreButton.Background = new SolidColorBrush(Windows.UI.Colors.Tomato);
+            MainPage._pomodoreButton.Style = Application.Current.Resources["PomodoreTimer_Working"] as Style;
             if (RemainTime < TimeSpan.Zero)
             {
                 //TimeCountStop();
@@ -184,7 +184,7 @@ namespace Pomoductive.ViewModels
 
         public void RestMinutes()
         {
-            MainPage._pomodoreButton.Background = new SolidColorBrush(Windows.UI.Colors.GreenYellow);
+            MainPage._pomodoreButton.Style = Application.Current.Resources["PomodoreTimer_NotWorking"] as Style;
             if (RemainTime < TimeSpan.Zero)
             {
                 //TimeCountStop();

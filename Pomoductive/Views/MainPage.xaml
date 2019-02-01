@@ -23,7 +23,7 @@
             </qc:SerialChart.Graphs>
         </qc:SerialChart>
         <local:TodoListControl HorizontalAlignment="Left" Background="{ThemeResource PomoductivaAcrylicBrush}"/>
-        <Button x:Name="PomodoreButtonText"
+        <Button Style="{StaticResource PomodoreTimer_Working}" x:Name="PomodoreButtonText"
              Click="TimeCountingStartsButtonClicked" 
              HorizontalAlignment="Center" VerticalAlignment="Bottom"
              Grid.ColumnSpan="2" Content="Start" 

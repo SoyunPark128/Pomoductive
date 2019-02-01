@@ -21,7 +21,7 @@ namespace Pomoductive.Repository
         /// <summary>
         /// Returns the Journal with the given Date. 
         /// </summary>
-        Task<IEnumerable<Journal>> GetAsyncByDate(DateTime redordingDate);
+        Task<Journal> GetAsyncByDate(DateTime redordingDate);
 
         /// <summary>
         /// Adds a new Journal if the Journal does not exist, updates the 

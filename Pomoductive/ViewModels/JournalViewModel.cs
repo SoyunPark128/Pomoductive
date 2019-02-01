@@ -50,8 +50,17 @@ namespace Pomoductive.ViewModels
             }
         }
 
-        public DateTime JournalDate { get => JournalModel.JournalDate; }
-
+        public DateTime JournalDate
+        {
+            get => JournalModel.JournalDate; set
+            {
+                if (value != JournalModel.JournalDate)
+                {
+                    JournalModel.JournalDate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public async Task SaveJournalkAsync()
         {
             await App.Repository.Journals.UpsertAsync(JournalModel);

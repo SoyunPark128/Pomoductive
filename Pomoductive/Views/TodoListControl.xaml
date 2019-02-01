@@ -12,7 +12,7 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="TreeViewItemDataTemplate" x:DataType="data:TodoViewModel">
-            <TreeViewItem ItemsSource="{x:Bind SubTodos}">
+            <TreeViewItem ItemsSource="{x:Bind SubTodos}" IsExpanded="True">
                 <Grid  Width="250">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -47,7 +47,8 @@
                                       ItemContainerStyle="{StaticResource TreeViewItemStyle}"
                                       CanDragItems="True"
                                       AllowDrop="True"
-                                      CanReorderItems="True">
+                                      CanReorderItems="True"
+                                      >
 
                             <TreeViewList.ItemContainerTransitions>
                                 <TransitionCollection>
@@ -68,7 +69,7 @@
                     <Flyout Closed="AddSubTodoFlyout_Closed">
                         <StackPanel>
                             <TextBox x:Name="AddNewSubTodoTextBox" IsReadOnly="False" Margin="2"/>
-                            <Button Click="AddNewSubTodoAsync" Content="Add New Sub To-Do"/>
+                            <Button Click="AddNewSubTodoAsync" Content="Add New Sub To-Do" />
                         </StackPanel>
                     </Flyout>
                 </FlyoutBase.AttachedFlyout>
@@ -84,13 +85,17 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0">
-            <TextBox Name="TodoNameInput"  AccessKey="TodoCreateButton" MaxWidth="290"
-                            PlaceholderText="New To-Do" FontSize="22"/>
-            <Button Name="TodoCreateButton" Content="Create"  Click="{x:Bind TodoCreateButtonAsync}"
-                        HorizontalAlignment="Stretch" FontSize="20" x:FieldModifier="public"/>
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch" Height="40" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Name="TodoNameInput"  AccessKey="TodoCreateButton" MaxWidth="290" HorizontalAlignment="Stretch"
+                            PlaceholderText="New To-Do" FontSize="20" Grid.Column="0" VerticalContentAlignment="Center" Padding="8,4,0,0"/>
+            <AppBarButton Name="TodoCreateButton" Icon="Accept" ToolTipService.ToolTip="Creat New Todo" Click="{x:Bind TodoCreateButtonAsync}"
+                         x:FieldModifier="public" Padding="0,4,0,0" Grid.Column="1" Width="40" Background="{ThemeResource SystemAccentColorLight1Brush}" Foreground="White"/>
 
-        </StackPanel>
+        </Grid>
         <ScrollViewer Grid.Row="1">
             <TreeView x:Name="TodoTreeView" Grid.Row="1"
                       SelectionMode="{x:Bind project:Converters.IsRunningToSelectionMode(ViewModel.AppStopwatchViewModel.IsRunning), Mode=OneWay}"

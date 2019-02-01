@@ -8,6 +8,175 @@
 
     <Application.Resources>
         <ResourceDictionary>
+            <StaticResource x:Key="ButtonBackground" ResourceKey="SystemControlBackgroundBaseLowBrush"/>
+            <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="SystemControlBackgroundBaseLowBrush"/>
+            <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="SystemControlBackgroundBaseMediumLowBrush"/>
+            <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="SystemControlBackgroundBaseLowBrush"/>
+            <StaticResource x:Key="ButtonForeground" ResourceKey="SystemControlForegroundBaseHighBrush"/>
+            <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="SystemControlHighlightBaseHighBrush"/>
+            <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="SystemControlHighlightBaseHighBrush"/>
+            <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush"/>
+            <StaticResource x:Key="ButtonBorderBrush" ResourceKey="SystemControlForegroundTransparentBrush"/>
+            <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="SystemControlHighlightBaseMediumLowBrush"/>
+            <Style x:Key="PomodoreTimer_Working" TargetType="Button">
+                <Setter Property="Background" Value="{ThemeResource SystemAccentColor}"/>
+                <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
+                <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+                <Setter Property="Padding" Value="20,10,20,15"/>
+                <Setter Property="Margin" Value="0,0,0,10"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Bottom"/>
+                <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+                <Setter Property="FontWeight" Value="ExtraBold"/>
+                <Setter Property="FontSize" Value="55"/>
+                <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+                <Setter Property="FocusVisualMargin" Value="-3"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" 
+                                              BackgroundSizing="{TemplateBinding BackgroundSizing}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" 
+                                              BorderBrush="{ThemeResource SystemAccentColor}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" 
+                                              CornerRadius="{TemplateBinding CornerRadius}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal">
+                                            <Storyboard>
+                                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorLight1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorLight1 }"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="White"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorDark1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorLight3}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorDark1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource NavBackgroundAcrylicBrush}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </ContentPresenter>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="PomodoreTimer_NotWorking" TargetType="Button">
+                <Setter Property="Background" Value="{ThemeResource SystemAccentColorTip}"/>
+                <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>
+                <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorTipForegroundLight1}"/>
+                <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderBrush}"/>
+                <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+                <Setter Property="Padding" Value="20,10,20,15"/>
+                <Setter Property="Margin" Value="0,0,0,10"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Bottom"/>
+                <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+                <Setter Property="FontWeight" Value="ExtraBold"/>
+                <Setter Property="FontSize" Value="55"/>
+                <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
+                <Setter Property="FocusVisualMargin" Value="-3"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" 
+                                              BackgroundSizing="{TemplateBinding BackgroundSizing}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" 
+                                              BorderBrush="{ThemeResource SystemAccentColorTip}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" 
+                                              CornerRadius="{TemplateBinding CornerRadius}" ContentTransitions="{TemplateBinding ContentTransitions}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal">
+                                            <Storyboard>
+                                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorTipLight1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorTipLight1 }"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorTipForegroundLight1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorTipDark1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushPressed}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorTipForegroundLight1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorTipDark1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemAccentColorTipForegroundLight1}"/>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </ContentPresenter>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="TextBoxStyle1" TargetType="TextBox"></Style>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Default">
                     <AcrylicBrush x:Key="NavBackgroundAcrylicBrush"
@@ -21,42 +190,48 @@
                     <AcrylicBrush x:Key="ButtonAcrylicDisabled"
                                   TintColor="{ThemeResource SystemAccentColor }"
                                   Opacity="0.4"/>
+                    <AcrylicBrush x:Key="AcrylicTipColor"
+                                  TintColor="{ThemeResource SystemAccentColorTip }"
+                                  Opacity="0.5"/>
+                    <AcrylicBrush x:Key="AcrylicTipColorFainted"
+                                  TintColor="{ThemeResource SystemAccentColorTip }"
+                                  Opacity="0.15"/>
+                    <AcrylicBrush x:Key="GenColorNavy"
+                                  TintColor="{ThemeResource SystemAccentColorTipForeground }"
+                                  Opacity="0.6"/>
                     <SolidColorBrush x:Key="PomoButtonBackGroundBrush"
-                                     Color="{ThemeResource SystemAccentColor }"/>
-                    <SolidColorBrush x:Key="ButtonBackground" Color="{ThemeResource SystemAccentColor}"/>
-                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource SystemAccentColorLight1 }"/>
-                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{ThemeResource SystemAccentColorDark1}"/>
-                    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{ThemeResource SystemAccentColorDark1}"/>
-                    <SolidColorBrush x:Key="ButtonForeground" Color="White"/>
-                    <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
-                    <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{ThemeResource SystemAccentColorLight3}"/>
-                    <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{ThemeResource NavBackgroundAcrylicBrush}"/>
-                    <SolidColorBrush x:Key="ButtonBorderBrush" Color="{ThemeResource SystemAccentColor}"/>
-                    <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{ThemeResource SystemAccentColorLight1 }"/>
+                                     Opacity="0.6"
+                                     Color="{ThemeResource SystemAccentColorTip }"/>
+                    
+                    <SolidColorBrush x:Key="SystemAccentColorBrush" Color="{ThemeResource SystemAccentColor}"/>
+                    <SolidColorBrush x:Key="SystemAccentColorLight1Brush" Color="{ThemeResource SystemAccentColorLight1 }"/>
+                    <SolidColorBrush x:Key="SystemAccentColorDark1Brush" Color="{ThemeResource SystemAccentColorDark1}"/>
+                    <SolidColorBrush x:Key="SystemAccentColorLight3Brush" Color="{ThemeResource SystemAccentColorLight3}"/>
                     <SolidColorBrush x:Key="SystemAccentColorTipBrush" Color="{ThemeResource SystemAccentColorTip }"/>
 
-                    <Style x:Key="myTopTitleStackpanelStyle1" TargetType="Button">
-                        <Setter Property="BorderThickness" Value="0,1"/>
-                        <Setter Property="Background" Value="#6600FF00"/>
-                        <Setter Property="BorderBrush" Value="#66275066"/>
-                    </Style>
-
+                    
                     <AcrylicBrush x:Key="PomoductivaAcrylicBrush"
                         TintColor="White"
-                        TintOpacity="0.1"/>
-                    
-                    <Color x:Key="SystemAccentColor">#ff4400</Color>
+                        TintOpacity="0.1"
+                        Opacity="0.35"
+                        BackgroundSource="Backdrop"/>
+
                     <Color x:Key="SystemAccentColorTip">#ffd1ff24</Color>
+                    <Color x:Key="SystemAccentColorTipLight1">#ffddff5b</Color>
+                    <Color x:Key="SystemAccentColorTipDark1">#ffacda00</Color>
+                    <Color x:Key="SystemAccentColorTipForeground">#ff10222B</Color>
+                    <Color x:Key="SystemAccentColorTipForegroundLight1">#ff455b66</Color>
+                    <Color x:Key="SystemAccentColor">#ff4400</Color>
+                    <Color x:Key="SystemAccentColorLight1">#ff6a34</Color>
+                    <Color x:Key="SystemAccentColorLight2">#ff9a75</Color>
+                    <Color x:Key="SystemAccentColorLight3">#ffb79d</Color>
+                    <Color x:Key="SystemAccentColorDark1">#e23c00</Color>
+
                 </ResourceDictionary>
-                
+
             </ResourceDictionary.ThemeDictionaries>
-            <Color x:Key="SystemAccentColor">#ff4400</Color>
-            <Color x:Key="SystemAccentColorLight1">#ff6a34</Color>
-            <Color x:Key="SystemAccentColorLight2">#ff9a75</Color>
-            <Color x:Key="SystemAccentColorLight3">#ffb79d</Color>
-            <Color x:Key="SystemAccentColorDark1">#e23c00</Color>
+
         </ResourceDictionary>
-        
     </Application.Resources>
     
 </Application>

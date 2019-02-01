@@ -118,15 +118,11 @@ namespace Pomoductive.Views
             await parentsTodoViewModel.SaveTodoAsync();
             await newSubTodoViewModel.SaveTodoAsync();
         }
+        
 
-        private void RenameTodoButton_Click(object sender, RoutedEventArgs e)
+        private async void RenameTodoAsync(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void RenameTodoAsync(object sender, RoutedEventArgs e)
-        {
-
+            var currentTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
         }
 
         private void AddNewSubTodoFlyoutOpen(object sender, RoutedEventArgs e)

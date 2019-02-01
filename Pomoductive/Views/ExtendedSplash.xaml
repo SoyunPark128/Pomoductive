@@ -20,7 +20,7 @@
                       Height="40"
                       Width="40"
                       IsActive="True"
-                      Foreground="{ThemeResource ButtonBackground}"
+                      Foreground="{ThemeResource SystemAccentColorBrush}"
                       Canvas.Left="650"
                       Canvas.Top="550" />
         </Canvas>

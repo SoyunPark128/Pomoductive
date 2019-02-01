@@ -31,12 +31,11 @@ namespace Pomoductive.Repository.Sql
                 .FirstOrDefaultAsync(Journal => Journal.Id == id);
         }
 
-        public async Task<IEnumerable<Journal>> GetAsyncByDate(DateTime redordingDate)
+        public async Task<Journal> GetAsyncByDate(DateTime redordingDate)
         {
             return await _db.Journals
                 .AsNoTracking()
-                .Where(j => j.JournalDate == redordingDate)
-                .ToListAsync();
+                .FirstOrDefaultAsync(j => j.JournalDate == redordingDate);
         }
 
         public async Task<Journal> UpsertAsync(Journal journal)
