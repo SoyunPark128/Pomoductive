@@ -21,5 +21,7 @@ Pomodore for Windows 10 and Productive Life
 
 ## How to use pomodoro timer?
 ![image](https://user-images.githubusercontent.com/46061797/52152722-63c58a00-2645-11e9-84c9-d05ee64cd2b9.png)
--------------------------------------------------------------------------------------
 Just select a to-do you made on the list, then push the start button.
+
+![image](https://user-images.githubusercontent.com/46061797/52152851-f49c6580-2645-11e9-8cb7-1925759c4b88.png)
+If you want to quit current todo and restart with new to-do, select another and choose "stop" button on the message box. The current to-do will stop.
