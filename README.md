@@ -5,13 +5,16 @@ Pomodore for Windows 10 and Productive Life
 ## Start Up Page
 ![pomoductive specification](https://user-images.githubusercontent.com/46061797/52149640-67541380-263b-11e9-9a2b-eaa24311305e.png)
 --------------------------------------------------------------------------------------------------
-1. **5 pages**
-	* Dashboard : This is the startup page. You can use the simplified version of To-do management, see the graph of daily amount of To-dos done, and start the Pomodoro Timer.
-	* Statistics : _Not implemented yet_. You can browse data about your working hours statistics
-	* To-Do Management : _Not implemented yet_. You can manipulate your to-dos. it includes Daily set-up, relationship between to-dos, Reward setting
-	* Journal : Edit Journal about what were you doing today and wrap your day up.
-	* Challenge : _Not implemented yet_. Make your N-days challenges and try to keep it. 
- 
+1. **Navigation of 5 pages**
+
+| Page | Description |
+| --- | --- |
+| `Dashboard`  | This is the startup page. You can use the simplified version of To-do management, see the graph of daily amount of To-dos done, and start the Pomodoro Timer.  |
+| `Statistics`  | _Not implemented yet_. You can browse data about your working hours statistics  |
+| `To-Do Management` | _Not implemented yet_. You can manipulate your to-dos. it includes Daily set-up, relationship between to-dos, timer duration, and Reward setting |
+| `Journal` | Edit Journal about what were you doing today and wrap your day up. |
+| `Challenge` |  _Not implemented yet_. Make your N-days challenges and try to keep it. |
+
 2. **Create new To-do**
 3. **Check Box : When you finished your to-do, you can check it up and eliminate it.**
 4. **Simple To-do set up**
