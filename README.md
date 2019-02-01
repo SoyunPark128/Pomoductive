@@ -34,3 +34,7 @@ Pomodore for Windows 10 and Productive Life
 - When one pomodoro finished, instantly continue the break period.
 
 ## Journal Page
+![image](https://user-images.githubusercontent.com/46061797/52154743-282ebe00-264d-11e9-9151-35c12dd7a426.png)
+
+* Edit your journal for a day and save. This page shows you journal history and what did you do in the past.
+* Keeping your journal about How to spend your day will help you keep on track and make you feel productive.
