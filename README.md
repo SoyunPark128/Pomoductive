@@ -29,3 +29,6 @@ Pomodore for Windows 10 and Productive Life
 
 ![image](https://user-images.githubusercontent.com/46061797/52152851-f49c6580-2645-11e9-8cb7-1925759c4b88.png)
 - If you want to quit current todo and restart with new to-do, select another and choose "stop" button on the message box. The current to-do will stop.
+
+![image](https://user-images.githubusercontent.com/46061797/52153747-324ebd80-2649-11e9-9a66-05767134b363.png)
+- When one pomodoro finished, instantly continue the break period.
