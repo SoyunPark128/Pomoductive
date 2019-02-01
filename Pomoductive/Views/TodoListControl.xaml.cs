@@ -72,6 +72,10 @@ namespace Pomoductive.Views
                         MainPage._pomodoreButton.FontSize = 55;
                         MainPage._pomodoreButton.Content = "Start";
                     }
+                    else
+                    {
+                        //  Future Implement : Do not change selection highlight
+                    }
 
                 }
                 else
@@ -105,7 +109,6 @@ namespace Pomoductive.Views
         private async void AddNewSubTodoAsync(object sender, RoutedEventArgs e)
         {
             var parentsTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
-
             Todo newSubTodo = new Todo(AddNewSubTodoTextBox.Text, null, parentsTodoViewModel.Id);
             TodoViewModel newSubTodoViewModel = new TodoViewModel(newSubTodo)
             {
@@ -119,12 +122,7 @@ namespace Pomoductive.Views
             await newSubTodoViewModel.SaveTodoAsync();
         }
         
-
-        private async void RenameTodoAsync(object sender, RoutedEventArgs e)
-        {
-            var currentTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
-        }
-
+       
         private void AddNewSubTodoFlyoutOpen(object sender, RoutedEventArgs e)
         {
             
@@ -163,6 +161,15 @@ namespace Pomoductive.Views
         {
             var finishedTodoViewModel = (sender as FrameworkElement).DataContext as TodoViewModel;
             await finishedTodoViewModel.ReleaseTodo(true);
+        }
+        
+
+        private async void TodoListTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var currentTodoViewModel =  (sender as FrameworkElement).DataContext as TodoViewModel;
+            var currentTextBox = sender as TextBox;
+            currentTodoViewModel.Name = currentTextBox.Text;
+            await currentTodoViewModel.SaveTodoAsync();
         }
     }
 }

@@ -9,6 +9,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <Canvas Background="White" >
+            <Image Stretch="Fill"
+               x:Name="splashImage"
+               Source="ms-appx:///Assets/not implemented yet.png" Width="700" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Canvas>
     </Grid>
 </Page>
     

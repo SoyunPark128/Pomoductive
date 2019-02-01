@@ -140,6 +140,7 @@
   <ItemGroup>
     <Content Include="Assets\logo-icon.png" />
     <Content Include="Assets\logo3.png" />
+    <Content Include="Assets\not implemented yet.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-400.png" />
     <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
