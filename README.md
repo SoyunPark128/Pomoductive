@@ -5,7 +5,7 @@ Pomodore for Windows 10 and Productive Life
 ## Version History
 | Version | Release Date | Version Details |
 | --- | --- | --- |
-| Alpha 0.1 | 2019-02-01 | First Alpha Version Released. The main Dashboard and Journal page was implemented |
+| Alpha 0.1 | 2019-02-01 | First Alpha Version Released. The main Dashboard and Journal page was implemented. This version use local database which is generated automatically when user start app first time |
 
 
 ## Start Up Page
