@@ -2,6 +2,12 @@
 # Pomoductive
 Pomodore for Windows 10 and Productive Life
 
+## Version History
+| Version | Release Date | Version Details |
+| --- | --- | --- |
+| Alpha 0.1 | 2019-02-01 | First Alpha Version Released. The main Dashboard and Journal page was implemented |
+
+
 ## Start Up Page
 ![pomoductive specification](https://user-images.githubusercontent.com/46061797/52149640-67541380-263b-11e9-9a2b-eaa24311305e.png)
 --------------------------------------------------------------------------------------------------
