@@ -20,7 +20,7 @@ Pomodore for Windows 10 and Productive Life
 5. **Graph chart for 2-weeks of your works.**
 
 ## How to use pomodoro timer?
-
+![image](https://user-images.githubusercontent.com/46061797/52152972-4644f000-2646-11e9-8fc6-191b74d8af38.png)
 Just select a to-do you made on the list, then push the start button.
 
 ![image](https://user-images.githubusercontent.com/46061797/52152851-f49c6580-2645-11e9-8cb7-1925759c4b88.png)
