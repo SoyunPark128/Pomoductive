@@ -32,3 +32,5 @@ Pomodore for Windows 10 and Productive Life
 
 ![image](https://user-images.githubusercontent.com/46061797/52153747-324ebd80-2649-11e9-9a66-05767134b363.png)
 - When one pomodoro finished, instantly continue the break period.
+
+## Journal Page
