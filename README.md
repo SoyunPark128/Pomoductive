@@ -18,6 +18,7 @@ Pomodore for Windows 10 and Productive Life
 	* Add Sub todo
 	* Delete Todo
 5. **Graph chart for 2-weeks of your works.**
+6. **Pomodoro timer button**
 
 ## How to use pomodoro timer?
 ![image](https://user-images.githubusercontent.com/46061797/52152972-4644f000-2646-11e9-8fc6-191b74d8af38.png)
