@@ -44,3 +44,20 @@ Pomodore for Windows 10 and Productive Life
 
 * Edit your journal for a day and save. This page shows you journal history and what did you do in the past.
 * Keeping your journal about How to spend your day will help you keep on track and make you feel productive.
+
+
+----------------------------------
+## In progress and Roadmap
+#### In progress
+* Statistic Page Implementation
+* To-Do Management Page Implementation
+* Challenge Page Implementation
+#### Roadmap
+* Data synchronization with google account
+* Minimized Pomodoro player.
+* Color theme customizing
+* Pomodoro Data sharing with coworker groop.
+
+## Get in Touch
+soyun.park712@gmail.com
+https://www.linkedin.com/in/soyun-park-263069176/
