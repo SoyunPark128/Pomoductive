@@ -59,5 +59,5 @@ Pomodore for Windows 10 and Productive Life
 * Pomodoro Data sharing with coworker groop.
 
 ## Get in Touch
-soyun.park712@gmail.com
-https://www.linkedin.com/in/soyun-park-263069176/
+- soyun.park712@gmail.com
+- https://www.linkedin.com/in/soyun-park-263069176/
