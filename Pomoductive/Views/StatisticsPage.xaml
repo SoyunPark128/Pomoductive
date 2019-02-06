@@ -5,14 +5,129 @@
     xmlns:local="using:Pomoductive.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:qc="using:Ailon.QuickCharts"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Page.Resources>
+        <Style x:Key="BladeStyle" TargetType="controls:BladeItem">
+            <Setter Property="Header" Value="Default Blade" />
+            <Setter Property="Width" Value="700" />
+            <Setter Property="IsOpen" Value="True" />
+            <Setter Property="TitleBarBackground" Value="{ThemeResource SystemAccentColorLight3Brush}"/>
+            <Setter Property="CloseButtonForeground" Value="{ThemeResource SystemAccentColorTipBrush}"/>
+        </Style>
+    </Page.Resources>
     <Grid >
-        <Canvas Background="White" >
-            <Image Stretch="Fill"
-               x:Name="splashImage"
-               Source="ms-appx:///Assets/not implemented yet.png" Width="700" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Canvas>
+        <controls:BladeView x:Name="BladeView"
+                        Margin="0"
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        BladeMode="Normal"
+                        AutoCollapseCountThreshold="3">
+            <controls:BladeItem x:Name="FirstBlade"
+                          Header="Test"
+                          TitleBarVisibility="Collapsed">
+                <ListView Margin="0,30,0,0" SelectionMode="None">
+                        <ToggleButton
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Content="The Number of Pomodoros on time"
+                            IsChecked="{Binding IsOpen, Mode=TwoWay, ElementName=NumOfPomos}" />
+                        <ToggleButton 
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Content="The Composition of the Operated To-do"
+                            IsChecked="{Binding IsOpen, Mode=TwoWay, ElementName=CompositionOfOperationBlade}" />
+                        <ToggleButton 
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            Content="To-dos in a specific period"
+                            IsChecked="{Binding IsOpen, Mode=TwoWay, ElementName=TodosInPeriodBlade}" />
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </controls:BladeItem>
+
+            <controls:BladeItem x:Name="NumOfPomos"
+                          Header="The Number of Pomodoros on time"
+                          IsOpen="False"
+                          Style="{StaticResource BladeStyle}">
+                <StackPanel Orientation="Vertical">
+                <TextBlock Text="The Entire Duration"/>
+                    <qc:SerialChart DataSource="{x:Bind StatisticViewModel.GraphDataDicNumOfPomosOnTime}" CategoryValueMemberPath="Key">
+                        <qc:SerialChart.Graphs>
+                            <qc:ColumnGraph ValueMemberPath="Value" />
+                        </qc:SerialChart.Graphs>
+                    </qc:SerialChart>
+                </StackPanel>
+            </controls:BladeItem>
+
+            <controls:BladeItem x:Name="CompositionOfOperationBlade"
+                          Header="The Composition of the Operated To-do"
+                          Style="{StaticResource BladeStyle}"
+                          IsOpen="False">
+                <qc:PieChart DataSource="{x:Bind StatisticViewModel.GraphDataDicTodoPortions}" TitleMemberPath="Key" ValueMemberPath="Value" Margin="30" />
+            </controls:BladeItem>
+
+            <controls:BladeItem x:Name="TodosInPeriodBlade"
+                          Header="To-dos in a specific period"
+                          Style="{StaticResource BladeStyle}"
+                          IsOpen="False">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <DatePicker x:Name="StartDatePicker" Header="Start" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" DateChanged="DatePicker_DateChanged"/>
+                    <DatePicker x:Name="EndDatePicker" Header="End"  HorizontalAlignment="Right" VerticalAlignment="Top" DateChanged="DatePicker_DateChanged"/>
+                    <qc:SerialChart  x:Name="GraphTodosInPeriod" DataSource="{x:Bind StatisticViewModel.GraphDataDicTotalTodosPerADaySpecificPeriod, Mode=OneWay}" CategoryValueMemberPath="Key" 
+                                     MinimumCategoryGridStep="10" AxisForeground="Transparent" GridStroke="Transparent" BackgroundSizing="OuterBorderEdge" 
+                                     Background="Transparent"  Margin="-42,-10,-42,-30" Grid.Row="1" Visibility="Collapsed">
+                        <qc:SerialChart.Graphs>
+                            <qc:AreaGraph  ValueMemberPath="Value">
+                                <qc:AreaGraph.Brush>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="{ThemeResource SystemAccentColor}" Offset="0"/>
+                                        <GradientStop Color="{ThemeResource SystemAccentColorLight3}" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </qc:AreaGraph.Brush>
+                            </qc:AreaGraph>
+                        </qc:SerialChart.Graphs>
+                    </qc:SerialChart>
+                </Grid>
+            </controls:BladeItem>
+        </controls:BladeView>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Full">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="Small">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="BladeView.Padding" Value="12" />
+                        <Setter Target="FirstBlade.Width" Value="280" />
+                        <Setter Target="FirstBlade.FontSize" Value="12" />
+                        <Setter Target="SecondBlade.Width" Value="280" />
+                        <Setter Target="SecondBlade.FontSize" Value="12" />
+                        <Setter Target="ThirdBlade.Width" Value="280" />
+                        <Setter Target="ThirdBlade.FontSize" Value="12" />
+                        <Setter Target="FourthBlade.Width" Value="280" />
+                        <Setter Target="FourthBlade.FontSize" Value="12" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>

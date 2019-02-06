@@ -8,6 +8,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 
 namespace Pomoductive.ViewModels
@@ -15,22 +16,30 @@ namespace Pomoductive.ViewModels
 
     public class StatisticDataViewModel:BindableBase
     {
-        public ObservableCollection<TimeRecordViewModel> TimeRecordViewModels = new ObservableCollection<TimeRecordViewModel>();
-        private Dictionary<string, int> TotalTodosPerADayDic = new Dictionary<string, int>();
-
-        // For Graph
-        public ObservableCollection<TodosPerOneday> TotalTodosPerADay = new ObservableCollection<TodosPerOneday>();
-        // For Journal Page
-        public ObservableCollection<TimeRecordViewModel> TotalTodosAndNamePerADay = new ObservableCollection<TimeRecordViewModel>();
         
+        public ObservableCollection<TimeRecordViewModel> TimeRecordViewModels = new ObservableCollection<TimeRecordViewModel>();
+
+        #region Statistic Datas
+        // For Main Page Graph
+        public ObservableDictionary<string, double> GraphDataDicTotalTodosPerADay = new ObservableDictionary<string, double>();
+        public ObservableDictionary<string, double> GraphDataDicTotalTodosPerADay2Weeks;
+
+        // For Journal Page
+        public ObservableCollection<TimeRecordViewModel> GraphDataTotalTodosAndNamePerADay = new ObservableCollection<TimeRecordViewModel>();
+
+        // For Statistic Page
+        public ObservableDictionary<string, double> GraphDataDicTodoPortions = new ObservableDictionary<string, double>();
+        public ObservableDictionary<string, double> GraphDataDicNumOfPomosOnTime = new ObservableDictionary<string, double>();
+        public ObservableDictionary<string, double> GraphDataDicTotalTodosPerADaySpecificPeriod = new ObservableDictionary<string, double>();
+        #endregion
 
         public async Task ConfigureStatisticsDatas()
         {
+            
             //Load Datas to TimeRecordsFor2Weeks
             Task timerecordSetup = Task.Run(GetTimeRecordDatasAsync);
             await timerecordSetup.ContinueWith(
-                delegate { LoadTotalTodosInOneDay(); }).ContinueWith(
-                delegate { TotalTodosPerADay = Converters.TodosPerADayDicToStruct(TotalTodosPerADayDic, DateTime.Now.AddDays(-14), DateTime.Now); }).ContinueWith(
+                delegate { LoadStatisticData(); }).ContinueWith(
                 delegate { SetTotalTodosAndNamePerADay(DateTime.Today); });
             TimeRecordViewModels.CollectionChanged += new NotifyCollectionChangedEventHandler(StatisticsDataUpdate);
         }
@@ -76,68 +85,132 @@ namespace Pomoductive.ViewModels
                 
                 IsLoading = false;
             });
-            
-
         }
 
-        private void LoadTotalTodosInOneDay()
+        private void LoadStatisticData()
         {
             if (TimeRecordViewModels is null)
             {
                 return;
             }
+            
+            // Sort by Hour
+            for (int t = 0; t < 25; t++)
+            {
+                GraphDataDicNumOfPomosOnTime.Add(t.ToString(), 0);
+            }
 
             foreach (var trvm in TimeRecordViewModels)
             {
                 string _date = trvm.RedordingDate.ToShortDateString();
-                int _count = trvm.TotalTaskCount;
+                string _hour = trvm.RedordingDate.Hour.ToString();
+                string _name = trvm.TodoName;
+                double _count = trvm.TotalTaskCount + trvm.Remainder;
 
+
+
+                //GraphDataTotalTodosPerADay
                 try
                 {
-                    TotalTodosPerADayDic[_date] += _count;
+                    GraphDataDicTotalTodosPerADay[_date] += _count;
                 }
                 catch (KeyNotFoundException)
                 {
-                    TotalTodosPerADayDic[_date] = _count;
+                    GraphDataDicTotalTodosPerADay.Add(_date, _count);
+                }
+
+                //GraphDataDicTodoPortions
+                try
+                {
+                    GraphDataDicTodoPortions[_name] += _count;
+                }
+                catch (KeyNotFoundException)
+                {
+                    GraphDataDicTodoPortions.Add(_name, _count);
+                }
+
+                // GraphDataDicNumOfPomos
+                try
+                {
+                    GraphDataDicNumOfPomosOnTime[_hour] += _count;
+                }
+                catch (KeyNotFoundException)
+                {
+
+                    GraphDataDicNumOfPomosOnTime.Add(_hour, _count);
                 }
             }
+
+            GraphDataDicTotalTodosPerADay2Weeks = DataDicFilter(GraphDataDicTotalTodosPerADay, DateTime.Now.AddDays(-14), DateTime.Now,"Date");
         }
 
-        private void StatisticsDataUpdate(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args)
+        public ObservableDictionary<string, double> DataDicFilter(ObservableDictionary<string, double> orinignalDataDic , DateTime start, DateTime end, string keyType, string parentsTodoName = "")
         {
-            int before = 0;
-            foreach (var tad in TotalTodosPerADay)
+
+            /// TODO: Now it only filters Date-Count Dictionary.
+            ObservableDictionary<string, double> _filteredDataDic = new ObservableDictionary<string, double>();
+
+            for (DateTime d = start; d < end;)
             {
-                if (tad.Date == DateTime.Today.ToShortDateString())
+                if (orinignalDataDic.TryGetValue(d.ToShortDateString(), out double _value))
                 {
-                    before = tad.Todos;
-                    TotalTodosPerADay.Remove(tad);
+                    switch (keyType)
+                    {
+                        case "Date":
+                            _filteredDataDic.Add(d.ToShortDateString(), _value);
+                            break;
+                        case "Name":
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (keyType)
+                    {
+                        case "Date":
+                            _filteredDataDic.Add(d.ToShortDateString(), _value);
+                            break;
+                        case "Name":
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                d = d.AddDays(1);
+            }
+
+            return _filteredDataDic;
+        }
+
+        private void StatisticsDataUpdate(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            double before = 0;
+            foreach (var tad in GraphDataDicTotalTodosPerADay2Weeks)
+            {
+                if (tad.Key == DateTime.Today.ToShortDateString())
+                {
+                    before = tad.Value;
+                    GraphDataDicTotalTodosPerADay2Weeks.Remove(tad);
                     break;
                 }
             }
-            TodosPerOneday _todosInOneday = new TodosPerOneday();
-            _todosInOneday.Date = DateTime.Today.ToShortDateString();
-            _todosInOneday.Todos = ++before;
-            TotalTodosPerADay.Add(_todosInOneday);
+            GraphDataDicTotalTodosPerADay2Weeks.Add(DateTime.Today.ToShortDateString(), ++before);
         }
 
+        // For Journal
         public void SetTotalTodosAndNamePerADay(DateTime date)
         {
 
-            TotalTodosAndNamePerADay.Clear();
-            foreach (var item in App.AppStatisticDataViewModel.TimeRecordViewModels)
+            GraphDataTotalTodosAndNamePerADay.Clear();
+            foreach (var item in TimeRecordViewModels)
             {
                 if (item.RedordingDate == date)
                 {
-                    TotalTodosAndNamePerADay.Add(item);
+                    GraphDataTotalTodosAndNamePerADay.Add(item);
                 }
             }
-        }
-
-        public struct TodosPerOneday
-        {
-            public string Date { get; set; }
-            public int Todos { get; set; }
         }
     }
 }

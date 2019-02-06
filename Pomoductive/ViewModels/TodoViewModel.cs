@@ -272,7 +272,8 @@ namespace Pomoductive.ViewModels
         {
             TimeRecord _timeRecord = TimeRecords.FirstOrDefault(trvm => trvm.TodoId == Id 
                                                                             && trvm.TaskMin == TaskMinutesPerOnePomo 
-                                                                            && trvm.RedordingDate == DateTime.Today);
+                                                                            && trvm.RedordingDate.Date == DateTime.Today
+                                                                            && trvm.Remainder != 0);
             
             if (_timeRecord is null)
             {

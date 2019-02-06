@@ -24,7 +24,7 @@
                             Click="Task_Finished_CheckAsync"
                             MinWidth="0" Width="15" Height="15" Margin="0,0,5,0" Padding="0,0,-10,0" 
                             Background="White" BorderBrush="Black"  />
-                    <TextBox Style="{StaticResource TreeViewListTextBox}"  Grid.Column="1"
+                    <TextBox x:Name="textBoxTest" Style="{StaticResource TreeViewListTextBox}"  Grid.Column="1"
                             Text="{x:Bind Name}"
                             HorizontalAlignment="Left" VerticalAlignment="Center"
                              TextChanged="TodoListTextBox_TextChanged"/>

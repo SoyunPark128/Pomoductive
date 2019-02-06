@@ -18,7 +18,7 @@
             <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush"/>
             <StaticResource x:Key="ButtonBorderBrush" ResourceKey="SystemControlForegroundTransparentBrush"/>
             <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="SystemControlHighlightBaseMediumLowBrush"/>
-            <Style x:Key="PomodoreTimer_Working" TargetType="Button">
+            <Style x:Key="PomodoroTimer_Working" TargetType="Button">
                 <Setter Property="Background" Value="{ThemeResource SystemAccentColor}"/>
                 <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>
                 <Setter Property="Foreground" Value="White"/>
@@ -97,7 +97,7 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="PomodoreTimer_NotWorking" TargetType="Button">
+            <Style x:Key="PomodoroTimer_NotWorking" TargetType="Button">
                 <Setter Property="Background" Value="{ThemeResource SystemAccentColorTip}"/>
                 <Setter Property="BackgroundSizing" Value="OuterBorderEdge"/>
                 <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorTipForegroundLight1}"/>

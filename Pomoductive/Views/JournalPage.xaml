@@ -173,7 +173,7 @@
                 <ColumnDefinition Width="8*" />
             </Grid.ColumnDefinitions>
             <ListView x:Name="TodosInDay"
-                      ItemsSource="{x:Bind StatisticViewModel.TotalTodosAndNamePerADay}"
+                      ItemsSource="{x:Bind StatisticViewModel.GraphDataTotalTodosAndNamePerADay}"
                       ItemTemplate="{StaticResource TodoListViewTemplate}"
                       SelectionMode="None"
                       Grid.Column="0" Margin="10,10,0,20" Padding="-11,0,0,0" >

@@ -11,7 +11,7 @@ namespace Pomoductive.Models
        
         public Guid TodoId { get; set; }
         public string TodoName { get; set; }
-        public DateTime RedordingDate { get; set; } = DateTime.Today;
+        public DateTime RedordingDate { get; set; } = DateTime.Now;
         public int TaskMin { get; set; }
 
         public int TotalTaskCount { get; set; } = 0;

@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Pomoductive.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,9 +25,33 @@ namespace Pomoductive.Views
     /// </summary>
     public sealed partial class StatisticsPage : Page
     {
+        StatisticDataViewModel StatisticViewModel => App.AppStatisticDataViewModel;
+        bool isSelectedStartAndEnd = false;
+
         public StatisticsPage()
         {
             this.InitializeComponent();
+        }
+
+        public void SetFilter(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            StatisticViewModel.GraphDataDicTotalTodosPerADaySpecificPeriod.Clear();
+            StatisticViewModel.GraphDataDicTotalTodosPerADaySpecificPeriod =
+                StatisticViewModel.DataDicFilter(StatisticViewModel.GraphDataDicTotalTodosPerADay, StartDatePicker.Date.Date, EndDatePicker.Date.Date, "Date");
+            
+            GraphTodosInPeriod.Visibility = Visibility.Visible;
+        }
+        
+        private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        {
+            if (isSelectedStartAndEnd)
+            {
+                SetFilter(sender, null);
+            }
+            else
+            {
+                isSelectedStartAndEnd = true;
+            }
         }
     }
 }

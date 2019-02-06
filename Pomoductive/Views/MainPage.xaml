@@ -9,10 +9,10 @@
     xmlns:qc="using:Ailon.QuickCharts"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid >
-        <qc:SerialChart DataSource="{x:Bind StatisticViewModel.TotalTodosPerADay, Mode=OneWay}" CategoryValueMemberPath="Date" MinimumCategoryGridStep="10" 
+        <qc:SerialChart DataSource="{x:Bind StatisticViewModel.GraphDataDicTotalTodosPerADay2Weeks, Mode=OneWay}" CategoryValueMemberPath="Key" MinimumCategoryGridStep="10" 
             AxisForeground="Transparent" GridStroke="Transparent" BackgroundSizing="OuterBorderEdge" Background="Transparent"  Margin="-42,-10,-42,-30">
             <qc:SerialChart.Graphs>
-                <qc:AreaGraph  ValueMemberPath="Todos" >
+                <qc:AreaGraph  ValueMemberPath="Value" >
                     <qc:AreaGraph.Brush>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="{ThemeResource SystemAccentColor}" Offset="0"/>
@@ -23,7 +23,7 @@
             </qc:SerialChart.Graphs>
         </qc:SerialChart>
         <local:TodoListControl HorizontalAlignment="Left" Background="{ThemeResource PomoductivaAcrylicBrush}"/>
-        <Button Style="{StaticResource PomodoreTimer_Working}" x:Name="PomodoreButtonText"
+        <Button Style="{StaticResource PomodoroTimer_Working}" x:Name="PomodoroButtonText"
              Click="TimeCountingStartsButtonClicked" 
              HorizontalAlignment="Center" VerticalAlignment="Bottom"
              Grid.ColumnSpan="2" Content="Start" 

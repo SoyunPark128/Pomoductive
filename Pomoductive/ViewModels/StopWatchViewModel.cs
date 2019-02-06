@@ -90,7 +90,7 @@ namespace Pomoductive.ViewModels
             {
                 RemainTime = TimeSpan.FromMinutes(App.AppViewModel.SelectedTodo.TaskMinutesPerOnePomo);
             }
-            MainPage._pomodoreButton.FontSize = 45;
+            MainPage._pomodoroButton.FontSize = 45;
             StopWatchModel.TotalTime = TimeSpan.Zero;
             StopWatchModel.Stopwatch.Start();
             timer4Stopwatch.Start();
@@ -137,13 +137,10 @@ namespace Pomoductive.ViewModels
 
         public async Task TodoMinutes()
         {
-            MainPage._pomodoreButton.Style = Application.Current.Resources["PomodoreTimer_Working"] as Style;
+            MainPage._pomodoroButton.Style = Application.Current.Resources["PomodoroTimer_Working"] as Style;
             if (RemainTime < TimeSpan.Zero)
             {
-                //TimeCountStop();
                 player.Play();
-                //MainPage._pomodoreButton.FontSize = 55;
-                //MainPage._pomodoreButton.Content = "Done!";
 
                 App.AppViewModel.AppTimeRecordViewModel.Remainder = 0;
                 App.AppViewModel.AppTimeRecordViewModel.TotalTaskCount++;
@@ -170,7 +167,7 @@ namespace Pomoductive.ViewModels
             }
             else
             {
-                MainPage._pomodoreButton.Content = RemainTime.ToString(@"dd\:mm\:ss");
+                MainPage._pomodoroButton.Content = RemainTime.ToString(@"dd\:mm\:ss");
                 RemainTime -= oneSecond;
 
                 App.AppViewModel.AppTimeRecordViewModel.Remainder = Converters.RemainTimeToRemainder(RemainTime, App.AppViewModel.AppTimeRecordViewModel.TaskMin);
@@ -184,7 +181,7 @@ namespace Pomoductive.ViewModels
 
         public void RestMinutes()
         {
-            MainPage._pomodoreButton.Style = Application.Current.Resources["PomodoreTimer_NotWorking"] as Style;
+            MainPage._pomodoroButton.Style = Application.Current.Resources["PomodoroTimer_NotWorking"] as Style;
             if (RemainTime < TimeSpan.Zero)
             {
                 //TimeCountStop();
@@ -203,7 +200,7 @@ namespace Pomoductive.ViewModels
             }
             else
             {
-                MainPage._pomodoreButton.Content = RemainTime.ToString(@"dd\:mm\:ss");
+                MainPage._pomodoroButton.Content = RemainTime.ToString(@"dd\:mm\:ss");
                 RemainTime -= oneSecond;
             }
 

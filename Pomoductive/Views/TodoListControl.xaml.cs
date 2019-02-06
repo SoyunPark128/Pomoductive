@@ -52,7 +52,7 @@ namespace Pomoductive.Views
                 if (ViewModel.AppStopwatchViewModel.IsRunning)
                 {
                     // Create the message dialog and set its content
-                    var messageDialog = new MessageDialog("Do you Want to stop the current Pomodore?");
+                    var messageDialog = new MessageDialog("Do you Want to stop the current Pomodoro?");
 
 
                     // Add commands and set their command ids
@@ -69,8 +69,8 @@ namespace Pomoductive.Views
                     {
                         ViewModel.AppStopwatchViewModel.TimeCountStop();
                         ViewModel.SelectedTodo = node;
-                        MainPage._pomodoreButton.FontSize = 55;
-                        MainPage._pomodoreButton.Content = "Start";
+                        MainPage._pomodoroButton.FontSize = 55;
+                        MainPage._pomodoroButton.Content = "Start";
                     }
                     else
                     {
@@ -80,8 +80,8 @@ namespace Pomoductive.Views
                 }
                 else
                 {
-                    MainPage._pomodoreButton.FontSize = 55;
-                    MainPage._pomodoreButton.Content = "Start";
+                    MainPage._pomodoroButton.FontSize = 55;
+                    MainPage._pomodoroButton.Content = "Start";
                     ViewModel.SelectedTodo = node;
                 }
             }

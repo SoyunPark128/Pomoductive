@@ -17,7 +17,7 @@ namespace Pomoductive.Views
 
             
             //Initiate StopWatch Event
-            _pomodoreButton = PomodoreButtonText;
+            _pomodoroButton = PomodoroButtonText;
 
             if (StopWatch.IsRunning)
             {
@@ -43,7 +43,7 @@ namespace Pomoductive.Views
 
         TodoViewModel selectedTodoViewModel = new TodoViewModel();
 
-        public static Button _pomodoreButton = new Button();
+        public static Button _pomodoroButton = new Button();
 
         private void TimeCountingStartsButtonClicked(object sender, RoutedEventArgs e)
         {
