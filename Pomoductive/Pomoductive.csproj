@@ -100,8 +100,9 @@
     <Compile Include="AppShell.xaml.cs">
       <DependentUpon>AppShell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters.cs" />
-    <Compile Include="ObservableDictionary.cs" />
+    <Compile Include="Common\Converters.cs" />
+    <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="Common\Section.cs" />
     <Compile Include="ViewModels\JournalViewModel.cs" />
     <Compile Include="ViewModels\ShellNavigationItem.cs" />
     <Compile Include="ViewModels\StatisticDataViewModel.cs" />

@@ -1,6 +1,8 @@
 ﻿using Pomoductive.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,13 +26,22 @@ namespace Pomoductive.Views
     /// </summary>
     public sealed partial class TodoManagementPage : Page
     {
-        
+        ObservableCollection<TodoViewModel> ViewModel => App.AppViewModel.AllTodoViewModels;
+        TodoViewModel _selectedTodo = new TodoViewModel();
 
         public TodoManagementPage()
         {
             this.InitializeComponent();
+            _selectedTodo = new TodoViewModel();
         }
 
+        private void Listview_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            
+            _selectedTodo = e.ClickedItem as TodoViewModel;
+            _selectedTodo.OnPropertyChanged();
+
+        }
         
     }
 }

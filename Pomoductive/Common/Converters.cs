@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using Pomoductive.ViewModels;
+using System;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using static Pomoductive.ViewModels.StatisticDataViewModel;
 
 namespace Pomoductive
@@ -53,6 +49,22 @@ namespace Pomoductive
         public static double GetCenterPoint(float value)
         {
             return (90 - GetEllipseSize(value)) / 2;
+        }
+
+        public static string GetNameFromID(Guid id)
+        {
+            TodoViewModel _todoViewModel = App.AppViewModel.TodoViewModels.FirstOrDefault(x => x.Id == id);
+            return _todoViewModel is null ? "" : _todoViewModel.Name;
+        }
+
+        public static string TerminatedToString(bool isterminated)
+        {
+            return isterminated ? "Terminated" : "In Process";
+        }
+
+        public static bool SetOppositeBoolean(bool value)
+        {
+            return !value;
         }
     }
 }

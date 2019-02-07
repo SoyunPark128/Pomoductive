@@ -22,7 +22,7 @@ namespace Pomoductive.ViewModels
         #region Statistic Datas
         // For Main Page Graph
         public ObservableDictionary<string, double> GraphDataDicTotalTodosPerADay = new ObservableDictionary<string, double>();
-        public ObservableDictionary<string, double> GraphDataDicTotalTodosPerADay2Weeks;
+        public ObservableDictionary<string, double> GraphDataDicTotalTodosPerADay2Weeks = new ObservableDictionary<string, double>();
 
         // For Journal Page
         public ObservableCollection<TimeRecordViewModel> GraphDataTotalTodosAndNamePerADay = new ObservableCollection<TimeRecordViewModel>();
@@ -141,14 +141,15 @@ namespace Pomoductive.ViewModels
                 }
             }
 
-            GraphDataDicTotalTodosPerADay2Weeks = DataDicFilter(GraphDataDicTotalTodosPerADay, DateTime.Now.AddDays(-14), DateTime.Now,"Date");
+            DataDicFilter(GraphDataDicTotalTodosPerADay, ref GraphDataDicTotalTodosPerADay2Weeks, DateTime.Now.AddDays(-14), DateTime.Now,"Date");
         }
 
-        public ObservableDictionary<string, double> DataDicFilter(ObservableDictionary<string, double> orinignalDataDic , DateTime start, DateTime end, string keyType, string parentsTodoName = "")
+        public void DataDicFilter(ObservableDictionary<string, double> orinignalDataDic, ref ObservableDictionary<string, double>targetDataDic, 
+            DateTime start, DateTime end, string keyType, string parentsTodoName = "")
         {
 
             /// TODO: Now it only filters Date-Count Dictionary.
-            ObservableDictionary<string, double> _filteredDataDic = new ObservableDictionary<string, double>();
+            targetDataDic.Clear();
 
             for (DateTime d = start; d < end;)
             {
@@ -157,7 +158,7 @@ namespace Pomoductive.ViewModels
                     switch (keyType)
                     {
                         case "Date":
-                            _filteredDataDic.Add(d.ToShortDateString(), _value);
+                            targetDataDic.Add(d.ToShortDateString(), _value);
                             break;
                         case "Name":
                             break;
@@ -170,7 +171,7 @@ namespace Pomoductive.ViewModels
                     switch (keyType)
                     {
                         case "Date":
-                            _filteredDataDic.Add(d.ToShortDateString(), _value);
+                            targetDataDic.Add(d.ToShortDateString(), _value);
                             break;
                         case "Name":
                             break;
@@ -180,8 +181,7 @@ namespace Pomoductive.ViewModels
                 }
                 d = d.AddDays(1);
             }
-
-            return _filteredDataDic;
+            
         }
 
         private void StatisticsDataUpdate(object sender, NotifyCollectionChangedEventArgs args)

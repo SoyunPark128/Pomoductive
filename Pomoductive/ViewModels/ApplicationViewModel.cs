@@ -24,11 +24,17 @@ namespace Pomoductive.ViewModels
         }
 
         //// <summary>
-        /// The collection of todos in the list. 
+        /// The collection of parents todos in the list. 
         /// </summary>
         public ObservableCollection<TodoViewModel> TodoViewModels { get; }
             = new ObservableCollection<TodoViewModel>();
-       
+
+        //// <summary>
+        /// The collection of all todos in the list. 
+        /// </summary>
+        public ObservableCollection<TodoViewModel> AllTodoViewModels { get; }
+            = new ObservableCollection<TodoViewModel>();
+
         //// <summary>
         /// The collection of journals.
         /// </summary>
@@ -92,8 +98,10 @@ namespace Pomoductive.ViewModels
                     {
                         var newSubTodoViewModel = new TodoViewModel(st);
                         newTodoViewModel.SubTodos.Add(newSubTodoViewModel);
+                        AllTodoViewModels.Add(newSubTodoViewModel);
                     }
                     TodoViewModels.Add(newTodoViewModel);
+                    AllTodoViewModels.Add(newTodoViewModel);
                 }
                 
                 

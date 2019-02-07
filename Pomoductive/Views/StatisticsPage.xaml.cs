@@ -1,4 +1,5 @@
-﻿using Pomoductive.ViewModels;
+﻿using Microsoft.Toolkit.Uwp.UI.Controls;
+using Pomoductive.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -36,8 +37,8 @@ namespace Pomoductive.Views
         public void SetFilter(object sender, NotifyCollectionChangedEventArgs args)
         {
             StatisticViewModel.GraphDataDicTotalTodosPerADaySpecificPeriod.Clear();
-            StatisticViewModel.GraphDataDicTotalTodosPerADaySpecificPeriod =
-                StatisticViewModel.DataDicFilter(StatisticViewModel.GraphDataDicTotalTodosPerADay, StartDatePicker.Date.Date, EndDatePicker.Date.Date, "Date");
+            StatisticViewModel.DataDicFilter(StatisticViewModel.GraphDataDicTotalTodosPerADay, ref StatisticViewModel.GraphDataDicTotalTodosPerADaySpecificPeriod,
+                StartDatePicker.Date.Date, EndDatePicker.Date.Date, "Date");
             
             GraphTodosInPeriod.Visibility = Visibility.Visible;
         }
@@ -53,5 +54,6 @@ namespace Pomoductive.Views
                 isSelectedStartAndEnd = true;
             }
         }
+        
     }
 }

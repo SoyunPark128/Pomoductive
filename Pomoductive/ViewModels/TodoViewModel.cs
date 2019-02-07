@@ -29,7 +29,7 @@ namespace Pomoductive.ViewModels
         }
         
         public ObservableCollection<TodoViewModel> SubTodos { get; } = new ObservableCollection<TodoViewModel>();
-
+        
 
         /// <summary>
         /// Gets or sets the underlying Todo object.

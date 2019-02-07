@@ -15,6 +15,7 @@
             <Setter Property="Header" Value="Default Blade" />
             <Setter Property="Width" Value="700" />
             <Setter Property="IsOpen" Value="True" />
+            <Setter Property="MinWidth" Value="60"/>
             <Setter Property="TitleBarBackground" Value="{ThemeResource SystemAccentColorLight3Brush}"/>
             <Setter Property="CloseButtonForeground" Value="{ThemeResource SystemAccentColorTipBrush}"/>
         </Style>
@@ -56,15 +57,21 @@
             <controls:BladeItem x:Name="NumOfPomos"
                           Header="The Number of Pomodoros on time"
                           IsOpen="False"
-                          Style="{StaticResource BladeStyle}">
-                <StackPanel Orientation="Vertical">
-                <TextBlock Text="The Entire Duration"/>
-                    <qc:SerialChart DataSource="{x:Bind StatisticViewModel.GraphDataDicNumOfPomosOnTime}" CategoryValueMemberPath="Key">
+                          Style="{StaticResource BladeStyle}"
+                                MinWidth="30">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="The Entire Period" Grid.Row="0" HorizontalAlignment="Center" Margin="30"/>
+                    <qc:SerialChart DataSource="{x:Bind StatisticViewModel.GraphDataDicNumOfPomosOnTime}" CategoryValueMemberPath="Key" Margin="30"
+                                    Grid.Row="1" AxisForeground="{ThemeResource SystemAccentColorLight1Brush}" GridStroke="{ThemeResource SystemAccentColorLight3Brush}" >
                         <qc:SerialChart.Graphs>
-                            <qc:ColumnGraph ValueMemberPath="Value" />
+                            <qc:ColumnGraph ValueMemberPath="Value" Grid.Row="1"/>
                         </qc:SerialChart.Graphs>
                     </qc:SerialChart>
-                </StackPanel>
+                </Grid>
             </controls:BladeItem>
 
             <controls:BladeItem x:Name="CompositionOfOperationBlade"
@@ -83,11 +90,12 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <DatePicker x:Name="StartDatePicker" Header="Start" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" DateChanged="DatePicker_DateChanged"/>
-                    <DatePicker x:Name="EndDatePicker" Header="End"  HorizontalAlignment="Right" VerticalAlignment="Top" DateChanged="DatePicker_DateChanged"/>
+                    <DatePicker x:Name="StartDatePicker" Header="Start" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30" DateChanged="DatePicker_DateChanged"/>
+                    <DatePicker x:Name="EndDatePicker" Header="End"  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="30" DateChanged="DatePicker_DateChanged"/>
                     <qc:SerialChart  x:Name="GraphTodosInPeriod" DataSource="{x:Bind StatisticViewModel.GraphDataDicTotalTodosPerADaySpecificPeriod, Mode=OneWay}" CategoryValueMemberPath="Key" 
-                                     MinimumCategoryGridStep="10" AxisForeground="Transparent" GridStroke="Transparent" BackgroundSizing="OuterBorderEdge" 
-                                     Background="Transparent"  Margin="-42,-10,-42,-30" Grid.Row="1" Visibility="Collapsed">
+                                     MinimumCategoryGridStep="100" BackgroundSizing="OuterBorderEdge"
+                                     AxisForeground="{ThemeResource SystemAccentColorLight1Brush}" GridStroke="{ThemeResource SystemAccentColorLight3Brush}"  
+                                     Background="Transparent"  Margin="30" Grid.Row="1" Visibility="Collapsed">
                         <qc:SerialChart.Graphs>
                             <qc:AreaGraph  ValueMemberPath="Value">
                                 <qc:AreaGraph.Brush>
@@ -119,12 +127,6 @@
                         <Setter Target="BladeView.Padding" Value="12" />
                         <Setter Target="FirstBlade.Width" Value="280" />
                         <Setter Target="FirstBlade.FontSize" Value="12" />
-                        <Setter Target="SecondBlade.Width" Value="280" />
-                        <Setter Target="SecondBlade.FontSize" Value="12" />
-                        <Setter Target="ThirdBlade.Width" Value="280" />
-                        <Setter Target="ThirdBlade.FontSize" Value="12" />
-                        <Setter Target="FourthBlade.Width" Value="280" />
-                        <Setter Target="FourthBlade.FontSize" Value="12" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
