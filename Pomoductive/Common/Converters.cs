@@ -30,7 +30,7 @@ namespace Pomoductive
         }
         
 
-        public static double GetEllipseSize(float value)
+        public static double GetEllipseSize(double value)
         {
             double _ellipseSize = value*5 + 10;
             if (_ellipseSize > 80)
@@ -40,13 +40,13 @@ namespace Pomoductive
             return _ellipseSize;
         }
 
-        public static string GetPomoCount(float value)
+        public static string GetPomoCount(double value)
         {
             string _pomoCount = value.ToString("F1", CultureInfo.InvariantCulture) + "Pomos";
             return _pomoCount;
         }
 
-        public static double GetCenterPoint(float value)
+        public static double GetCenterPoint(double value)
         {
             return (90 - GetEllipseSize(value)) / 2;
         }

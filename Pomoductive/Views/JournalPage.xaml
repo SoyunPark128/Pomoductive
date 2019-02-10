@@ -12,7 +12,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <DataTemplate x:Key="TodoListViewTemplate" x:DataType="data:TimeRecordViewModel">
+        <DataTemplate x:Key="TodoListViewTemplate" x:DataType="data:TodoCountAndName">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -20,22 +20,22 @@
                 </Grid.ColumnDefinitions>
                 <Canvas Width="90" Height="90" Grid.Column="0" HorizontalAlignment="Left">
                     <Ellipse x:Name="Ellipse"
-                         Width ="{x:Bind project:Converters.GetEllipseSize(TotalTaskCountAccurate)}" 
-                         Height="{x:Bind project:Converters.GetEllipseSize(TotalTaskCountAccurate)}" 
-                         Canvas.Left="{x:Bind project:Converters.GetCenterPoint(TotalTaskCountAccurate)}"
-                         Canvas.Top="{x:Bind project:Converters.GetCenterPoint(TotalTaskCountAccurate)}"
+                         Width ="{x:Bind project:Converters.GetEllipseSize(Count)}" 
+                         Height="{x:Bind project:Converters.GetEllipseSize(Count)}" 
+                         Canvas.Left="{x:Bind project:Converters.GetCenterPoint(Count)}"
+                         Canvas.Top="{x:Bind project:Converters.GetCenterPoint(Count)}"
                          VerticalAlignment="Center"
                          HorizontalAlignment="Center"
                          Fill="{ThemeResource SystemAccentColorTipBrush}"/>
                 </Canvas>
                 <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Right"
                             VerticalAlignment="Center" >
-                    <TextBlock Text="{x:Bind TodoName}"
+                    <TextBlock Text="{x:Bind Name}"
                                x:Phase="1"
                                Style="{ThemeResource BaseTextBlockStyle}"
                                 Margin="1" HorizontalAlignment="Right"/>
                     <TextBlock                              
-                                Text="{x:Bind project:Converters.GetPomoCount(TotalTaskCountAccurate)}"
+                                Text="{x:Bind project:Converters.GetPomoCount(Count)}"
                                 x:Phase="2"
                                 FontSize="11"
                                 Style="{ThemeResource BodyTextBlockStyle}"
@@ -94,7 +94,7 @@
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Normal">
-                                    <Storyboard>
+                                        <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="BorderBrush">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonAcrylicDisabled}"/>
                                             </ObjectAnimationUsingKeyFrames>
@@ -185,7 +185,7 @@
             </ListView>
             <RichEditBox Style="{StaticResource Focused}" x:Name="JournalContentsBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Margin="15,10,50,40"
                          Background="{ThemeResource ButtonAcrylicPointOver}">
-                
+
             </RichEditBox>
         </Grid>
         <toolkit:InAppNotification x:Name="JournalSavedNotification" 

@@ -28,12 +28,7 @@ namespace Pomoductive.ViewModels
         /// </summary>
         public ObservableCollection<TodoViewModel> TodoViewModels { get; }
             = new ObservableCollection<TodoViewModel>();
-
-        //// <summary>
-        /// The collection of all todos in the list. 
-        /// </summary>
-        public ObservableCollection<TodoViewModel> AllTodoViewModels { get; }
-            = new ObservableCollection<TodoViewModel>();
+        
 
         //// <summary>
         /// The collection of journals.
@@ -53,6 +48,18 @@ namespace Pomoductive.ViewModels
                 Set(ref _appTimeRecordViewModel, value);
                 OnPropertyChanged();
             }
+        }
+
+        private TodoViewModel _selectedTodo;
+
+        /// <summary>
+        /// Gets or sets the selected todo
+        /// </summary>
+        public TodoViewModel SelectedTodo
+        {
+            get => _selectedTodo;
+            set => Set(ref _selectedTodo, value);
+
         }
 
         private bool _isLoading = false;
@@ -98,10 +105,8 @@ namespace Pomoductive.ViewModels
                     {
                         var newSubTodoViewModel = new TodoViewModel(st);
                         newTodoViewModel.SubTodos.Add(newSubTodoViewModel);
-                        AllTodoViewModels.Add(newSubTodoViewModel);
                     }
                     TodoViewModels.Add(newTodoViewModel);
-                    AllTodoViewModels.Add(newTodoViewModel);
                 }
                 
                 
@@ -138,17 +143,7 @@ namespace Pomoductive.ViewModels
         }
 
 
-        private TodoViewModel _selectedTodo;
-
-        /// <summary>
-        /// Gets or sets the selected order.
-        /// </summary>
-        public TodoViewModel SelectedTodo
-        {
-            get => _selectedTodo;
-            set => Set(ref _selectedTodo, value);
-
-        }
+        
 
         private ObservableCollection<ShellNavigationItem> _navigationItems = new ObservableCollection<ShellNavigationItem>();
         public ObservableCollection<ShellNavigationItem> NavigationItems

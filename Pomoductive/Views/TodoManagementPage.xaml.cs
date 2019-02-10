@@ -6,9 +6,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,21 +28,74 @@ namespace Pomoductive.Views
     /// </summary>
     public sealed partial class TodoManagementPage : Page
     {
-        ObservableCollection<TodoViewModel> ViewModel => App.AppViewModel.AllTodoViewModels;
-        TodoViewModel _selectedTodo = new TodoViewModel();
+        public TodoListViewModel ViewModel { get; } = new TodoListViewModel();
 
         public TodoManagementPage()
         {
             this.InitializeComponent();
-            _selectedTodo = new TodoViewModel();
         }
 
-        private void Listview_ItemClick(object sender, ItemClickEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            
-            _selectedTodo = e.ClickedItem as TodoViewModel;
-            _selectedTodo.OnPropertyChanged();
+            await ViewModel.GetTodoListAsync();
+        }
 
+        private async void NonTextControl_Changed(object sender, RoutedEventArgs e)
+        {
+            await ViewModel.SelectedTodo.SaveTodoAsync();
+        }
+
+        private async void IsTerminatedToggleButton_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.SelectedTodo is null || ViewModel.IsInEdit == false)
+            {
+                return;
+            }
+            ViewModel.SelectedTodo.IsTerminated = !ViewModel.SelectedTodo.IsTerminated;
+            await ViewModel.SelectedTodo.SaveTodoAsync();
+        }
+
+        private void Listview_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.IsInEdit = false;
+
+            IsTerminatedToggleButton.IsOn = !ViewModel.SelectedTodo.IsTerminated;
+
+            ViewModel.IsInEdit = true;
+        }
+
+        private async void Slider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if (ViewModel.SelectedTodo is null || ViewModel.IsInEdit == false)
+            {
+                return;
+            }
+            await ViewModel.SelectedTodo.SaveTodoAsync();
+        }
+        
+
+        private async void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (ViewModel.SelectedTodo is null || ViewModel.IsInEdit == false)
+            {
+                return;
+            }
+            
+            if (e.Key == VirtualKey.Enter )
+            {
+                TextBox textBox = (TextBox)sender;
+                if (textBox.Name == "SelectedNameEditBox")
+                {
+                    ViewModel.SelectedTodo.Name = textBox.Text;
+                }
+
+                else if (textBox.Name == "SelectedRewardEditBox")
+                {
+                    ViewModel.SelectedTodo.Reward = textBox.Text;
+                }
+
+                await ViewModel.SelectedTodo.SaveTodoAsync();
+            }
         }
         
     }

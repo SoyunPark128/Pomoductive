@@ -25,7 +25,7 @@ namespace Pomoductive.ViewModels
         public ObservableDictionary<string, double> GraphDataDicTotalTodosPerADay2Weeks = new ObservableDictionary<string, double>();
 
         // For Journal Page
-        public ObservableCollection<TimeRecordViewModel> GraphDataTotalTodosAndNamePerADay = new ObservableCollection<TimeRecordViewModel>();
+        public ObservableCollection<TodoCountAndName> GraphDataTotalTodosAndNamePerADay = new ObservableCollection<TodoCountAndName>();
 
         // For Statistic Page
         public ObservableDictionary<string, double> GraphDataDicTodoPortions = new ObservableDictionary<string, double>();
@@ -202,15 +202,42 @@ namespace Pomoductive.ViewModels
         // For Journal
         public void SetTotalTodosAndNamePerADay(DateTime date)
         {
-
             GraphDataTotalTodosAndNamePerADay.Clear();
             foreach (var item in TimeRecordViewModels)
             {
-                if (item.RedordingDate == date)
+                if (item.RedordingDate.Date == date.Date)
                 {
-                    GraphDataTotalTodosAndNamePerADay.Add(item);
+                    var _tempTcn = new TodoCountAndName();
+                    _tempTcn.Name = item.TodoName;
+                    _tempTcn.Count = item.TotalTaskCountAccurate;
+
+                    if (GraphDataTotalTodosAndNamePerADay.Count == 0)
+                    {
+                        GraphDataTotalTodosAndNamePerADay.Add(_tempTcn);
+                    }
+
+                    else
+                    {
+                        foreach (TodoCountAndName tcn in GraphDataTotalTodosAndNamePerADay)
+                        {
+                            if (tcn.Name == item.TodoName)
+                            {
+                                _tempTcn.Count = tcn.Count + item.TotalTaskCountAccurate;
+                                GraphDataTotalTodosAndNamePerADay.Remove(tcn);
+                                break;
+                            }
+                        }
+                        GraphDataTotalTodosAndNamePerADay.Add(_tempTcn);
+                    }
+                    
                 }
             }
         }
+        
+    }
+    public class TodoCountAndName
+    {
+        public string Name { get; set; }
+        public double Count { get; set; } = 0;
     }
 }
