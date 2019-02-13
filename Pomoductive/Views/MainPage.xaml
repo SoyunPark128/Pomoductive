@@ -23,11 +23,13 @@
             </qc:SerialChart.Graphs>
         </qc:SerialChart>
         <local:TodoListControl HorizontalAlignment="Left" Background="{ThemeResource PomoductivaAcrylicBrush}"/>
-        <Button Style="{StaticResource PomodoroTimer_Working}" x:Name="PomodoroButtonText"
-             Click="TimeCountingStartsButtonClicked" 
-             HorizontalAlignment="Center" VerticalAlignment="Bottom"
-             Grid.ColumnSpan="2" Content="Start" 
-             Padding="20,10,20,15" Margin="0,0,0,10" FontSize="55" FontWeight="ExtraBold"/>
+        <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <TextBlock Text="{x:Bind ViewModel.SelectedTodo.Name, Mode=OneWay}" Foreground="{ThemeResource SystemAccentColorLight1Brush}" 
+                       Margin="0,0,0,3" HorizontalAlignment="Center" FontSize="33" FontWeight="ExtraBold"/>
+            <Button Style="{StaticResource PomodoroTimer_Working}" x:Name="PomodoroButtonText"
+                 Click="TimeCountingStartsButtonClicked" Content="Start" 
+                 Padding="20,10,20,15" Margin="0,0,0,10" FontSize="55" FontWeight="ExtraBold"/>
+        </StackPanel>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Vertical">
             <TextBlock x:Name="ElapsedMinTxt"/>
             <TextBlock x:Name="min"/>
@@ -35,7 +37,7 @@
             <TextBlock x:Name="stopwatchElapsed"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,10,0">
-            <HyperlinkButton Content="DEMO" 
+            <!--<HyperlinkButton Content="DEMO" 
                                  Foreground="#ff4400"
                                  Margin="0,0,10,0">
                 <FlyoutBase.AttachedFlyout>
@@ -46,17 +48,17 @@
                     </Flyout>
                 </FlyoutBase.AttachedFlyout>
             </HyperlinkButton>
-            <!--ProfilePicture="{x:Bind ViewModel.User.PhotoUrl, Mode=OneWay}"-->
+            ProfilePicture="{x:Bind ViewModel.User.PhotoUrl, Mode=OneWay}"
             <PersonPicture x:Name="UserPicture"
                                Width="24" Height="24" 
                                Background="#d1ff24">
                 <FlyoutBase.AttachedFlyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Sign out"/>
-                        <!--Click="MenuFlyoutItem_Click" />-->
+                        Click="MenuFlyoutItem_Click" />
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
-            </PersonPicture>
+            </PersonPicture>-->
         </StackPanel>
     </Grid>
 

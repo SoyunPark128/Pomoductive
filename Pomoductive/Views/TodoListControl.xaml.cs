@@ -171,5 +171,6 @@ namespace Pomoductive.Views
             currentTodoViewModel.Name = currentTextBox.Text;
             await currentTodoViewModel.SaveTodoAsync();
         }
+        
     }
 }

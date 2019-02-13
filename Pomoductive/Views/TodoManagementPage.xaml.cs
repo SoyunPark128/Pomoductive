@@ -35,11 +35,6 @@ namespace Pomoductive.Views
             this.InitializeComponent();
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
-            await ViewModel.GetTodoListAsync();
-        }
-
         private async void NonTextControl_Changed(object sender, RoutedEventArgs e)
         {
             await ViewModel.SelectedTodo.SaveTodoAsync();
@@ -60,11 +55,23 @@ namespace Pomoductive.Views
             ViewModel.IsInEdit = false;
 
             IsTerminatedToggleButton.IsOn = !ViewModel.SelectedTodo.IsTerminated;
+            ViewModel.GetParentsTodoList();
+
+            TodoViewModel _selectedItem =  ViewModel.ParrentsTodos.FirstOrDefault(t => t.Id == ViewModel.SelectedTodo.ParentsTodoId);
+            if (_selectedItem is null)
+            {
+                ParentsComboBox.SelectedIndex = 0;
+            }
+            else
+            {
+                ParentsComboBox.SelectedItem = _selectedItem;
+            }
+            
 
             ViewModel.IsInEdit = true;
         }
 
-        private async void Slider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        private async void Slider_LostFocus(object sender, RoutedEventArgs e)
         {
             if (ViewModel.SelectedTodo is null || ViewModel.IsInEdit == false)
             {
@@ -72,7 +79,6 @@ namespace Pomoductive.Views
             }
             await ViewModel.SelectedTodo.SaveTodoAsync();
         }
-        
 
         private async void TextBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
@@ -94,9 +100,40 @@ namespace Pomoductive.Views
                     ViewModel.SelectedTodo.Reward = textBox.Text;
                 }
 
+                if (ViewModel.SelectedTodo.IsSubTodo())
+                {
+                    TodoViewModel _parentsTodo = ViewModel.SelectedTodo.GetParentsViewModel();
+                }
                 await ViewModel.SelectedTodo.SaveTodoAsync();
             }
         }
+
+        private async void ParentsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel.SelectedTodo is null || ViewModel.IsInEdit == false)
+            {
+                return;
+            }
+
+            ViewModel.SelectedTodo.ReleaseFromParentsTodo();
+
+            /// - None -
+            if (ParentsComboBox.SelectedIndex == 0)
+            {
+                App.AppViewModel.RootTodoViewModels.Add(ViewModel.SelectedTodo);
+            }
+
+            else
+            {
+                App.AppViewModel.RootTodoViewModels.Remove(ViewModel.SelectedTodo);
+
+                TodoViewModel selectedParentTodoViewModel = ParentsComboBox.SelectedItem as TodoViewModel;
+                ViewModel.SelectedTodo.SetParents(ref selectedParentTodoViewModel);
+            }
+
+            await ViewModel.SelectedTodo.SaveTodoAsync();
+        }
+
         
     }
 }

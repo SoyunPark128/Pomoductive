@@ -11,8 +11,8 @@
     >
 
     <UserControl.Resources>
-        <DataTemplate x:Key="TreeViewItemDataTemplate" x:DataType="data:TodoViewModel">
-            <TreeViewItem ItemsSource="{x:Bind SubTodos}" IsExpanded="True" >
+        <DataTemplate x:Key="TreeViewItemDataTemplate" x:DataType="data:TodoViewModel" >
+            <TreeViewItem ItemsSource="{x:Bind SubTodos, Mode=OneWay}" IsExpanded="True" >
                 <Grid  Width="250">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -25,7 +25,7 @@
                             MinWidth="0" Width="15" Height="15" Margin="0,0,5,0" Padding="0,0,-10,0" 
                             Background="White" BorderBrush="Black"  />
                     <TextBlock Grid.Column="1"
-                            Text="{x:Bind Name}"
+                            Text="{x:Bind Name, Mode=OneWay}"
                             HorizontalAlignment="Left" VerticalAlignment="Center"
                             Style="{ThemeResource BodyTextBlockStyle}" />
                     <Button x:Name="MoreButton" Grid.Column="2" Margin="0,0,10,0"
@@ -45,9 +45,9 @@
                         <TreeViewList x:Name="ListControl"
                                       ItemTemplate="{StaticResource TreeViewItemDataTemplate}"
                                       ItemContainerStyle="{StaticResource TreeViewItemStyle}"
-                                      CanDragItems="True"
-                                      AllowDrop="True"
-                                      CanReorderItems="True"
+                                      CanDragItems="False"
+                                      AllowDrop="False"
+                                      CanReorderItems="False"
                                       >
 
                             <TreeViewList.ItemContainerTransitions>
@@ -84,6 +84,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        
         <Grid Grid.Row="0" HorizontalAlignment="Stretch" Height="40" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -91,25 +92,18 @@
             </Grid.ColumnDefinitions>
             <TextBox Name="TodoNameInput"  AccessKey="TodoCreateButton" MaxWidth="290" HorizontalAlignment="Stretch"
                             PlaceholderText="New To-Do" FontSize="20" Grid.Column="0" VerticalContentAlignment="Center" Padding="8,4,0,0"/>
-            <AppBarButton Name="TodoCreateButton" Icon="Accept" ToolTipService.ToolTip="Creat New Todo" Click="{x:Bind TodoCreateButtonAsync}"
+            <AppBarButton Name="TodoCreateButton" Icon="Accept" ToolTipService.ToolTip="Creat New Todo" Click="{x:Bind TodoCreateButtonAsync}" FontSize="18"
                          x:FieldModifier="public" Padding="0,4,0,0" Grid.Column="1" Width="40" Background="{ThemeResource SystemAccentColorLight1Brush}" Foreground="White"/>
 
         </Grid>
         <ScrollViewer Grid.Row="1">
             <TreeView x:Name="TodoTreeView" Grid.Row="1"
                       Margin="-30,0,0,0" MinWidth="290"
-                      ItemsSource="{x:Bind ViewModel.TodoViewModels}"
+                      ItemsSource="{x:Bind ViewModel.RootTodoViewModels , Mode=OneWay}"
                       Expanding="TodoTreeView_Expanding"
                       Collapsed="TodoTreeView_Collapsed"
                       ItemInvoked="TodoTreeView_ItemInvoked"
                       >
-                <TreeView.ItemTemplate>
-                    <DataTemplate x:DataType="data:TodoViewModel">
-                        <TreeViewItem ItemsSource="{x:Bind SubTodos}"
-                                    Content="{x:Bind Name}" HorizontalAlignment="Stretch"/>
-                    </DataTemplate>
-                </TreeView.ItemTemplate>
-
             </TreeView>
         </ScrollViewer>
         

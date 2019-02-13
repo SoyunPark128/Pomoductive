@@ -157,16 +157,21 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="SelectedNameEditBox" Grid.Row="0" Grid.Column="0" Header="Name" Margin="10,0,5,0" 
                                              IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" Text="{x:Bind ViewModel.SelectedTodo.Name, Mode=TwoWay}" KeyDown="TextBox_KeyDown"/>
-                                    <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="False" Header="Parents Name" Margin="5,0,10,0" Text="{x:Bind project:Converters.GetNameFromID(ViewModel.SelectedTodo.ParentsTodoId ), Mode=OneWay}"/>
-                                    <ToggleSwitch x:Name="IsTerminatedToggleButton"  Grid.Row="1" Grid.Column="0" Header="Termination" 
+
+                                    <ComboBox x:Name="ParentsComboBox" ItemsSource="{x:Bind ViewModel.ParrentsTodos, Mode=OneWay}" DisplayMemberPath="Name" SelectedValuePath="Id"
+                                         Grid.Row="0" Grid.Column="1" Header="Parents Name" Margin="5,0,10,0"  />
+
+
+                                    <!-- <TextBox Grid.Row="0" Grid.Column="1" IsEnabled="False" Header="Parents Name" Margin="5,0,10,0" Text="{x:Bind project:Converters.GetNameFromID(ViewModel.SelectedTodo.ParentsTodoId ), Mode=OneWay}"/> -->
+                                    <ToggleSwitch x:Name="IsTerminatedToggleButton"  Grid.Row="1" Grid.Column="0" Header="Termination" Margin="3"
                                         OnContent="In Process" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
                                         OffContent="Terminated" Toggled="IsTerminatedToggleButton_Toggled" />
-                                    <Slider Grid.Row="1" Grid.Column="1" Header="Daily Count" ValueChanged="Slider_ValueChanged" 
+                                    <Slider Grid.Row="1" Grid.Column="1" Header="Daily Count" LostFocus="Slider_LostFocus" Margin="3"
                                         AutomationProperties.Name="Slider with ticks" TickFrequency="1" TickPlacement="Outside" Maximum="15"
                                         Value="{x:Bind ViewModel.SelectedTodo.DailyCount, Mode=TwoWay}" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"/>
-                                    <TextBox x:Name="SelectedRewardEditBox" Grid.Row="2" Grid.ColumnSpan="2" Header="Reward" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
+                                    <TextBox x:Name="SelectedRewardEditBox" Grid.Row="2" Grid.ColumnSpan="2" Margin="3" Header="Reward" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
                                              Text="{x:Bind ViewModel.SelectedTodo.Reward, Mode=TwoWay}" KeyDown="TextBox_KeyDown"/>
-                                    <Border Grid.Row="3" Grid.ColumnSpan="2" BorderThickness="0,0,1,0" BorderBrush="LightGray">
+                                    <Border Grid.Row="3" Grid.ColumnSpan="2"  Margin="2" BorderThickness="0,0,1,0" BorderBrush="LightGray">
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*"/>
@@ -178,11 +183,11 @@
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Row="0" Grid.ColumnSpan="4" Text="Timer Setting"/>
-                                            <Slider Grid.Row="1" Grid.Column="0" Header="Task" Margin="3" ValueChanged="Slider_ValueChanged" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
+                                            <Slider Grid.Row="1" Grid.Column="0" Header="Task" Margin="3" LostFocus="Slider_LostFocus" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}" 
                                                 AutomationProperties.Name="vertical slider" Maximum="60" Minimum="20" Value="{x:Bind ViewModel.SelectedTodo.TaskMinutesPerOnePomo, Mode=TwoWay}"/>
-                                            <Slider Grid.Row="1" Grid.Column="1" Header="Short Break" Margin="3" ValueChanged="Slider_ValueChanged" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
+                                            <Slider Grid.Row="1" Grid.Column="1" Header="Short Break" Margin="3" LostFocus="Slider_LostFocus" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
                                                 AutomationProperties.Name="vertical slider" Maximum="20" Minimum="3" Value="{x:Bind ViewModel.SelectedTodo.ShortBreakMinutesPerOnePomo, Mode=TwoWay}"/>
-                                            <Slider Grid.Row="1" Grid.Column="2" Header="Long Break" Margin="3" ValueChanged="Slider_ValueChanged" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
+                                            <Slider Grid.Row="1" Grid.Column="2" Header="Long Break" Margin="3" LostFocus="Slider_LostFocus" IsEnabled="{x:Bind ViewModel.IsInEdit, Mode=OneWay}"
                                                 AutomationProperties.Name="vertical slider" Maximum="60" Minimum="20" Value="{x:Bind ViewModel.SelectedTodo.LongBreakMinutesPerOnePomo, Mode=TwoWay}"/>
                                         </Grid>
 

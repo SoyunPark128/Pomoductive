@@ -24,11 +24,17 @@ namespace Pomoductive.ViewModels
         }
 
         //// <summary>
-        /// The collection of parents todos in the list. 
+        /// The collection of Todos in the list. 
         /// </summary>
         public ObservableCollection<TodoViewModel> TodoViewModels { get; }
             = new ObservableCollection<TodoViewModel>();
-        
+
+        //// <summary>
+        /// The collection of Root todos for treeview.  
+        /// </summary>
+        public ObservableCollection<TodoViewModel> RootTodoViewModels { get; }
+            = new ObservableCollection<TodoViewModel>();
+
 
         //// <summary>
         /// The collection of journals.
@@ -82,11 +88,11 @@ namespace Pomoductive.ViewModels
         public async Task GetTodoListAsync()
         {
             await DispatcherHelper.ExecuteOnUIThreadAsync(() => IsLoading = true);
+            
+            var subTodos = await App.Repository.Todos.GetForSubTodoAsync();
+            var allTodos = await App.Repository.Todos.GetAsync();
 
-            var parentsTodos = await App.Repository.Todos.GetForParentsTodoAsync();
-            var SubTodos = await App.Repository.Todos.GetForSubTodoAsync();
-
-            if (null == parentsTodos)
+            if (null == allTodos)
             {
                 return;
             }
@@ -94,26 +100,36 @@ namespace Pomoductive.ViewModels
             // TodoViewModel
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
+                RootTodoViewModels.Clear();
                 TodoViewModels.Clear();
-
-                foreach (var pt in parentsTodos)
+                
+                foreach (var td in allTodos)
                 {
-                    var newTodoViewModel = new TodoViewModel(pt);
-                    newTodoViewModel.SubTodos.Clear();
-                    var subTodos = SubTodos.ToList<Todo>().FindAll(x => x.ParentsTodo == newTodoViewModel.Id);
-                    foreach (var st in subTodos)
+                    var newTodoViewModel = new TodoViewModel(td);
+                    if (td.ParentsTodo == default(Guid))
                     {
-                        var newSubTodoViewModel = new TodoViewModel(st);
-                        newTodoViewModel.SubTodos.Add(newSubTodoViewModel);
+                        GetSubTodos(subTodos, ref newTodoViewModel);
+                        RootTodoViewModels.Add(newTodoViewModel);
                     }
                     TodoViewModels.Add(newTodoViewModel);
                 }
-                
-                
                 IsLoading = false;
             });
         }
 
+        public void GetSubTodos(IEnumerable<Todo> subTodos, ref TodoViewModel parentsTodo)
+        {
+            foreach (var subTodo in subTodos)
+            {
+                if (subTodo.ParentsTodo == parentsTodo.Id)
+                {
+                    var newSubTodoViewModel = new TodoViewModel(subTodo);
+                    newSubTodoViewModel.SubTodos.Clear();
+                    GetSubTodos(subTodos, ref newSubTodoViewModel);
+                    parentsTodo.SubTodos.Add(newSubTodoViewModel);
+                }
+            }
+        }
         /// <summary>
         /// Gets the Journals from the database.
         /// </summary>
@@ -131,7 +147,7 @@ namespace Pomoductive.ViewModels
             // TodoViewModel
             await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
             {
-                TodoViewModels.Clear();
+                JournalViewModels.Clear();
 
                 foreach (var j in journals)
                 {

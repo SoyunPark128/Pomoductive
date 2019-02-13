@@ -13,9 +13,11 @@ namespace Pomoductive.ViewModels
         //// <summary>
         /// The collection of all todos in the list. 
         /// </summary>
-        public ObservableCollection<TodoViewModel> AllTodoViewModels { get; }
-            = new ObservableCollection<TodoViewModel>();
-        
+        public ObservableCollection<TodoViewModel> AllTodoViewModels => App.AppViewModel.TodoViewModels;
+
+        public ObservableCollection<TodoViewModel> ParrentsTodos { get; set; } = new ObservableCollection<TodoViewModel>();
+
+
         private TodoViewModel _selectedTodo;
 
         /// <summary>
@@ -34,27 +36,21 @@ namespace Pomoductive.ViewModels
             set => Set(ref _isInEdit, value);
         }
 
-        public async Task GetTodoListAsync()
+        public void GetParentsTodoList()
         {
-            var allTodos = await App.Repository.Todos.GetAsync();
+            ParrentsTodos.Clear();
 
-            if (null == allTodos)
+            var defaultNoneParentsTodoViewModel = new TodoViewModel();
+            defaultNoneParentsTodoViewModel.Name = " - None - ";
+            ParrentsTodos.Add(defaultNoneParentsTodoViewModel);
+
+            foreach (var todo in AllTodoViewModels)
             {
-                return;
-            }
-
-            // TodoViewModel
-            await DispatcherHelper.ExecuteOnUIThreadAsync(() =>
-            {
-                AllTodoViewModels.Clear();
-
-                foreach (var pt in allTodos)
+                if (SelectedTodo.Id != todo.Id)
                 {
-                    var newTodoViewModel = new TodoViewModel(pt);
-                    AllTodoViewModels.Add(newTodoViewModel);
+                    ParrentsTodos.Add(todo);
                 }
-                
-            });
+            }
         }
     }
 }

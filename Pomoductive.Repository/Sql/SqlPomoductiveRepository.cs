@@ -19,7 +19,8 @@ namespace Pomoductive.Repository.Sql
             _dbOptions = dbOptionsBuilder.Options;
             using (var db = new PomoductiveContext(_dbOptions))
             {
-                db.Database.EnsureCreated();
+                db.Database.Migrate();
+                //db.Database.EnsureCreated();
             }
         }
 

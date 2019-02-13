@@ -196,8 +196,10 @@ namespace Pomoductive.ViewModels
                 }
                 else
                 {
-                    App.AppViewModel.TodoViewModels.Add(this);
+                    App.AppViewModel.RootTodoViewModels.Add(this);
                 }
+
+                App.AppViewModel.TodoViewModels.Add(this);
             }
 
             await App.Repository.Todos.UpsertAsync(TodoModel);
@@ -216,17 +218,26 @@ namespace Pomoductive.ViewModels
             }
 
 
+            ReleaseFromParentsTodo();
+            App.AppViewModel.TodoViewModels.Remove(this);
+
+        }
+
+        public async void ReleaseFromParentsTodo()
+        {
             if (IsSubTodo())
             {
                 //TODO: CreateFromGuid create empty TodoViewModel. Find out later
                 //var _parentsTodo = await TodoViewModel.CreateFromGuid(deleteTodo.ParentsTodo);
                 var _parentsTodoViewModel = GetParentsViewModel();
                 _parentsTodoViewModel.SubTodos.Remove(this);
+                ParentsTodoId = default(Guid);
+
+                await _parentsTodoViewModel.SaveTodoAsync();
             }
             else
             {
-                
-                App.AppViewModel.TodoViewModels.Remove(this);
+                App.AppViewModel.RootTodoViewModels.Remove(this);
             }
         }
 
@@ -316,6 +327,17 @@ namespace Pomoductive.ViewModels
                 return true;
             }
             return false;
+        }
+
+        public void SetParents(ref TodoViewModel newParents)
+        {
+            TodoViewModel OldParents = GetParentsViewModel();
+            
+            OldParents?.SubTodos.Remove(this);
+
+            this.ParentsTodoId = newParents.Id;
+            newParents.SubTodos.Add(this);
+
         }
     }
 }

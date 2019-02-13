@@ -21,6 +21,7 @@
             <Setter Property="FocusVisualPrimaryBrush" Value="White"/>
             <Setter Property="FocusVisualSecondaryBrush" Value="Transparent"/>
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
         </Style>
 
         <Style x:Key="ListViewItemNarrow"
