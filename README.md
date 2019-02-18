@@ -7,7 +7,7 @@ Pomodore for Windows 10 and Productive Life
 | --- | --- | --- |
 | Alpha 0.1 | 2019-02-01 | First Alpha Version Released. The main Dashboard and Journal page was implemented. This version use local database which is generated automatically when user start app first time |
 | Alpha 0.2 | 2019-02-06 | The Statistics Page was updated |
-
+| Alpha 0.3 | 2019-02-10 | The To-Do Management Page was updated |
 
 ## Start Up Page
 ![pomoductive specification](https://user-images.githubusercontent.com/46061797/52149640-67541380-263b-11e9-9a2b-eaa24311305e.png)
@@ -17,8 +17,8 @@ Pomodore for Windows 10 and Productive Life
 | Page | Description |
 | --- | --- |
 | `Dashboard`  | This is the startup page. You can use the simplified version of To-do management, see the graph of daily amount of To-dos done, and start the Pomodoro Timer.  |
-| `Statistics`  | _Not implemented yet_. You can browse data about your working hours statistics  |
-| `To-Do Management` | _Not implemented yet_. You can manipulate your to-dos. it includes Daily set-up, relationship between to-dos, timer duration, and Reward setting |
+| `Statistics`  | You can browse datas about your working hours statistics  |
+| `To-Do Management` | You can manipulate your to-dos. it includes Daily set-up, relationship between to-dos, timer duration, and Reward setting |
 | `Journal` | Edit Journal about what were you doing today and wrap your day up. |
 | `Challenge` |  _Not implemented yet_. Make your N-days challenges and try to keep it. |
 
@@ -50,11 +50,18 @@ Pomodore for Windows 10 and Productive Life
 ![o8aom1x9lj](https://user-images.githubusercontent.com/46061797/52397930-3cc3e980-2a85-11e9-96c2-2c9274104851.gif)
 
 * Check your visualized productivity!
+
+## To-Do Management Page
+![pomoductive management](https://user-images.githubusercontent.com/46061797/52771090-f16c8680-3002-11e9-8149-54b6c47bc73a.PNG)
+
+* This page provide you basic settings of exist to-dos.
+* Main Page and Pomodoro timer reflects changed settings automatically and immediately.
+
 ----------------------------------
 ## In progress and Roadmap
 #### In progress
 * ~~Statistic Page Implementation~~
-* To-Do Management Page Implementation
+* ~~To-Do Management Page Implementation ~~
 * Challenge Page Implementation
 #### Roadmap
 * Data synchronization with google account
