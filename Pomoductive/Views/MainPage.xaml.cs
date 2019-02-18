@@ -22,13 +22,13 @@ namespace Pomoductive.Views
             if (StopWatch.IsRunning)
             {
                 StopWatch.Interval = new TimeSpan(0, 0, 0);
-                if (ViewModel.AppTimeRecordViewModel.Remainder != 0)
+                if (ViewModel.AppTimeRecordViewModel.Remainder != 0 && StopWatch.CurrentStatus == TimerStatus.InTodo)
                 {
                     StopWatch.RemainTime = Converters.RemainderToRemainTime(ViewModel.AppTimeRecordViewModel.Remainder, ViewModel.AppTimeRecordViewModel.TaskMin);
                 }
-                else
+                else if (ViewModel.AppTimeRecordViewModel.Remainder == 0 && StopWatch.CurrentStatus == TimerStatus.InTodo)
                 {
-                    StopWatch.RemainTime = TimeSpan.FromMinutes(selectedTodoViewModel.TaskMinutesPerOnePomo);
+                    StopWatch.RemainTime = TimeSpan.FromMinutes(ViewModel.SelectedTodo.TaskMinutesPerOnePomo);
                 }
             }
         }
@@ -40,8 +40,7 @@ namespace Pomoductive.Views
         ApplicationViewModel ViewModel => App.AppViewModel;
         StopWatchViewModel StopWatch => ViewModel.AppStopwatchViewModel;
         StatisticDataViewModel StatisticViewModel => App.AppStatisticDataViewModel;
-
-        TodoViewModel selectedTodoViewModel = new TodoViewModel();
+        
 
         public static Button _pomodoroButton = new Button();
 
@@ -54,8 +53,7 @@ namespace Pomoductive.Views
 
             else
             {
-                selectedTodoViewModel = ViewModel.SelectedTodo;
-                ViewModel.AppTimeRecordViewModel = selectedTodoViewModel.GetTimeRecordViewModel();
+                ViewModel.AppTimeRecordViewModel = ViewModel.SelectedTodo.GetTimeRecordViewModel();
                 StopWatch.TimeCountStart();
                 
             }

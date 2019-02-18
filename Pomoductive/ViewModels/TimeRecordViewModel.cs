@@ -29,6 +29,7 @@ namespace Pomoductive.ViewModels
         {
             TimeRecordModel = timeRecord;
         }
+
         /// <summary>
         /// Gets or sets the underlying TimeRecordModel object.
         /// </summary>
@@ -44,6 +45,11 @@ namespace Pomoductive.ViewModels
                     OnPropertyChanged(string.Empty);
                 }
             }
+        }
+
+        public Guid Id
+        {
+            get => _timeRecord.Id;
         }
 
         public Guid TodoId
